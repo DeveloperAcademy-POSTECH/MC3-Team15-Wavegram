@@ -21,6 +21,6 @@ Wavegram
 예시) [Type] #이슈번호 커밋메세지 `git commit -m "[Feat] #12 로그인 기능 추가"`
 
 ## Git Pull Request Message
-[태스크] >> 브랜치 명
+태스크 >> [브랜치 명]
 
-예시) [추가 모달 뷰 연결] >> addModalView
+예시) 추가 모달 뷰 연결 >> [addModalView]
