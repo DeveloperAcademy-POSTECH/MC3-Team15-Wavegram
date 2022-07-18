@@ -9,13 +9,16 @@
 /* Begin PBXBuildFile section */
 		0ABD56AC288534A2001DF711 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD56AB288534A2001DF711 /* AppDelegate.swift */; };
 		0ABD56AE288534A2001DF711 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD56AD288534A2001DF711 /* SceneDelegate.swift */; };
-		0ABD56B0288534A2001DF711 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD56AF288534A2001DF711 /* ViewController.swift */; };
-		0ABD56B3288534A2001DF711 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0ABD56B1288534A2001DF711 /* Main.storyboard */; };
 		0ABD56B5288534A3001DF711 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0ABD56B4288534A3001DF711 /* Assets.xcassets */; };
 		0ABD56B8288534A3001DF711 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0ABD56B6288534A3001DF711 /* LaunchScreen.storyboard */; };
 		0ABD56C3288534A3001DF711 /* WavegramTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD56C2288534A3001DF711 /* WavegramTests.swift */; };
 		0ABD56CD288534A3001DF711 /* WavegramUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD56CC288534A3001DF711 /* WavegramUITests.swift */; };
 		0ABD56CF288534A3001DF711 /* WavegramUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD56CE288534A3001DF711 /* WavegramUITestsLaunchTests.swift */; };
+		0ABD56DC28853555001DF711 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD56DB28853555001DF711 /* Extensions.swift */; };
+		0ABD56E428853691001DF711 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD56E328853691001DF711 /* MainTabBarViewController.swift */; };
+		0ABD56E8288536DC001DF711 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD56E7288536DC001DF711 /* HomeViewController.swift */; };
+		0ABD56EA28853701001DF711 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD56E928853701001DF711 /* SearchViewController.swift */; };
+		0ABD56EC28853718001DF711 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD56EB28853718001DF711 /* UserViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,8 +42,6 @@
 		0ABD56A8288534A2001DF711 /* Wavegram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wavegram.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0ABD56AB288534A2001DF711 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0ABD56AD288534A2001DF711 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		0ABD56AF288534A2001DF711 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		0ABD56B2288534A2001DF711 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0ABD56B4288534A3001DF711 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0ABD56B7288534A3001DF711 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0ABD56B9288534A3001DF711 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,6 +50,11 @@
 		0ABD56C8288534A3001DF711 /* WavegramUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WavegramUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0ABD56CC288534A3001DF711 /* WavegramUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WavegramUITests.swift; sourceTree = "<group>"; };
 		0ABD56CE288534A3001DF711 /* WavegramUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WavegramUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		0ABD56DB28853555001DF711 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		0ABD56E328853691001DF711 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
+		0ABD56E7288536DC001DF711 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		0ABD56E928853701001DF711 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		0ABD56EB28853718001DF711 /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,10 +105,11 @@
 		0ABD56AA288534A2001DF711 /* Wavegram */ = {
 			isa = PBXGroup;
 			children = (
+				0ABD56ED28853741001DF711 /* Controllers */,
+				0ABD56DF2885357E001DF711 /* Views */,
+				0ABD56DB28853555001DF711 /* Extensions.swift */,
 				0ABD56AB288534A2001DF711 /* AppDelegate.swift */,
 				0ABD56AD288534A2001DF711 /* SceneDelegate.swift */,
-				0ABD56AF288534A2001DF711 /* ViewController.swift */,
-				0ABD56B1288534A2001DF711 /* Main.storyboard */,
 				0ABD56B4288534A3001DF711 /* Assets.xcassets */,
 				0ABD56B6288534A3001DF711 /* LaunchScreen.storyboard */,
 				0ABD56B9288534A3001DF711 /* Info.plist */,
@@ -125,6 +132,24 @@
 				0ABD56CE288534A3001DF711 /* WavegramUITestsLaunchTests.swift */,
 			);
 			path = WavegramUITests;
+			sourceTree = "<group>";
+		};
+		0ABD56DF2885357E001DF711 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		0ABD56ED28853741001DF711 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				0ABD56E328853691001DF711 /* MainTabBarViewController.swift */,
+				0ABD56E7288536DC001DF711 /* HomeViewController.swift */,
+				0ABD56E928853701001DF711 /* SearchViewController.swift */,
+				0ABD56EB28853718001DF711 /* UserViewController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -233,7 +258,6 @@
 			files = (
 				0ABD56B8288534A3001DF711 /* LaunchScreen.storyboard in Resources */,
 				0ABD56B5288534A3001DF711 /* Assets.xcassets in Resources */,
-				0ABD56B3288534A2001DF711 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,9 +282,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0ABD56B0288534A2001DF711 /* ViewController.swift in Sources */,
+				0ABD56EC28853718001DF711 /* UserViewController.swift in Sources */,
+				0ABD56EA28853701001DF711 /* SearchViewController.swift in Sources */,
+				0ABD56E8288536DC001DF711 /* HomeViewController.swift in Sources */,
 				0ABD56AC288534A2001DF711 /* AppDelegate.swift in Sources */,
+				0ABD56E428853691001DF711 /* MainTabBarViewController.swift in Sources */,
 				0ABD56AE288534A2001DF711 /* SceneDelegate.swift in Sources */,
+				0ABD56DC28853555001DF711 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,14 +325,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		0ABD56B1288534A2001DF711 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0ABD56B2288534A2001DF711 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		0ABD56B6288534A3001DF711 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -442,7 +462,6 @@
 				INFOPLIST_FILE = Wavegram/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -470,7 +489,6 @@
 				INFOPLIST_FILE = Wavegram/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
