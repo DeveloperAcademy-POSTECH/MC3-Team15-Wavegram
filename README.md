@@ -2,8 +2,8 @@
 Wavegram
 
 ## Members
-|Drogba|Raymond|Alice|
-|:---|:---|:---|
+<!-- |Drogba|Raymond|Alice|
+|:---|:---|:---| -->
 |[Drogba](https://github.com/iDrogba)|[Raymond](https://wwww.github.com/garlicvread)|[Alice](https://github.com/ejalice)|
 
 ## Git Commit Message
