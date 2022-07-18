@@ -4,7 +4,7 @@ Wavegram
 ## Members
 <!-- |Drogba|Raymond|Alice|
 |:---|:---|:---| -->
-| [Drogba](https://github.com/iDrogba) | [Raymond](https://wwww.github.com/garlicvread) | [Alice](https://github.com/ejalice) |
+| [Drogba](https://github.com/iDrogba) | [Raymond](https://wwww.github.com/garlicvread) | [Alice](https://github.com/ejalice) | [Woody](https://github.com/insub4067)
 
 <br>
 
