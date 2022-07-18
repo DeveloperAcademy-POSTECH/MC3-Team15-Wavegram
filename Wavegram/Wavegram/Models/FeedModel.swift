@@ -13,8 +13,8 @@ struct Feed: Hashable, Codable, Identifiable {
     let owner: User
     let contributor: User?
     let title: String
-    let description: String
-    let imageName: String
+    let description: String?
+    let imageName: String?
     let audioName: String
     
     var isOriginal: Bool {
