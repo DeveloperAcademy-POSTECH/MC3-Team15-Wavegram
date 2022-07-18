@@ -2,9 +2,9 @@
 Wavegram
 
 ## Members
-|Drogba||
+|Drogba|Raymond|
 |:---|:---|
-|[Drogba](https://github.com/iDrogba)|[]()|
+|[Drogba](https://github.com/iDrogba)|[Raymond](https://wwww.github.com/garlicvread)|
 
 ## Git Commit Message
 |*Type*|*Subject*|
