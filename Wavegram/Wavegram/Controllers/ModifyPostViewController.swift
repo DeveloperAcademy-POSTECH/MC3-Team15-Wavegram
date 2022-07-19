@@ -7,7 +7,21 @@
 
 import UIKit
 
+// MARK: UIViewController
 class ModifyPostViewController: UIViewController {
+    private let maxTitleTextLength: Int = 20
+    private let maxMemoTextLength: Int = 50
+    
+    private let memoTextLengthLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "(7/30)"
+        label.textColor = .gray
+        label.font = .systemFont(ofSize: 10, weight: .regular)
+        
+        return label
+    }()
+    
     private let representativeImageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -31,10 +45,12 @@ class ModifyPostViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "제목 *"
-        label.textColor = .white
+        let attributedString = NSMutableAttributedString(string: "제목 *")
+        attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSString(string: "제목 *").range(of: "제목"))
+        attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: NSString(string: "제목 *").range(of: "*"))
+        label.attributedText = attributedString
         label.font = .systemFont(ofSize: 17, weight: .semibold)
+        label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
     }()
@@ -46,7 +62,7 @@ class ModifyPostViewController: UIViewController {
         textField.text = "우럭먹다 받은 영감"
         textField.textColor = .white
         textField.clearButtonMode = .whileEditing
-
+        
         return textField
     }()
     
@@ -72,7 +88,9 @@ class ModifyPostViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        [representativeImageLabel, representativeImage, titleLabel, titleTextField, memoLabel, memoTextField].forEach {self.view.addSubview($0)}
+        [representativeImageLabel, representativeImage, titleLabel, titleTextField, memoLabel, memoTextField, memoTextLengthLabel].forEach { self.view.addSubview($0) }
+        titleTextField.delegate = self
+        memoTextField.delegate = self
     }
     
     override func viewDidLayoutSubviews() {
@@ -81,9 +99,14 @@ class ModifyPostViewController: UIViewController {
             self.view.backgroundColor = .black
             self.setConstraints()
             self.setTitleTextFieldBorder()
+            
             titleTextField.setClearButton(with: UIImage(systemName: "x.circle")!, mode: .always)
             memoTextField.setClearButton(with: UIImage(systemName: "x.circle")!, mode: .always)
         }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     private func setTitleTextFieldBorder() {
@@ -122,7 +145,34 @@ class ModifyPostViewController: UIViewController {
             memoTextField.topAnchor.constraint(equalTo: memoLabel.bottomAnchor, constant: 10),
 
         ]
+        let memoTextLengthLabelConstraints = [
+            memoTextLengthLabel.trailingAnchor.constraint(equalTo: memoTextField.trailingAnchor),
+            memoTextLengthLabel.topAnchor.constraint(equalTo: memoTextField.bottomAnchor, constant: 5)
+        ]
         
-        [representativeImageLabelConstraints, representativeImageConstraints, titleLabelConstraints, titleTextFieldConstraints, memoLabelConstraints, memoTextFieldConstraints].forEach {NSLayoutConstraint.activate($0)}
+        [representativeImageLabelConstraints, representativeImageConstraints, titleLabelConstraints, titleTextFieldConstraints, memoLabelConstraints, memoTextFieldConstraints, memoTextLengthLabelConstraints].forEach { NSLayoutConstraint.activate($0) }
+    }
+}
+
+// MARK: UITextFieldDelegate
+extension ModifyPostViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text as? NSString else { return false }
+        let newText = text.replacingCharacters(in: range, with: string)
+
+        guard textField.isEqual(memoTextField) else {
+            guard newText.count > maxTitleTextLength else { return true }
+            return false
+        }
+        guard newText.count > maxMemoTextLength else {
+            memoTextLengthLabel.text = "(\(newText.count)/\(maxMemoTextLength))"
+            return true
+        }
+        return false
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
