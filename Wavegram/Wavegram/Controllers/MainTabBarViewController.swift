@@ -14,15 +14,15 @@ class MainTabBarViewController: UITabBarController {
         
         let vc1 = UINavigationController(rootViewController: HomeViewController())
         let vc2 = UINavigationController(rootViewController: SeacrhViewController())
-        let vc4 = UINavigationController(rootViewController: UserViewController())
+        let vc3 = UINavigationController(rootViewController: UserViewController())
         
         vc1.tabBarItem.image = UIImage(systemName: "music.note.house.fill")
         vc2.tabBarItem.image = UIImage(systemName: "magnifyingglass")
-        vc4.tabBarItem.image = UIImage(systemName: "person.fill")
+        vc3.tabBarItem.image = UIImage(systemName: "person.fill")
         
         vc1.title = "Home"
         vc2.title = "Search"
-        vc4.title = "User"
+        vc3.title = "User"
         
         tabBar.tintColor = .label
         
