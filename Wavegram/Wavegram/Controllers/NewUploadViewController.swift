@@ -13,6 +13,7 @@ import AVFoundation
 class NewUploadViewController: UIViewController {
     var audioPlayer : AVAudioPlayer!
     var audioRecorder : AVAudioRecorder!
+    let imagePicker = UIImagePickerController()
     private let maxTitleTextLength: Int = 20
     private let maxMemoTextLength: Int = 50
     private var isRecording: Bool = false
@@ -38,6 +39,8 @@ class NewUploadViewController: UIViewController {
         return label
     }()
     
+    private lazy var imagegesture = UITapGestureRecognizer(target: self, action: #selector(onTapRepresentativeImage(_:)))
+    
     private let representativeImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -45,9 +48,23 @@ class NewUploadViewController: UIViewController {
         imageView.image = UIImage(named: "testImage1")
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 4
-        
+        imageView.isUserInteractionEnabled = true
+                
         return imageView
     }()
+    
+    @objc func onTapRepresentativeImage(_ sender: UITapGestureRecognizer) {
+        let alert =  UIAlertController(title: "사진을 골라주세요", message: "", preferredStyle: .actionSheet)
+        let library =  UIAlertAction(title: "사진앨범", style: .default) { (action) in self.openLibrary()
+        }
+        let camera =  UIAlertAction(title: "카메라", style: .default) { (action) in self.openCamera()
+        }
+        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        alert.addAction(library)
+        alert.addAction(camera)
+        alert.addAction(cancel)
+        present(alert, animated: true, completion: nil)
+    }
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -109,6 +126,7 @@ class NewUploadViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.white.cgColor
+        view.layer.cornerRadius = 4
         
         return view
     }()
@@ -143,9 +161,10 @@ class NewUploadViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .black
         [representativeImageLabel, representativeImage, titleLabel, titleTextField, memoLabel, memoTextField, memoTextLengthLabel, recordLabel, recordView, recordToggleButton, playToggleButton].forEach { self.view.addSubview($0) }
-//        [recordToggleButton].forEach{ recordView.addSubview($0) }
         titleTextField.delegate = self
         memoTextField.delegate = self
+        imagePicker.delegate = self
+        representativeImage.addGestureRecognizer(imagegesture)
     }
     
     override func viewDidLayoutSubviews() {
@@ -389,5 +408,29 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
         else{
             print("녹음 실패 종료")
         }
+    }
+}
+
+// MARK: Imagepicker Delegate
+extension NewUploadViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func openLibrary(){
+        imagePicker.sourceType = .photoLibrary
+        present(imagePicker, animated: false, completion: nil)
+    }
+    
+    func openCamera(){
+        if(UIImagePickerController .isSourceTypeAvailable(.camera)){
+            imagePicker.sourceType = .camera
+            present(imagePicker, animated: false, completion: nil)
+        } else {
+            print("Camera not available")
+        }
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[.originalImage] as? UIImage {
+            representativeImage.image = image
+        }
+        dismiss(animated: true, completion: nil)
     }
 }

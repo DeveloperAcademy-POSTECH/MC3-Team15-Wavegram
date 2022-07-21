@@ -513,7 +513,9 @@
 				DEVELOPMENT_TEAM = ZNH7978JJQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Wavegram/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 사용 허용?";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "마이크 허용해줘잉";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "갤러리 사용 허용?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -541,7 +543,9 @@
 				DEVELOPMENT_TEAM = ZNH7978JJQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Wavegram/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 사용 허용?";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "마이크 허용해줘잉";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "갤러리 사용 허용?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
