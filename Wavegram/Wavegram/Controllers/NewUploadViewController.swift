@@ -18,6 +18,7 @@ class NewUploadViewController: UIViewController {
     private let maxMemoTextLength: Int = 50
     private var isRecording: Bool = false
     private var isPlaying: Bool = false
+    private lazy var imagegesture = UITapGestureRecognizer(target: self, action: #selector(onTapRepresentativeImage(_:)))
     
     private let memoTextLengthLabel: UILabel = {
         let label = UILabel()
@@ -32,39 +33,26 @@ class NewUploadViewController: UIViewController {
     private let representativeImageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "대표 이미지"
-        label.textColor = .white
+        let attributedString = NSMutableAttributedString(string: "대표 이미지 *")
+        attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSString(string: "대표 이미지 *").range(of: "대표 이미지"))
+        attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: NSString(string: "대표 이미지 *").range(of: "*"))
+        label.attributedText = attributedString
         label.font = .systemFont(ofSize: 17, weight: .semibold)
         
         return label
     }()
     
-    private lazy var imagegesture = UITapGestureRecognizer(target: self, action: #selector(onTapRepresentativeImage(_:)))
-    
     private let representativeImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "testImage1")
+        imageView.backgroundColor = .gray
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 4
         imageView.isUserInteractionEnabled = true
                 
         return imageView
     }()
-    
-    @objc func onTapRepresentativeImage(_ sender: UITapGestureRecognizer) {
-        let alert =  UIAlertController(title: "사진을 골라주세요", message: "", preferredStyle: .actionSheet)
-        let library =  UIAlertAction(title: "사진앨범", style: .default) { (action) in self.openLibrary()
-        }
-        let camera =  UIAlertAction(title: "카메라", style: .default) { (action) in self.openCamera()
-        }
-        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        alert.addAction(library)
-        alert.addAction(camera)
-        alert.addAction(cancel)
-        present(alert, animated: true, completion: nil)
-    }
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -160,6 +148,7 @@ class NewUploadViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .black
+        self.setNavigationBar()
         [representativeImageLabel, representativeImage, titleLabel, titleTextField, memoLabel, memoTextField, memoTextLengthLabel, recordLabel, recordView, recordToggleButton, playToggleButton].forEach { self.view.addSubview($0) }
         titleTextField.delegate = self
         memoTextField.delegate = self
@@ -167,26 +156,30 @@ class NewUploadViewController: UIViewController {
         representativeImage.addGestureRecognizer(imagegesture)
     }
     
+    private func setNavigationBar() {
+        self.navigationItem.title = "새 업로드"
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        let leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(onTapLeftBarButtonItem))
+        self.navigationItem.leftBarButtonItem = leftBarButtonItem
+        let rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onTapRightBarButtonItem))
+        self.navigationItem.rightBarButtonItem = rightBarButtonItem
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         DispatchQueue.main.async {
             self.setConstraints()
             self.setTitleTextFieldBorder()
-            self.setButtonBorder()
+            self.setRecordToggleButtonBorder()
 
             guard let xCircleImage = UIImage(systemName: "x.circle") else { return }
             self.titleTextField.setClearButton(with: xCircleImage, mode: .always)
             self.memoTextField.setClearButton(with: xCircleImage, mode: .always)
         }
-    }
-    private func setButtonBorder() {
-        recordToggleButton.layer.borderColor = UIColor.gray.cgColor
-        recordToggleButton.layer.borderWidth = 5
-        recordToggleButton.layer.cornerRadius = recordToggleButton.frame.width * 0.5
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
     }
     
     private func setTitleTextFieldBorder() {
@@ -194,7 +187,13 @@ class NewUploadViewController: UIViewController {
         self.memoTextField.layer.addBorder([.bottom], color: .white, width: 1)
     }
     
-    // MARK: setConstraints
+    private func setRecordToggleButtonBorder() {
+        recordToggleButton.layer.borderColor = UIColor.gray.cgColor
+        recordToggleButton.layer.borderWidth = 5
+        recordToggleButton.layer.cornerRadius = recordToggleButton.frame.width * 0.5
+    }
+    
+    // MARK: SetConstraints
     private func setConstraints() {
         let representativeImageLabelConstraints = [
             representativeImageLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
@@ -253,6 +252,29 @@ class NewUploadViewController: UIViewController {
             playToggleButton.heightAnchor.constraint(equalToConstant: 50)
         ]
         [representativeImageLabelConstraints, representativeImageConstraints, titleLabelConstraints, titleTextFieldConstraints, memoLabelConstraints, memoTextFieldConstraints, memoTextLengthLabelConstraints, recordLabelConstraints, recordViewConstraints, recordToggleButtonConstraints, playToggleButtonConstraints].forEach{ NSLayoutConstraint.activate($0) }
+    }
+    
+    // MARK: OnTapGesture
+    @objc func onTapRepresentativeImage(_ sender: UITapGestureRecognizer) {
+        let alert =  UIAlertController(title: "사진을 골라주세요", message: "", preferredStyle: .actionSheet)
+        let library =  UIAlertAction(title: "사진앨범", style: .default) { (action) in self.openLibrary()
+        }
+        let camera =  UIAlertAction(title: "카메라", style: .default) { (action) in self.openCamera()
+        }
+        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        alert.addAction(library)
+        alert.addAction(camera)
+        alert.addAction(cancel)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @objc func onTapLeftBarButtonItem() {
+//        self.dismiss(animated: false)
+        print("onTapLeftBarButtonItem")
+    }
+    
+    @objc func onTapRightBarButtonItem() {
+        print("onTapRightBarButtonItem")
     }
 }
 

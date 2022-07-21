@@ -88,9 +88,23 @@ class ModifyPostViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setNavigationBar()
         [representativeImageLabel, representativeImage, titleLabel, titleTextField, memoLabel, memoTextField, memoTextLengthLabel].forEach { self.view.addSubview($0) }
         titleTextField.delegate = self
         memoTextField.delegate = self
+    }
+    
+    private func setNavigationBar() {
+        self.navigationItem.title = "새 업로드"
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        let leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(onTapLeftBarButtonItem))
+        self.navigationItem.leftBarButtonItem = leftBarButtonItem
+        let rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onTapRightBarButtonItem))
+        self.navigationItem.rightBarButtonItem = rightBarButtonItem
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     override func viewDidLayoutSubviews() {
@@ -105,15 +119,12 @@ class ModifyPostViewController: UIViewController {
         }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
     private func setTitleTextFieldBorder() {
         self.titleTextField.layer.addBorder([.bottom], color: .white, width: 1)
         self.memoTextField.layer.addBorder([.bottom], color: .white, width: 1)
     }
     
+    // MARK: SetConstraints
     private func setConstraints() {
         let representativeImageLabelConstraints = [
             representativeImageLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
@@ -151,6 +162,16 @@ class ModifyPostViewController: UIViewController {
         ]
         
         [representativeImageLabelConstraints, representativeImageConstraints, titleLabelConstraints, titleTextFieldConstraints, memoLabelConstraints, memoTextFieldConstraints, memoTextLengthLabelConstraints].forEach { NSLayoutConstraint.activate($0) }
+    }
+    
+    // MARK: OnTapGesture
+    @objc func onTapLeftBarButtonItem() {
+//        self.dismiss(animated: false)
+        print("onTapLeftBarButtonItem")
+    }
+    
+    @objc func onTapRightBarButtonItem() {
+        print("onTapRightBarButtonItem")
     }
 }
 
