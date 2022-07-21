@@ -18,6 +18,8 @@
 		0ABD56E8288536DC001DF711 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD56E7288536DC001DF711 /* HomeViewController.swift */; };
 		0ABD56EA28853701001DF711 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD56E928853701001DF711 /* SearchViewController.swift */; };
 		0ABD56EC28853718001DF711 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD56EB28853718001DF711 /* UserViewController.swift */; };
+		C64C9B3E288679B600DA1238 /* UserViewFeedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64C9B3D288679B600DA1238 /* UserViewFeedCollectionViewCell.swift */; };
+		C64C9B402886BA2A00DA1238 /* SingleFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64C9B3F2886BA2A00DA1238 /* SingleFeedViewController.swift */; };
 		C651E9FA288542C3002BBAA8 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C651E9F9288542C3002BBAA8 /* UserModel.swift */; };
 		C651E9FC2885458D002BBAA8 /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C651E9FB2885458D002BBAA8 /* FeedModel.swift */; };
 		C651E9FE28854706002BBAA8 /* JsonManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C651E9FD28854706002BBAA8 /* JsonManager.swift */; };
@@ -57,6 +59,8 @@
 		0ABD56E7288536DC001DF711 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		0ABD56E928853701001DF711 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		0ABD56EB28853718001DF711 /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
+		C64C9B3D288679B600DA1238 /* UserViewFeedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserViewFeedCollectionViewCell.swift; path = Wavegram/Resources/UserViewFeedCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
+		C64C9B3F2886BA2A00DA1238 /* SingleFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SingleFeedViewController.swift; path = Wavegram/Resources/SingleFeedViewController.swift; sourceTree = SOURCE_ROOT; };
 		C651E9F9288542C3002BBAA8 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		C651E9FB2885458D002BBAA8 /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
 		C651E9FD28854706002BBAA8 /* JsonManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonManager.swift; sourceTree = "<group>"; };
@@ -142,6 +146,8 @@
 		0ABD56DF2885357E001DF711 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C64C9B3D288679B600DA1238 /* UserViewFeedCollectionViewCell.swift */,
+				C64C9B3F2886BA2A00DA1238 /* SingleFeedViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -324,6 +330,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0ABD56EC28853718001DF711 /* UserViewController.swift in Sources */,
+				C64C9B3E288679B600DA1238 /* UserViewFeedCollectionViewCell.swift in Sources */,
 				C651E9FC2885458D002BBAA8 /* FeedModel.swift in Sources */,
 				0ABD56EA28853701001DF711 /* SearchViewController.swift in Sources */,
 				0ABD56E8288536DC001DF711 /* HomeViewController.swift in Sources */,
@@ -332,6 +339,7 @@
 				0ABD56AE288534A2001DF711 /* SceneDelegate.swift in Sources */,
 				C651E9FE28854706002BBAA8 /* JsonManager.swift in Sources */,
 				C651E9FA288542C3002BBAA8 /* UserModel.swift in Sources */,
+				C64C9B402886BA2A00DA1238 /* SingleFeedViewController.swift in Sources */,
 				0ABD56DC28853555001DF711 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
