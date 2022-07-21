@@ -157,7 +157,7 @@ class NewUploadViewController: UIViewController {
     }
     
     private func setNavigationBar() {
-        self.navigationItem.title = "새 업로드"
+        self.navigationItem.title = "게시물 업로드"
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         let leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(onTapLeftBarButtonItem))
         self.navigationItem.leftBarButtonItem = leftBarButtonItem
