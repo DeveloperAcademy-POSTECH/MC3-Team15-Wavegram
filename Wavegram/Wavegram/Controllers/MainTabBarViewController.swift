@@ -5,12 +5,14 @@
 //  Created by 김상현 on 2022/07/18.
 //
 import UIKit
+import SwiftUI
 
 class MainTabBarViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemBackground  // 앱에 다크모드 적용
+        overrideUserInterfaceStyle = .dark
         
         let vc1 = UINavigationController(rootViewController: HomeViewController())
         let vc2 = UINavigationController(rootViewController: SeacrhViewController())
@@ -30,3 +32,31 @@ class MainTabBarViewController: UITabBarController {
     }
     
 }
+
+
+// MARK: SwiftUI - Preview 추가
+struct MainTabBarViewControllerPreView: PreviewProvider {
+    static var previews: some View {
+        MainTabBarViewController().uiViewControllerToPreview()
+    }
+}
+
+
+#if DEBUG
+extension UIViewController {
+    private struct Preview: UIViewControllerRepresentable {
+        let viewController: UIViewController
+
+        func makeUIViewController(context: Context) -> UIViewController {
+            return viewController
+        }
+
+        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        }
+    }
+
+    func uiViewControllerToPreview() -> some View {
+        Preview(viewController: self)
+    }
+}
+#endif
