@@ -20,8 +20,9 @@
 		0ABD59C72885B11600B70589 /* LayerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD59C62885B11600B70589 /* LayerExtension.swift */; };
 		0ABD5A092887EA7500B70589 /* NewUploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD5A082887EA7500B70589 /* NewUploadViewController.swift */; };
 		0ABD5A0B2888471B00B70589 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD5A0A2888471B00B70589 /* StringExtension.swift */; };
-		C64C9B3E288679B600DA1238 /* UserViewFeedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64C9B3D288679B600DA1238 /* UserViewFeedCollectionViewCell.swift */; };
-		C64C9B402886BA2A00DA1238 /* SingleFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64C9B3F2886BA2A00DA1238 /* SingleFeedViewController.swift */; };
+		59BEF138584DA7C80B1E05B6 /* SingleFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59BEFDFE9355842A70A4F869 /* SingleFeedViewController.swift */; };
+		59BEF7E2CE0DEA659F422C7B /* UserViewFeedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59BEFE8BF5D049F3D0CEF035 /* UserViewFeedCollectionViewCell.swift */; };
+		943264D6288A752D003A789A /* Spectrogram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943264D5288A752D003A789A /* Spectrogram.swift */; };
 		C651E9FA288542C3002BBAA8 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C651E9F9288542C3002BBAA8 /* UserModel.swift */; };
 		C651E9FC2885458D002BBAA8 /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C651E9FB2885458D002BBAA8 /* FeedModel.swift */; };
 		C651E9FE28854706002BBAA8 /* JsonManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C651E9FD28854706002BBAA8 /* JsonManager.swift */; };
@@ -63,8 +64,9 @@
 		0ABD59C62885B11600B70589 /* LayerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerExtension.swift; sourceTree = "<group>"; };
 		0ABD5A082887EA7500B70589 /* NewUploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUploadViewController.swift; sourceTree = "<group>"; };
 		0ABD5A0A2888471B00B70589 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
-		C64C9B3D288679B600DA1238 /* UserViewFeedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserViewFeedCollectionViewCell.swift; path = Wavegram/Resources/UserViewFeedCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
-		C64C9B3F2886BA2A00DA1238 /* SingleFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SingleFeedViewController.swift; path = Wavegram/Resources/SingleFeedViewController.swift; sourceTree = SOURCE_ROOT; };
+		59BEFDFE9355842A70A4F869 /* SingleFeedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleFeedViewController.swift; sourceTree = "<group>"; };
+		59BEFE8BF5D049F3D0CEF035 /* UserViewFeedCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewFeedCollectionViewCell.swift; sourceTree = "<group>"; };
+		943264D5288A752D003A789A /* Spectrogram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spectrogram.swift; sourceTree = "<group>"; };
 		C651E9F9288542C3002BBAA8 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		C651E9FB2885458D002BBAA8 /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
 		C651E9FD28854706002BBAA8 /* JsonManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonManager.swift; sourceTree = "<group>"; };
@@ -118,23 +120,14 @@
 			isa = PBXGroup;
 			children = (
 				C651E9F128853E6F002BBAA8 /* Models */,
-				0ABD56DF2885357E001DF711 /* Views */,
 				0ABD56ED28853741001DF711 /* Controllers */,
 				C651E9F228853F5B002BBAA8 /* Managers */,
 				C651E9FF28854811002BBAA8 /* Resources */,
 				C651EA0228855081002BBAA8 /* Extension */,
 				0ABD56B9288534A3001DF711 /* Info.plist */,
+				59BEF362E7EE33D2002C7B18 /* Views */,
 			);
 			path = Wavegram;
-			sourceTree = "<group>";
-		};
-		0ABD56DF2885357E001DF711 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				C64C9B3D288679B600DA1238 /* UserViewFeedCollectionViewCell.swift */,
-				C64C9B3F2886BA2A00DA1238 /* SingleFeedViewController.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		0ABD56ED28853741001DF711 /* Controllers */ = {
@@ -148,6 +141,16 @@
 				0ABD5A082887EA7500B70589 /* NewUploadViewController.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		59BEF362E7EE33D2002C7B18 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				59BEFDFE9355842A70A4F869 /* SingleFeedViewController.swift */,
+				59BEFE8BF5D049F3D0CEF035 /* UserViewFeedCollectionViewCell.swift */,
+				943264D5288A752D003A789A /* Spectrogram.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		C651E9F128853E6F002BBAA8 /* Models */ = {
@@ -320,7 +323,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0ABD56EC28853718001DF711 /* UserViewController.swift in Sources */,
-				C64C9B3E288679B600DA1238 /* UserViewFeedCollectionViewCell.swift in Sources */,
 				C651E9FC2885458D002BBAA8 /* FeedModel.swift in Sources */,
 				0ABD5A0B2888471B00B70589 /* StringExtension.swift in Sources */,
 				0ABD56EA28853701001DF711 /* SearchViewController.swift in Sources */,
@@ -334,8 +336,10 @@
 				C651E9FE28854706002BBAA8 /* JsonManager.swift in Sources */,
 				0ABD56F128857F9B001DF711 /* TextFieldExtension.swift in Sources */,
 				C651E9FA288542C3002BBAA8 /* UserModel.swift in Sources */,
-				C64C9B402886BA2A00DA1238 /* SingleFeedViewController.swift in Sources */,
 				0ABD56DC28853555001DF711 /* Extensions.swift in Sources */,
+				59BEF138584DA7C80B1E05B6 /* SingleFeedViewController.swift in Sources */,
+				59BEF7E2CE0DEA659F422C7B /* UserViewFeedCollectionViewCell.swift in Sources */,
+				943264D6288A752D003A789A /* Spectrogram.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

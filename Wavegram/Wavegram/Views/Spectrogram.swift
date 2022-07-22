@@ -39,6 +39,15 @@ public class Spectrogram: CALayer {
     }
 
 
-    // 스펙트로그램 사이즈 정의
+    // 스펙트로그램 프로퍼티 정의
+    // sampleCount: DCT(이산 코사인 변환)를 통과하는 샘플 갯수 및 표시되는 진동수의 해상도. MARK: 변경 금지
+    // 관련 문서: https://en.wikipedia.org/wiki/Discrete_cosine_transform
+    static let sampleCount = 1024
+
+    // bufferCount: 표시되는 버퍼 수. 버퍼 카운트가 커질 수록 느려짐
+    static let bufferCount = 1000
+
+    // hopCount: 버퍼가 오버랩되는 정도. 오버랩이 커질 수록 느려짐
+    static let hopCount = 500
 
 }

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="36e0a582-eef9-4a82-947c-660be6c77116" name="Changes" comment="디렉토리 패스 수정&#10;&#10;### Motivation&#10;- 논리 경로 - 물리 경로 충돌로 인한 파일 트래킹 불가 이슈 수정 소요 발생&#10;&#10;### Key Changes&#10;- 잘못된 논리 경로 삭제&#10;- 물리 경로 재생성&#10;- 각 파일의 디렉토리 재지정&#10;- 스펙트로그램 파일 일부 재작성&#10;&#10;### To Riviewers&#10;- 땡스 비비~">
+      <change beforePath="$PROJECT_DIR$/Wavegram.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/Wavegram.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Wavegram/Resources/SingleFeedViewController.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Wavegram/Resources/UserViewFeedCollectionViewCell.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Wavegram/Spectrogram/SpecgtrogramAVCaptureAudioDataOutputSampleBufferDelegate.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Wavegram/Spectrogram/Spectrogram.swift" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="iphoneos_00008103-0015391221D1001E" />
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectApplicationVersion">
+    <option name="ide" value="AppCode" />
+    <option name="majorVersion" value="2022" />
+    <option name="minorVersion" value="1.3" />
+  </component>
+  <component name="ProjectId" id="2CHnzaZImFUsGhFpFHy54VuN7Nx" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "OBJC.PRESERVED_TARGET_SELECTION": "Wavegram",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "cidr.known.project.marker": "true",
+    "last_opened_file_path": "/Users/raymondkim/Library/CloudStorage/OneDrive-Personal/development/ADA/challenge_3/Wavegram/Wavegram.xcodeproj",
+    "nodejs_package_manager_path": "npm"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="Wavegram" type="AppleRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Wavegram" TARGET_NAME="Wavegram" CONFIG_NAME="Debug" SCHEME_NAME="Wavegram" IS_LOCATION_SIMULATION_ALLOWED="true" APPLICATION_LANGUAGE="IDELaunchSchemeLanguageUseSystemLanguage" APPLICATION_REGION="" RUN_TARGET_PROJECT_NAME="Wavegram" RUN_TARGET_NAME="Wavegram" MAKE_ACTIVE="TRUE" SHOULD_DEBUG_EXTENSIONS="false">
+      <EXTENSION ID="org.jetbrains.appcode.reveal.RevealRunConfigurationExtension">
+        <REVEAL_SETTINGS autoInject="false" autoInstall="true" askToEnableAutoInstall="true" />
+      </EXTENSION>
+      <embedded_app_extension_list />
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="36e0a582-eef9-4a82-947c-660be6c77116" name="Changes" comment="" />
+      <created>1658468641175</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1658468641175</updated>
+      <workItem from="1658468642447" duration="1727000" />
+    </task>
+    <task id="LOCAL-00001" summary="디렉토리 패스 수정&#10;&#10;### Motivation&#10;- 논리 경로 - 물리 경로 충돌로 인한 파일 트래킹 불가 이슈 수정 소요 발생&#10;&#10;### Key Changes&#10;- 잘못된 논리 경로 삭제&#10;- 물리 경로 재생성&#10;- 각 파일의 디렉토리 재지정&#10;- 스펙트로그램 파일 일부 재작성&#10;&#10;### To Riviewers&#10;- 땡스 비비~">
+      <created>1658470025231</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1658470025231</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="directoryPathModification" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="디렉토리 패스 수정&#10;&#10;### Motivation&#10;- 논리 경로 - 물리 경로 충돌로 인한 파일 트래킹 불가 이슈 수정 소요 발생&#10;&#10;### Key Changes&#10;- 잘못된 논리 경로 삭제&#10;- 물리 경로 재생성&#10;- 각 파일의 디렉토리 재지정&#10;- 스펙트로그램 파일 일부 재작성&#10;&#10;### To Riviewers&#10;- 땡스 비비~" />
+    <option name="LAST_COMMIT_MESSAGE" value="디렉토리 패스 수정&#10;&#10;### Motivation&#10;- 논리 경로 - 물리 경로 충돌로 인한 파일 트래킹 불가 이슈 수정 소요 발생&#10;&#10;### Key Changes&#10;- 잘못된 논리 경로 삭제&#10;- 물리 경로 재생성&#10;- 각 파일의 디렉토리 재지정&#10;- 스펙트로그램 파일 일부 재작성&#10;&#10;### To Riviewers&#10;- 땡스 비비~" />
+  </component>
+</project>
