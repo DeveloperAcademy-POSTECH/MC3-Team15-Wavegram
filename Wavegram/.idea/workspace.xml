@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36e0a582-eef9-4a82-947c-660be6c77116" name="Changes" comment="디렉토리 패스 수정&#10;&#10;### Motivation&#10;- 논리 경로 - 물리 경로 충돌로 인한 파일 트래킹 불가 이슈 수정 소요 발생&#10;&#10;### Key Changes&#10;- 잘못된 논리 경로 삭제&#10;- 물리 경로 재생성&#10;- 각 파일의 디렉토리 재지정&#10;- 스펙트로그램 파일 일부 재작성&#10;&#10;### To Riviewers&#10;- 땡스 비비~">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Wavegram.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/Wavegram.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Wavegram/Resources/SingleFeedViewController.swift" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Wavegram/Resources/UserViewFeedCollectionViewCell.swift" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Wavegram/Spectrogram/SpecgtrogramAVCaptureAudioDataOutputSampleBufferDelegate.swift" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Wavegram/Spectrogram/Spectrogram.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Wavegram.xcodeproj/project.xcworkspace/xcuserdata/raymondkim.xcuserdatad/UserInterfaceState.xcuserstate" beforeDir="false" afterPath="$PROJECT_DIR$/Wavegram.xcodeproj/project.xcworkspace/xcuserdata/raymondkim.xcuserdatad/UserInterfaceState.xcuserstate" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Wavegram/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/Wavegram/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Wavegram/Views/Spectrogram.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Wavegram/Views/Spectrogram.swift" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,7 +17,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/.." value="main" />
+        <entry key="$PROJECT_DIR$/.." value="directoryPathModification" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -36,18 +36,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "OBJC.PRESERVED_TARGET_SELECTION": "Wavegram",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "cidr.known.project.marker": "true",
-    "last_opened_file_path": "/Users/raymondkim/Library/CloudStorage/OneDrive-Personal/development/ADA/challenge_3/Wavegram/Wavegram.xcodeproj",
-    "nodejs_package_manager_path": "npm"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;OBJC.PRESERVED_TARGET_SELECTION&quot;: &quot;Wavegram&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/raymondkim/Library/CloudStorage/OneDrive-Personal/development/ADA/challenge_3/Wavegram/Wavegram.xcodeproj&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Wavegram" type="AppleRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Wavegram" TARGET_NAME="Wavegram" CONFIG_NAME="Debug" SCHEME_NAME="Wavegram" IS_LOCATION_SIMULATION_ALLOWED="true" APPLICATION_LANGUAGE="IDELaunchSchemeLanguageUseSystemLanguage" APPLICATION_REGION="" RUN_TARGET_PROJECT_NAME="Wavegram" RUN_TARGET_NAME="Wavegram" MAKE_ACTIVE="TRUE" SHOULD_DEBUG_EXTENSIONS="false">
       <EXTENSION ID="org.jetbrains.appcode.reveal.RevealRunConfigurationExtension">
@@ -68,6 +68,7 @@
       <option name="presentableId" value="Default" />
       <updated>1658468641175</updated>
       <workItem from="1658468642447" duration="1727000" />
+      <workItem from="1658471213240" duration="2226000" />
     </task>
     <task id="LOCAL-00001" summary="디렉토리 패스 수정&#10;&#10;### Motivation&#10;- 논리 경로 - 물리 경로 충돌로 인한 파일 트래킹 불가 이슈 수정 소요 발생&#10;&#10;### Key Changes&#10;- 잘못된 논리 경로 삭제&#10;- 물리 경로 재생성&#10;- 각 파일의 디렉토리 재지정&#10;- 스펙트로그램 파일 일부 재작성&#10;&#10;### To Riviewers&#10;- 땡스 비비~">
       <created>1658470025231</created>

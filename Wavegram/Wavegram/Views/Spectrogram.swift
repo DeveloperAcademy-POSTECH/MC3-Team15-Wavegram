@@ -50,4 +50,74 @@ public class Spectrogram: CALayer {
     // hopCount: 버퍼가 오버랩되는 정도. 오버랩이 커질 수록 느려짐
     static let hopCount = 500
 
+
+    // AVCaptureAudioDataOutput() 추가
+    // 오디오 녹음 + 오디오 샘플 버퍼에 액세스를 제공하는 캡쳐
+    // 관련 문서: https://developer.apple.com/documentation/avfoundation/avcaptureaudiodataoutput
+    let audioOutput = AVCaptureAudioDataOutput()
+
+    let captureQueue = DispatchQueue(
+            label: "captureQueue",
+            qos: .userInitiated,
+            autoreleaseFrequency: .workItem
+    )
+
+    let sessionQueue = DispatchQueue(
+            label: "sessionQueue",
+            attributes: [],
+            autoreleaseFrequency: .workItem
+    )
+
+    let captureSession = AVCaptureSession()
+
+    let dispatchSemaphore = DispatchSemaphore(value: 1)
+}
+
+
+/*
+ @method captureOutput:didOutputSampleBuffer:fromConnection:
+ @abstract Called whenever an AVCaptureAudioDataOutput instance outputs a new audio sample buffer.
+ */
+extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
+
+    // MARK: 오디오 캡쳐 정의
+    // TODO: 드록바가 작성한 코드와 비교/선택 필요
+
+    // 오디오 캡쳐 환경설정(Configuration): AVCaptureSession 인스턴스 설정
+    func configureAudiopCaptureSession() {
+
+        // MARK: Code block starts here ---> 하단의 commitConfiguration()과 페어
+        captureSession.beginConfiguration()
+
+
+        // MARK: AVCaptureSession 인스턴스의 위치 마크
+        // beginConfiguration() 과 commitConfiguration() 사이에 위치
+        if captureSession.canAddOutput(audioOutput) {
+            captureSession.addOutput(audioOutput)
+        } else {
+            fatalError("Caanot add an audioOutput.")
+        }
+
+        // 빌트-인 마이크 정의
+        guard
+            let microphone = AVCaptureDevice.default(
+                .builtInMicrophone,
+                for: .audio,
+                position: .unspecified
+            ),
+            let microphoneInput = try? AVCaptureDeviceInput(device: microphone) else {
+                fatalError("Caanot create the microphone.")
+        }
+
+        if captureSession.canAddInput(microphoneInput) {
+            captureSession.addInput(microphoneInput)
+        } else {
+            fatalError("Cannot add an audioInput.")
+        }
+
+        // MARK: Code block ends here <--- 윗단의 beginConfiguration()과 페어
+        captureSession.commitConfiguration()
+    }
+
+
 }
