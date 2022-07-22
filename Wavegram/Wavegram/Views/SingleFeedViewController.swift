@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 class SingleFeedViewController: UIViewController {
 
