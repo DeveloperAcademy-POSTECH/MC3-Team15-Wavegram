@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="36e0a582-eef9-4a82-947c-660be6c77116" name="Changes" comment="디렉토리 패스 수정&#10;&#10;### Motivation&#10;- 논리 경로 - 물리 경로 충돌로 인한 파일 트래킹 불가 이슈 수정 소요 발생&#10;&#10;### Key Changes&#10;- 잘못된 논리 경로 삭제&#10;- 물리 경로 재생성&#10;- 각 파일의 디렉토리 재지정&#10;- 스펙트로그램 파일 일부 재작성&#10;&#10;### To Riviewers&#10;- 땡스 비비~">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Wavegram.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/Wavegram.xcodeproj/project.pbxproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Wavegram.xcodeproj/project.xcworkspace/xcuserdata/raymondkim.xcuserdatad/UserInterfaceState.xcuserstate" beforeDir="false" afterPath="$PROJECT_DIR$/Wavegram.xcodeproj/project.xcworkspace/xcuserdata/raymondkim.xcuserdatad/UserInterfaceState.xcuserstate" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Wavegram/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/Wavegram/Info.plist" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Wavegram/Views/Spectrogram.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Wavegram/Views/Spectrogram.swift" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -68,7 +66,7 @@
       <option name="presentableId" value="Default" />
       <updated>1658468641175</updated>
       <workItem from="1658468642447" duration="1727000" />
-      <workItem from="1658471213240" duration="2226000" />
+      <workItem from="1658471213240" duration="5263000" />
     </task>
     <task id="LOCAL-00001" summary="디렉토리 패스 수정&#10;&#10;### Motivation&#10;- 논리 경로 - 물리 경로 충돌로 인한 파일 트래킹 불가 이슈 수정 소요 발생&#10;&#10;### Key Changes&#10;- 잘못된 논리 경로 삭제&#10;- 물리 경로 재생성&#10;- 각 파일의 디렉토리 재지정&#10;- 스펙트로그램 파일 일부 재작성&#10;&#10;### To Riviewers&#10;- 땡스 비비~">
       <created>1658470025231</created>
