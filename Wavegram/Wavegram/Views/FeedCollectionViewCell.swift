@@ -36,11 +36,23 @@ class FeedCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    // originLabel
+    private let originLabel: UILabel = {
+        let label = UILabel()
+        label.font = label.font.withSize(12)
+        label.textColor = .systemGray
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         [
             profileImage, userName
+            , originLabel
         ].forEach { addSubview($0) }
     }
     
@@ -52,8 +64,16 @@ class FeedCollectionViewCell: UICollectionViewCell {
     // Configure
     public func configure(with model: Feed) {
         self.feeds = model
+        
         profileImage.image = UIImage(named: model.owner.profileImage)
         userName.text = model.owner.name
+        
+        // TODO: Need Model Understand
+        if model.isOriginal {
+            originLabel.text = ""
+        } else {
+            originLabel.text = "Begin by"
+        }
         
         applyConstraints(model)
     }
@@ -70,14 +90,28 @@ class FeedCollectionViewCell: UICollectionViewCell {
             profileImage.widthAnchor.constraint(equalToConstant: r)
         ]
         
-        let userNameConstraints = [
+        var userNameConstraints = [
             userName.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 4.96),
             userName.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor)
+        ]
+        
+        if !model.isOriginal {
+            userNameConstraints = [
+                userName.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 4.96),
+                userName.topAnchor.constraint(equalTo: topAnchor, constant: 5)
+            ]
+        }
+        
+        let originLabelConstraints = [
+            originLabel.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 4.96),
+            originLabel.topAnchor.constraint(equalTo: userName.bottomAnchor),
+            originLabel.bottomAnchor.constraint(equalTo: profileImage.bottomAnchor)
         ]
         
         [
             profileImageConstraints,
             userNameConstraints,
+            originLabelConstraints
         ].forEach { NSLayoutConstraint.activate($0) }
         
     }
