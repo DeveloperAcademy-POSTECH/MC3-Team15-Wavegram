@@ -28,6 +28,50 @@ class HomeViewController: UIViewController {
         return feedCollectionView
     }()
     
+    // NavigationBar
+    private func configureNavbar() {
+        
+        // Logo
+        let logoButton = UIButton()
+        logoButton.frame = CGRect(x: 0, y: 0, width: 114, height: 19)
+        logoButton.setTitle("Wavegram", for: .normal)
+        logoButton.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        
+        // NavBar Left
+        let leftBarButtonItem = UIBarButtonItem(customView: logoButton)
+        let leftWidth = leftBarButtonItem.customView?.widthAnchor.constraint(equalToConstant: 114)
+            leftWidth?.isActive = true
+        let leftHeight = leftBarButtonItem.customView?.heightAnchor.constraint(equalToConstant: 19)
+            leftHeight?.isActive = true
+        
+        navigationItem.leftBarButtonItem = leftBarButtonItem
+        
+        // Button
+        let addButton = UIButton(type: .system)
+        addButton.setImage(UIImage(systemName: "plus.square", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30, weight: .light)), for: .normal)
+        addButton.addTarget(self, action: #selector(uploadNewFeed), for: .touchUpInside)
+        
+        // NavBar Right
+        let rightBarButtonItem = UIBarButtonItem(customView: addButton)
+        rightBarButtonItem.customView?.translatesAutoresizingMaskIntoConstraints = false
+        let rightHeight = rightBarButtonItem.customView?.heightAnchor.constraint(equalToConstant: 30)
+            rightHeight?.isActive = true
+        let rightWidth = rightBarButtonItem.customView?.widthAnchor.constraint(equalToConstant: 30)
+            rightWidth?.isActive = true
+        // TODO: rightBarButton Trailing Padding
+        
+
+        navigationItem.rightBarButtonItem = rightBarButtonItem
+
+        navigationController?.navigationBar.tintColor = .white
+    }
+    
+    // NavBar Right Button Function
+    @objc func uploadNewFeed() {
+        // TODO: Move to Uploading a New Feed
+        print("Move To Upload Feed View")
+    }
+    
     // viewLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +87,7 @@ class HomeViewController: UIViewController {
         feedCollectionView.dataSource = self
         
         applyConstraints()
+        configureNavbar()
     }
     
     // Subview
