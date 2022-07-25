@@ -1,20 +1,25 @@
 //
-//  SpecgtrogramAVCaptureAudioDataOutputSampleBufferDelegate.swift
+//  SpectrogramExtension.swift
 //  Wavegram
 //
-//  Created by 김제필 on 7/21/22.
+//  Created by 김제필 on 7/18/22.
 //
+
 
 // MARK: AVCaptureAudioDataOutputSampleBufferDelegate + AVFoundation Support를 위한 코드
 
-
-import Foundation
 import AVFoundation
 
 
+/*
+ @method captureOutput:didOutputSampleBuffer:fromConnection:
+ @abstract Called whenever an AVCaptureAudioDataOutput instance outputs a new audio sample buffer.
+ */
 extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
 
     // MARK: 오디오 캡쳐 정의
+    // TODO: 드록바가 작성한 코드와 비교/선택 필요
+
     // 관련 문서: https://developer.apple.com/documentation/avfoundation/avcapturedevice
     // captureOutput(_:didOutput:from:) 함수의 콜이 필요함.
     public func captureOutput(
@@ -24,7 +29,7 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
     ) {
 
         // 보유하고 있는 블록 버퍼로 오디오 버퍼 목록 가져오기
-        // MARK: --->
+        // MARK: Code block Starts here --->
         var audioBufferList = AudioBufferList()
         var blockBuffer: CMBlockBuffer?
 
@@ -43,17 +48,7 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
             // return: raw 오디오 데이터에 대한 포인터
             return
         }
-        // MARK: <---
-
-
-        // nyquistFrequency: 시스템이 재생 가능한 최고 주파수. 일반적으로 시스템 샘플링 레이트의 절반.
-        // MARK: 현재 사용되지는 않지만 사용자 인터페이스에 오베레이 추가시 사용될 수 있음.
-        if nyquistFrequency == nil {
-            let duration = Float(CMSampleBufferGetDuration(sampleBuffer).value)
-            let timescale = Float(CMSampleBufferGetDuration(sampleBuffer).timescale)
-            let numsamples = Float(CMSampleBufferGetNumSamples(sampleBuffer))
-            nyquistFrequency = 0.5 / (duration / timescale / numsamples)
-        }
+        // MARK: Code block ends here <---
 
 
         /*
@@ -92,8 +87,7 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
     }
 
 
-    // MARK: 오디오 캡쳐를 위한 환경설정(Configuration)
-    // AVCaptureSession 인스턴스 설정
+    // MARK: 오디오 캡쳐를 위한 환경설정(Configuration): AVCaptureSession 인스턴스 설정
     func configureCaptureSession() {
         switch AVCaptureDevice.authorizationStatus(for: .audio) {
             case .authorized:
@@ -116,10 +110,10 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
         }
 
 
-        // MARK: AVCaptureSession 인스턴스의 위치를 마크하기 위한 코드
+        // MARK: AVCaptureSession() 인스턴스의 위치를 마크하기 위한 코드
         // AVCaptureSession은 beginConfiguration() 과 commitConfiguration() 사이에 위치함.
 
-        // MARK: ---> 하단의 commitConfiguration()과 페어
+        // MARK: Code block starts here --->
         captureSession.beginConfiguration()
 
         if captureSession.canAddOutput(audioOutput) {
@@ -129,7 +123,7 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
         }
 
 
-        // 세션 캡쳐를 위해 아이폰의 빌트-인 마이크 정의
+        // 빌트-인 마이크 정의
         guard
             let microphone = AVCaptureDevice.default(
                 .builtInMicrophone,
@@ -137,14 +131,16 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
                 position: .unspecified
             ),
             let microphoneInput = try? AVCaptureDeviceInput(device: microphone) else {
-                fatalError("Cannot create the microphone.")
+                fatalError("Caanot create the microphone.")
         }
 
         if captureSession.canAddInput(microphoneInput) {
             captureSession.addInput(microphoneInput)
+        } else {
+            fatalError("Cannot add an audioInput.")
         }
 
-        // MARK: <--- 윗단의 beginConfiguration()과 페어
+        // MARK: Code block ends here <---
         captureSession.commitConfiguration()
     }
 

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 class HomeViewController: UIViewController {
 
@@ -27,3 +28,31 @@ class HomeViewController: UIViewController {
     */
 
 }
+
+
+// MARK: SwiftUI - Preview 추가
+struct HomeViewControllerPreView: PreviewProvider {
+    static var previews: some View {
+        HomeViewController().homeViewControllerToPreview()
+    }
+}
+
+
+#if DEBUG
+extension UIViewController {
+    private struct Preview: UIViewControllerRepresentable {
+        let viewController: UIViewController
+
+        func makeUIViewController(context: Context) -> UIViewController {
+            return viewController
+        }
+
+        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        }
+    }
+
+    func homeViewControllerToPreview() -> some View {
+        Preview(viewController: self)
+    }
+}
+#endif
