@@ -47,12 +47,30 @@ class FeedCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    // originButton
+    private let originButton: UIButton = {
+        
+        let button = UIButton()
+        
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(moveToOriginFeed), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    @objc func moveToOriginFeed() {
+        // TODO: Move to the Original Feed / People
+        print("Move to Original Feed / People")
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         [
             profileImage, userName
-            , originLabel
+            , originLabel, originButton
         ].forEach { addSubview($0) }
     }
     
@@ -69,10 +87,11 @@ class FeedCollectionViewCell: UICollectionViewCell {
         userName.text = model.owner.name
         
         // TODO: Need Model Understand
-        if model.isOriginal {
+        if !model.isOriginal {
             originLabel.text = ""
         } else {
             originLabel.text = "Begin by"
+            originButton.setTitle(model.contributor?.name, for: .normal)
         }
         
         applyConstraints(model)
@@ -95,7 +114,8 @@ class FeedCollectionViewCell: UICollectionViewCell {
             userName.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor)
         ]
         
-        if !model.isOriginal {
+        // TODO: Need Model Understand
+        if model.isOriginal {
             userNameConstraints = [
                 userName.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 4.96),
                 userName.topAnchor.constraint(equalTo: topAnchor, constant: 5)
@@ -108,10 +128,15 @@ class FeedCollectionViewCell: UICollectionViewCell {
             originLabel.bottomAnchor.constraint(equalTo: profileImage.bottomAnchor)
         ]
         
+        let originButtonConstraints = [
+            originButton.leadingAnchor.constraint(equalTo: originLabel.trailingAnchor, constant: 4),
+            originButton.centerYAnchor.constraint(equalTo: originLabel.centerYAnchor)
+            
+        ]
+        
         [
-            profileImageConstraints,
-            userNameConstraints,
-            originLabelConstraints
+            profileImageConstraints,userNameConstraints,
+            originLabelConstraints, originButtonConstraints
         ].forEach { NSLayoutConstraint.activate($0) }
         
     }
