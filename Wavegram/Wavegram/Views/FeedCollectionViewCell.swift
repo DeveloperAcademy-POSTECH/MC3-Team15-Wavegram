@@ -25,10 +25,23 @@ class FeedCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
+    // UserName
+    private let userName: UILabel = {
+        
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = label.font.withSize(17)
+        label.textAlignment = .left
+        
+        return label
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        addSubview(profileImage)
+        [
+            profileImage, userName
+        ].forEach { addSubview($0) }
     }
     
     // Basic Setting
@@ -40,6 +53,7 @@ class FeedCollectionViewCell: UICollectionViewCell {
     public func configure(with model: Feed) {
         self.feeds = model
         profileImage.image = UIImage(named: model.owner.profileImage)
+        userName.text = model.owner.name
         
         applyConstraints(model)
     }
@@ -56,7 +70,15 @@ class FeedCollectionViewCell: UICollectionViewCell {
             profileImage.widthAnchor.constraint(equalToConstant: r)
         ]
         
-        NSLayoutConstraint.activate(profileImageConstraints)
+        let userNameConstraints = [
+            userName.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 4.96),
+            userName.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor)
+        ]
+        
+        [
+            profileImageConstraints,
+            userNameConstraints,
+        ].forEach { NSLayoutConstraint.activate($0) }
         
     }
     
