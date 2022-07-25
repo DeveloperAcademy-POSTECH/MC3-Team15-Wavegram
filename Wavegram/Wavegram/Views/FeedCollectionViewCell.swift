@@ -65,12 +65,24 @@ class FeedCollectionViewCell: UICollectionViewCell {
         print("Move to Original Feed / People")
     }
     
+    // AdditionalButton
+    private let additionalButton: UIButton = {
+        let button = UIButton()
+        
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        button.tintColor = .white
+        button.translatesAutoresizingMaskIntoConstraints = false
+                
+        return button
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         [
-            profileImage, userName
-            , originLabel, originButton
+            profileImage, userName,
+            originLabel, originButton,
+            additionalButton
         ].forEach { addSubview($0) }
     }
     
@@ -93,6 +105,10 @@ class FeedCollectionViewCell: UICollectionViewCell {
             originLabel.text = "Begin by"
             originButton.setTitle(model.contributor?.name, for: .normal)
         }
+        
+        // TODO: Need to know the App User Name
+        let buttonSymbolName = model.owner.name == "woody_." ? "ellipsis" : "rectangle.stack.badge.plus"
+        additionalButton.setImage(UIImage(systemName: buttonSymbolName, withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)), for: .normal)
         
         applyConstraints(model)
     }
@@ -131,12 +147,17 @@ class FeedCollectionViewCell: UICollectionViewCell {
         let originButtonConstraints = [
             originButton.leadingAnchor.constraint(equalTo: originLabel.trailingAnchor, constant: 4),
             originButton.centerYAnchor.constraint(equalTo: originLabel.centerYAnchor)
-            
+        ]
+        
+        let additionalButtonConstraints = [
+            additionalButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            additionalButton.topAnchor.constraint(equalTo: topAnchor, constant: 12.5),
         ]
         
         [
             profileImageConstraints,userNameConstraints,
-            originLabelConstraints, originButtonConstraints
+            originLabelConstraints, originButtonConstraints,
+            additionalButtonConstraints
         ].forEach { NSLayoutConstraint.activate($0) }
         
     }
