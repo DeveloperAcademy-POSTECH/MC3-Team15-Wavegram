@@ -20,4 +20,6 @@ struct Feed: Hashable, Codable, Identifiable {
     var isOriginal: Bool {
         contributor != nil
     }
+
+//    this is for test
 }
