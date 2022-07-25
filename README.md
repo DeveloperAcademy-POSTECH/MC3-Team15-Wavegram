@@ -35,9 +35,35 @@ Wavegram
 |**[Rename]**|파일명 또는 디렉토리명을 단순히 변경만 한 경우|
 |**[Delete]**|파일 또는 디렉토리를 단순히 삭제만 한 경우|
 
-Commit, PR, Issue의 title 시작을 tag로 시작한다
-
 예시) [Type] #이슈번호 커밋메세지 `git commit -m "[Feat] #12 로그인 기능 추가"`
+
+### Commit
+
+- Commit 의 title 시작을 tag로 시작한다
+
+- Title 은 작업된 File 이름 혹은 기능 이름으로 한다
+
+- Commit 의 description 에는 작업된 상세 내용이 들어간다
+
+- Description에는 작업한 내용과 To Reviewers 로 review 할 내용을 전달한다
+
+### PR
+
+- PR 의 title 시작을 tag로 시작한다
+
+- Title 은 작업된 File 이름 혹은 기능 이름으로 한다
+
+- 최소 2명의 Approve
+
+- PR를 올리기 전에 Issue를 생성하고 연결한다
+
+### Issue
+
+- Issue 의 title 시작을 tag로 시작한다
+
+- PR를 올리기 전에 Issue를 생성하고 연결한다
+
+- 작업에 대한 원인과 흐름등을 설정한다
 
 <br>
 
