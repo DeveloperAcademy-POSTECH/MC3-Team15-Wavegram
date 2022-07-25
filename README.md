@@ -69,6 +69,10 @@ Wavegram
 
 - 단위 : 같은 File 혹은 기능내에서 가능한 작은 단위의 기능으로 쪼개어 commit 한다 얘) func , class, component 등
 
+### Project ToDo
+
+- 개인의 할일 Reminder 로 사용한다
+
 <br>
 
 ### Subject(필수)
