@@ -37,15 +37,13 @@ Wavegram
 
 예시) [Type] #이슈번호 커밋메세지 `git commit -m "[Feat] #12 로그인 기능 추가"`
 
-### Commit
+### Issue
 
-- Commit 의 title 시작을 tag로 시작한다
+- Issue 의 title 시작을 tag로 시작한다
 
-- Title 은 작업된 File 이름 혹은 기능 이름으로 한다
+- PR를 올리기 전에 Issue를 생성하고 연결한다
 
-- Commit 의 description 에는 작업된 상세 내용이 들어간다
-
-- Description에는 작업한 내용과 To Reviewers 로 review 할 내용을 전달한다
+- 작업에 대한 원인과 흐름등을 설정한다
 
 ### PR
 
@@ -57,13 +55,19 @@ Wavegram
 
 - PR를 올리기 전에 Issue를 생성하고 연결한다
 
-### Issue
+- 단위 : 수정/추가된 기능 혹은 File 단위로 한다.
 
-- Issue 의 title 시작을 tag로 시작한다
+### Commit
 
-- PR를 올리기 전에 Issue를 생성하고 연결한다
+- Commit 의 title 시작을 tag로 시작한다
 
-- 작업에 대한 원인과 흐름등을 설정한다
+- Title 은 작업된 File 이름 혹은 기능 이름으로 한다
+
+- Commit 의 description 에는 작업된 상세 내용이 들어간다
+
+- Description에는 작업한 내용과 To Reviewers 로 review 할 내용을 전달한다
+
+- 단위 : 같은 File 혹은 기능내에서 가능한 작은 단위의 기능으로 쪼개어 commit 한다 얘) func , class, component 등
 
 <br>
 
