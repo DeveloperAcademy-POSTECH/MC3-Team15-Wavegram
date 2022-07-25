@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import SwiftUI
 
 // MARK: UIViewController
 class NewUploadViewController: UIViewController {
@@ -127,7 +128,7 @@ class NewUploadViewController: UIViewController {
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         button.tintColor = .red
-        button.addTarget(self, action: #selector(onTapRecordButton), for: .touchUpInside)
+        button.addTarget(NewUploadViewController.self, action: #selector(onTapRecordButton), for: .touchUpInside)
         
         return button
     }()
@@ -140,7 +141,7 @@ class NewUploadViewController: UIViewController {
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         button.tintColor = .red
-        button.addTarget(self, action: #selector(onTapPlayButton), for: .touchUpInside)
+        button.addTarget(NewUploadViewController.self, action: #selector(onTapPlayButton), for: .touchUpInside)
         
         return button
     }()
@@ -456,3 +457,31 @@ extension NewUploadViewController: UIImagePickerControllerDelegate, UINavigation
         dismiss(animated: true, completion: nil)
     }
 }
+
+
+// MARK: SwiftUI - Preview 추가
+struct NewUploadViewControllerPreView: PreviewProvider {
+    static var previews: some View {
+        NewUploadViewController().newUploadViewControllerToPreview()
+    }
+}
+
+
+#if DEBUG
+extension UIViewController {
+    private struct Preview: UIViewControllerRepresentable {
+        let viewController: UIViewController
+
+        func makeUIViewController(context: Context) -> UIViewController {
+            return viewController
+        }
+
+        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        }
+    }
+
+    func newUploadViewControllerToPreview() -> some View {
+        Preview(viewController: self)
+    }
+}
+#endif

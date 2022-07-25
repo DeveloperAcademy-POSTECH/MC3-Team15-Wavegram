@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import SwiftUI
 
 final class UserViewController: UIViewController {
     
     private let user = User(name: "woody__.", profileImage: "woodyProfileImage")
     
-    private let feeds = [Feed](repeating: Feed(id: 1001, owner: User(name: "woody__.", profileImage: "woodyProfileImage"), contributor: nil, title: "어쩌구", description: "저쩌구", imageName: "someImage", audioName: "someAudio"), count: 50)
+    private var feeds = [Feed](repeating: Feed(id: 1001, owner: User(name: "woody__.", profileImage: "woodyProfileImage"), contributor: nil, title: "어쩌구", description: "저쩌구", imageName: "someImage", audioName: "someAudio"), count: 25)
     
     private let upperBarHeight: CGFloat = 100
     
@@ -24,9 +25,6 @@ final class UserViewController: UIViewController {
     private let leadingPadding: CGFloat = 16
     
     private let trailingPadding: CGFloat = -16
-
-    private var collectionViewHeightConstraint: NSLayoutConstraint!
-
 
     // Scroll View
     private let scrollView: UIScrollView = {
@@ -146,7 +144,7 @@ final class UserViewController: UIViewController {
     }()
     
     // CollectionView
-    private lazy var feedCollectionView: UICollectionView = {
+    private let feedCollectionView: UICollectionView = {
 
         let surfaceLength = UIScreen.main.bounds.width / 3
 
@@ -160,9 +158,6 @@ final class UserViewController: UIViewController {
         collectionView.register(UserViewFeedCollectionViewCell.self, forCellWithReuseIdentifier: UserViewFeedCollectionViewCell.identifier)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isScrollEnabled = false
-
-        collectionViewHeightConstraint = collectionView.heightAnchor.constraint(equalToConstant: 0)
-        collectionViewHeightConstraint.isActive = true
         
         return collectionView
     }()
@@ -179,15 +174,22 @@ final class UserViewController: UIViewController {
         configureView()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        collectionViewHeightConstraint.constant = feedCollectionView.collectionViewLayout.collectionViewContentSize.height
-    }
-
+    // viewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        feedCollectionView.reloadData()
-        view.layoutIfNeeded()
+    }
+
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        feedCollectionView.heightAnchor.constraint(equalToConstant: feedCollectionView.collectionViewLayout.collectionViewContentSize.height).isActive = true
     }
     
     // Configure Nav Bar
@@ -344,3 +346,31 @@ extension UserViewController: UICollectionViewDelegate, UICollectionViewDataSour
         navigationController?.pushViewController(vc, animated: true)
     }
 }
+
+
+// MARK: SwiftUI - Preview 추가
+struct UserViewControllerPreView: PreviewProvider {
+    static var previews: some View {
+        UserViewController().userViewControllerToPreview()
+    }
+}
+
+
+#if DEBUG
+extension UIViewController {
+    private struct Preview: UIViewControllerRepresentable {
+        let viewController: UIViewController
+
+        func makeUIViewController(context: Context) -> UIViewController {
+            return viewController
+        }
+
+        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        }
+    }
+
+    func userViewControllerToPreview() -> some View {
+        Preview(viewController: self)
+    }
+}
+#endif
