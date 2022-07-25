@@ -11,8 +11,7 @@ class MainTabBarViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground  // 앱에 다크모드 적용
-        overrideUserInterfaceStyle = .dark
+        view.backgroundColor = .systemBackground
         
         let vc1 = UINavigationController(rootViewController: HomeViewController())
         let vc2 = UINavigationController(rootViewController: SeacrhViewController())
