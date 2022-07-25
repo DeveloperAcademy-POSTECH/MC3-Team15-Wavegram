@@ -50,7 +50,7 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
         }
         // MARK: Code block ends here <---
 
-
+        
         /*
          스펙트로그램을 그리려면 정확한 sampleCount(여기서는 1024로 정의) 샘플이 필요하지만
          AVFoundation의 오디오 샘플 버퍼에 항상 정확한 1024개 샘플이 포함되어 있지 않을 수 있다.
