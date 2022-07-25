@@ -50,17 +50,7 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
         }
         // MARK: Code block ends here <---
 
-
-        // nyquistFrequency: 시스템이 재생 가능한 최고 주파수. 일반적으로 시스템 샘플링 레이트의 절반.
-        // MARK: 현재 사용되지는 않지만 사용자 인터페이스에 오베레이 추가시 사용될 수 있음.
-        if nyquistFrequency == nil {
-            let duration = Float(CMSampleBufferGetDuration(sampleBuffer).value)
-            let timescale = Float(CMSampleBufferGetDuration(sampleBuffer).timescale)
-            let numsamples = Float(CMSampleBufferGetNumSamples(sampleBuffer))
-            nyquistFrequency = 0.5 / (duration / timescale / numsamples)
-        }
-
-
+        
         /*
          스펙트로그램을 그리려면 정확한 sampleCount(여기서는 1024로 정의) 샘플이 필요하지만
          AVFoundation의 오디오 샘플 버퍼에 항상 정확한 1024개 샘플이 포함되어 있지 않을 수 있다.
