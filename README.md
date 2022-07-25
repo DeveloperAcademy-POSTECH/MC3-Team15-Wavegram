@@ -35,6 +35,8 @@ Wavegram
 |**[Rename]**|파일명 또는 디렉토리명을 단순히 변경만 한 경우|
 |**[Delete]**|파일 또는 디렉토리를 단순히 삭제만 한 경우|
 
+Commit, PR, Issue의 title 시작을 tag로 시작한다
+
 예시) [Type] #이슈번호 커밋메세지 `git commit -m "[Feat] #12 로그인 기능 추가"`
 
 <br>
