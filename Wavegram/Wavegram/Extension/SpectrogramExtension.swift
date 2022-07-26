@@ -1,6 +1,6 @@
 //
-//  AVCaptureAudioDataOutputSampleBufferDelegate.swift
-//  Spectrogram
+//  SpectrogramExtension.swift
+//  Wavegram
 //
 //  Created by 김제필 on 7/18/22.
 //
@@ -17,9 +17,11 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
 
     // 관련 문서: https://developer.apple.com/documentation/avfoundation/avcapturedevice
     // captureOutput(_:didOutput:from:) 함수의 콜이 필요함.
-    public func captureOutput(_ output: AVCaptureOutput,
-                              didOutput sampleBuffer: CMSampleBuffer,
-                              from connection: AVCaptureConnection) {
+    public func captureOutput(
+            _ output: AVCaptureOutput,
+            didOutput sampleBuffer: CMSampleBuffer,
+            from connection: AVCaptureConnection
+    ) {
         // 보유하고 있는 블록 버퍼로 오디오 버퍼 목록 가져오기
         // MARK: Code block Starts here --->
         var audioBufferList = AudioBufferList()
@@ -33,7 +35,8 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
             blockBufferAllocator: nil,
             blockBufferMemoryAllocator: nil,
             flags: kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment,
-            blockBufferOut: &blockBuffer)
+            blockBufferOut: &blockBuffer
+        )
 
         guard let data = audioBufferList.mBuffers.mData else {
             // return: raw 오디오 데이터에 대한 포인터
@@ -49,8 +52,15 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
         if self.rawAudioData.count < Spectrogram.sampleCount * 2 {
             let actualSampleCount = CMSampleBufferGetNumSamples(sampleBuffer)
 
-            let ptr = data.bindMemory(to: Int16.self, capacity: actualSampleCount)
-            let buf = UnsafeBufferPointer(start: ptr, count: actualSampleCount)
+            let ptr = data.bindMemory(
+                    to: Int16.self,
+                    capacity: actualSampleCount
+            )
+
+            let buf = UnsafeBufferPointer(
+                    start: ptr,
+                    count: actualSampleCount
+            )
 
             rawAudioData.append(contentsOf: Array(buf))
         }
@@ -58,7 +68,7 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
         // rawAudioData 배열에 데이터 추가
         //      1. -> raw 오디오 데이터 중 첫 번째 sampleCount가 processData(values: ) 함수로 넘겨짐
         //      2. raw 오디오 데이터에서 hopCount만큼의 데이터 제거
-        // bufferCount만큼의 데이터가 아니라 hopCount만큼의 데이터가 제거되는 이유: 데이터를 오버랩을 통한 데이터 로스 방지
+        // bufferCount만큼의 데이터가 아니라 hopCount만큼의 데이터를 제거하는 이유: 데이터 오버랩을 통한 데이터 로스 방지
         while self.rawAudioData.count >= Spectrogram.sampleCount {
             let dataToProcess = Array(self.rawAudioData[0 ..< Spectrogram.sampleCount])
             self.rawAudioData.removeFirst(Spectrogram.hopCount)
@@ -73,21 +83,22 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
     func configureCaptureSession() {
         switch AVCaptureDevice.authorizationStatus(for: .audio) {
             case .authorized:
-                    break
+                break
             case .notDetermined:
                 sessionQueue.suspend()
-                AVCaptureDevice.requestAccess(for: .audio,
-                                              completionHandler: { granted in
-                    if !granted {
-                        fatalError("App requires microphone access.")
-                    } else {
-                        self.configureCaptureSession()
-                        self.sessionQueue.resume()
-                    }
-                })
+                AVCaptureDevice.requestAccess(
+                        for: .audio,
+                        completionHandler: { granted in
+                            if !granted {
+                                fatalError("App requires microphone access.")
+                            } else {
+                                self.configureCaptureSession()
+                                self.sessionQueue.resume()
+                            }
+                        })
                 return
-            default:
-                fatalError("App requires microphone access.")
+        default:
+            fatalError("App requires microphone access.")
         }
 
 
@@ -105,9 +116,11 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
 
         // 세션 캡쳐를 위해 아이폰의 빌트-인 마이크 정의
         guard
-            let microphone = AVCaptureDevice.default(.builtInMicrophone,
-                                                     for: .audio,
-                                                     position: .unspecified),
+            let microphone = AVCaptureDevice.default(
+                    .builtInMicrophone,
+                    for: .audio,
+                    position: .unspecified
+            ),
             let microphoneInput = try? AVCaptureDeviceInput(device: microphone) else {
                 fatalError("Can't create microphone.")
         }
