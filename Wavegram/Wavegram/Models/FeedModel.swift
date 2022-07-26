@@ -14,7 +14,7 @@ struct Feed: Hashable, Codable, Identifiable {
     let contributor: User?
     let title: String
     let description: String?
-    let imageName: String?
+    let imageName: String
     let audioName: String
     
     var isOriginal: Bool {

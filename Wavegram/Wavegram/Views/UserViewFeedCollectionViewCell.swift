@@ -29,7 +29,7 @@ final class UserViewFeedCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(with feed: Feed) {
-        feedImageView.image = UIImage(named: feed.imageName!)
+        feedImageView.image = UIImage(named: feed.imageName)
     }
     
     required init?(coder aDecoder: NSCoder) {
