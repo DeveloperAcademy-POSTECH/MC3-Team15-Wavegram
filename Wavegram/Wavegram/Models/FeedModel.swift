@@ -18,6 +18,6 @@ struct Feed: Hashable, Codable, Identifiable {
     let audioName: String
     
     var isOriginal: Bool {
-        contributor != nil
+        contributor == nil
     }
 }
