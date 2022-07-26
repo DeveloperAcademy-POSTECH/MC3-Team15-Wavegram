@@ -20,17 +20,17 @@ class NewUploadViewController: UIViewController {
     private var isRecording: Bool = false
     private var isPlaying: Bool = false
     private lazy var imagegesture = UITapGestureRecognizer(target: self, action: #selector(onTapRepresentativeImage(_:)))
-    
+
     private let memoTextLengthLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "(7/30)"
         label.textColor = .gray
         label.font = .systemFont(ofSize: 10, weight: .regular)
-        
+
         return label
     }()
-    
+
     private let representativeImageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -39,10 +39,10 @@ class NewUploadViewController: UIViewController {
         attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: NSString(string: "대표 이미지 *").range(of: "*"))
         label.attributedText = attributedString
         label.font = .systemFont(ofSize: 17, weight: .semibold)
-        
+
         return label
     }()
-    
+
     private let representativeImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -51,10 +51,10 @@ class NewUploadViewController: UIViewController {
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 4
         imageView.isUserInteractionEnabled = true
-                
+
         return imageView
     }()
-    
+
     private let titleLabel: UILabel = {
         let label = UILabel()
         let attributedString = NSMutableAttributedString(string: "제목 *")
@@ -63,10 +63,10 @@ class NewUploadViewController: UIViewController {
         label.attributedText = attributedString
         label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
-        
+
         return label
     }()
-    
+
     private let titleTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -74,20 +74,20 @@ class NewUploadViewController: UIViewController {
         textField.text = "우럭먹다 받은 영감"
         textField.textColor = .white
         textField.clearButtonMode = .whileEditing
-        
+
         return textField
     }()
-    
+
     private let memoLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "메모"
         label.textColor = .white
         label.font = .systemFont(ofSize: 17, weight: .semibold)
-        
+
         return label
     }()
-    
+
     private let memoTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -97,7 +97,7 @@ class NewUploadViewController: UIViewController {
 
         return textField
     }()
-    
+
     private let recordLabel: UILabel = {
         let label = UILabel()
         let attributedString = NSMutableAttributedString(string: "녹음 *")
@@ -106,20 +106,20 @@ class NewUploadViewController: UIViewController {
         label.attributedText = attributedString
         label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
-        
+
         return label
     }()
-    
+
     private let recordView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.white.cgColor
         view.layer.cornerRadius = 4
-        
+
         return view
     }()
-    
+
     private let recordToggleButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -129,10 +129,10 @@ class NewUploadViewController: UIViewController {
         button.contentHorizontalAlignment = .fill
         button.tintColor = .red
         button.addTarget(NewUploadViewController.self, action: #selector(onTapRecordButton), for: .touchUpInside)
-        
+
         return button
     }()
-    
+
     private let playToggleButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -142,10 +142,10 @@ class NewUploadViewController: UIViewController {
         button.contentHorizontalAlignment = .fill
         button.tintColor = .red
         button.addTarget(NewUploadViewController.self, action: #selector(onTapPlayButton), for: .touchUpInside)
-        
+
         return button
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .black
@@ -156,7 +156,7 @@ class NewUploadViewController: UIViewController {
         imagePicker.delegate = self
         representativeImage.addGestureRecognizer(imagegesture)
     }
-    
+
     private func setNavigationBar() {
         self.navigationItem.title = "게시물 업로드"
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
@@ -165,11 +165,11 @@ class NewUploadViewController: UIViewController {
         let rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onTapRightBarButtonItem))
         self.navigationItem.rightBarButtonItem = rightBarButtonItem
     }
-    
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         DispatchQueue.main.async {
@@ -182,18 +182,18 @@ class NewUploadViewController: UIViewController {
             self.memoTextField.setClearButton(with: xCircleImage, mode: .always)
         }
     }
-    
+
     private func setTitleTextFieldBorder() {
         self.titleTextField.layer.addBorder([.bottom], color: .white, width: 1)
         self.memoTextField.layer.addBorder([.bottom], color: .white, width: 1)
     }
-    
+
     private func setRecordToggleButtonBorder() {
         recordToggleButton.layer.borderColor = UIColor.gray.cgColor
         recordToggleButton.layer.borderWidth = 5
         recordToggleButton.layer.cornerRadius = recordToggleButton.frame.width * 0.5
     }
-    
+
     // MARK: SetConstraints
     private func setConstraints() {
         let representativeImageLabelConstraints = [
@@ -214,7 +214,6 @@ class NewUploadViewController: UIViewController {
             titleTextField.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
             titleTextField.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
             titleTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
-
         ]
         let memoLabelConstraints = [
             memoLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
@@ -254,7 +253,7 @@ class NewUploadViewController: UIViewController {
         ]
         [representativeImageLabelConstraints, representativeImageConstraints, titleLabelConstraints, titleTextFieldConstraints, memoLabelConstraints, memoTextFieldConstraints, memoTextLengthLabelConstraints, recordLabelConstraints, recordViewConstraints, recordToggleButtonConstraints, playToggleButtonConstraints].forEach{ NSLayoutConstraint.activate($0) }
     }
-    
+
     // MARK: OnTapGesture
     @objc func onTapRepresentativeImage(_ sender: UITapGestureRecognizer) {
         let alert =  UIAlertController(title: "사진을 골라주세요", message: "", preferredStyle: .actionSheet)
@@ -268,12 +267,12 @@ class NewUploadViewController: UIViewController {
         alert.addAction(cancel)
         present(alert, animated: true, completion: nil)
     }
-    
+
     @objc func onTapLeftBarButtonItem() {
 //        self.dismiss(animated: false)
         print("onTapLeftBarButtonItem")
     }
-    
+
     @objc func onTapRightBarButtonItem() {
         print("onTapRightBarButtonItem")
     }
@@ -289,13 +288,15 @@ extension NewUploadViewController: UITextFieldDelegate {
             guard newText.count > maxTitleTextLength else { return true }
             return false
         }
+
         guard newText.count > maxMemoTextLength else {
             memoTextLengthLabel.text = "(\(newText.count)/\(maxMemoTextLength))"
             return true
         }
+
         return false
     }
-    
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
@@ -310,7 +311,7 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
                 self.recordToggleButton.imageView?.image = UIImage(systemName: "circle.fill")
                 self.isRecording.toggle()
             }
-            
+
             if let record = self.audioRecorder {
                 record.stop()
                 let session = AVAudioSession.sharedInstance()
@@ -321,15 +322,15 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
                     print("\(error)")
                 }
             }
-            
+
         case false:
             DispatchQueue.main.async {
                 self.recordToggleButton.imageView?.image = UIImage(systemName: "stop.circle.fill")
                 self.isRecording.toggle()
             }
-            
+
             let session = AVAudioSession.sharedInstance()
-            
+
             do{
                 try session.setCategory(AVAudioSession.Category.playAndRecord)
                 try session.setActive(true)
@@ -347,7 +348,7 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
             }
         }
     }
-    
+
     @objc func onTapPlayButton() {
         switch isPlaying {
         case true:
@@ -378,7 +379,7 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
             }
         }
     }
-    
+
     func startRecording(){
         do{
             let fileURL = NSURL(string: self.audioFilePath())!
@@ -396,19 +397,20 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
             print("\(error)")
         }
     }
+
     func audioFilePath() -> String {
         let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
         let filePath = path.stringByAppendingPathComponent(path: "test.m4a") as String
         
         return filePath
     }
-    
+
     func audioRecorderSettings() -> [String : AnyObject] {
         let settings = [AVFormatIDKey : NSNumber(value: Int32(kAudioFormatMPEG4AAC)), AVSampleRateKey : NSNumber(value: Float(16000.0)), AVNumberOfChannelsKey : NSNumber(value: 1), AVEncoderAudioQualityKey : NSNumber(value: Int64(AVAudioQuality.high.rawValue))]
         
         return settings
     }
-    
+
     //MARK: AVAudioPlayerDelegate
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         if flag == true {
@@ -421,7 +423,7 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
             print("Player 오류")
         }
     }
-    
+
     //MARK: AVAudioRecorderDelegate
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         if flag == true {
@@ -440,7 +442,7 @@ extension NewUploadViewController: UIImagePickerControllerDelegate, UINavigation
         imagePicker.sourceType = .photoLibrary
         present(imagePicker, animated: false, completion: nil)
     }
-    
+
     func openCamera(){
         if(UIImagePickerController .isSourceTypeAvailable(.camera)){
             imagePicker.sourceType = .camera
@@ -449,7 +451,7 @@ extension NewUploadViewController: UIImagePickerControllerDelegate, UINavigation
             print("Camera not available")
         }
     }
-    
+
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.originalImage] as? UIImage {
             representativeImage.image = image
