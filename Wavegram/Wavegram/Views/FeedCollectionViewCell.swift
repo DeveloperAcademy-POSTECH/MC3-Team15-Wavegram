@@ -13,6 +13,7 @@ class FeedCollectionViewCell: UICollectionViewCell {
     var feeds: Feed?
     weak var viewController: UIViewController?
     
+    // 상단
     // Profile Image
     // TODO: UIIMageView -> UIButton
     private let profileImage: UIImageView = {
@@ -108,13 +109,29 @@ class FeedCollectionViewCell: UICollectionViewCell {
         viewController?.present(actionSheet, animated: true)
     }
     
+    // 하단
+    // rectangle
+    private let rectangle: UIView = {
+        
+        let rect = UIView()
+        rect.layer.borderWidth = 1
+        rect.layer.backgroundColor = UIColor.clear.cgColor
+        rect.layer.borderColor = UIColor.white.cgColor
+        rect.translatesAutoresizingMaskIntoConstraints = false
+        
+        return rect
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        rectangle.frame = frame
         
         [
             profileImage, userName,
             originLabel, originButton,
-            additionalButton
+            additionalButton,
+            rectangle
         ].forEach { addSubview($0) }
     }
     
@@ -161,6 +178,8 @@ class FeedCollectionViewCell: UICollectionViewCell {
     
     // Constraints
     private func applyConstraints(_ model: Feed) {
+        
+        // 상단
         let r = frame.width * 21.0 / 175.0 // ProfileImage 반지름
         
         let profileImageConstraints = [
@@ -200,10 +219,20 @@ class FeedCollectionViewCell: UICollectionViewCell {
             additionalButton.topAnchor.constraint(equalTo: topAnchor, constant: 12.5),
         ]
         
+        // 하단
+        let rectangleConstraints = [
+            // 350:476
+            rectangle.leadingAnchor.constraint(equalTo: leadingAnchor),
+            rectangle.trailingAnchor.constraint(equalTo: trailingAnchor),
+            rectangle.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 6.82),
+            rectangle.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ]
+        
         [
             profileImageConstraints,userNameConstraints,
             originLabelConstraints, originButtonConstraints,
-            additionalButtonConstraints
+            additionalButtonConstraints,
+            rectangleConstraints
         ].forEach { NSLayoutConstraint.activate($0) }
         
     }
