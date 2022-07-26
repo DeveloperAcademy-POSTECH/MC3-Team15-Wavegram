@@ -164,6 +164,17 @@ class FeedCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    // titlelabel
+    private let titleLabel: UILabel = {
+
+        let label = UILabel()
+        label.font = label.font.withSize(16)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -178,7 +189,8 @@ class FeedCollectionViewCell: UICollectionViewCell {
             originLabel, originButton,
             additionalButton,
             rectangle,
-            feedImage, detailLabel
+            feedImage, detailLabel,
+            titleLabel
         ].forEach { addSubview($0) }
     }
     
@@ -222,6 +234,9 @@ class FeedCollectionViewCell: UICollectionViewCell {
         
         // feedImage
         feedImage.image = UIImage(named: model.imageName)
+        
+        // titleLabel
+        titleLabel.text = model.title
         
         applyConstraints(model)
     }
@@ -298,12 +313,19 @@ class FeedCollectionViewCell: UICollectionViewCell {
             detailLabel.trailingAnchor.constraint(equalTo: feedImage.trailingAnchor, constant: -10)
         ]
         
+        let titleLabelConstraints = [
+            titleLabel.centerXAnchor.constraint(equalTo: rectangle.centerXAnchor),
+            // topAnchor: 476:14 = 238:7
+            titleLabel.topAnchor.constraint(equalTo: feedImage.bottomAnchor, constant: rectangle.frame.height * (7.0 / 238.0))
+        ]
+        
         [
             profileImageConstraints,userNameConstraints,
             originLabelConstraints, originButtonConstraints,
             additionalButtonConstraints,
             rectangleConstraints,
-            feedImageConstraints, detailLabelConstraints
+            feedImageConstraints, detailLabelConstraints,
+            titleLabelConstraints
         ].forEach { NSLayoutConstraint.activate($0) }
         
     }
