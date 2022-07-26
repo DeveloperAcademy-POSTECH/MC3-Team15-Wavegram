@@ -15,7 +15,7 @@ class MainTabBarViewController: UITabBarController {
         
         let vc1 = UINavigationController(rootViewController: HomeViewController())
         let vc2 = UINavigationController(rootViewController: SeacrhViewController())
-        let vc3 = UINavigationController(rootViewController: UserViewController())
+        let vc3 = UINavigationController(rootViewController: SpectrogramViewController())
         
         vc1.tabBarItem.image = UIImage(systemName: "music.note.house.fill")
         vc2.tabBarItem.image = UIImage(systemName: "magnifyingglass")
