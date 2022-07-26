@@ -25,6 +25,14 @@ public class Spectrogram: CALayer {
         contentsGravity = .resize
 
         configureCaptureSession()
+
+        audioOutput.setSampleBufferDelegate(
+            self,
+            queue: captureQueue
+        )
+    }
+
+        configureCaptureSession()
         audioOutput.setSampleBufferDelegate(self,
                                             queue: captureQueue)
     }
@@ -49,7 +57,7 @@ public class Spectrogram: CALayer {
     static let bufferCount = 768
 
     // hopCount: 버퍼가 오버랩되는 정도. 오버랩이 커질 수록 느려짐
-    static let hopCount = 512
+    static let hopCount = 1000
 
 
     // AVCaptureAudioDataOutput() 추가
@@ -106,8 +114,10 @@ public class Spectrogram: CALayer {
     var nyquistFrequency: Float?
 
     // Raw 주파수값
-    var frequencyDomainValues = [Float](repeating: 0,
-                                        count: bufferCount * sampleCount)
+    var frequencyDomainValues = [Float](
+        repeating: 0,
+        count: bufferCount * sampleCount
+    )
 
     // vImage buffer -> spectrogram
     // 높이: sampleCount, 너비: bufferCount
@@ -175,13 +185,17 @@ public class Spectrogram: CALayer {
 
     // timeDomainBuffer: 오디오 데이터의 현재 프레임의 시간 영역을 단정밀도(single-precision) 값으로 내포하는 배열.
     // 코드 재사용을 위해 정의: 각 iteration별로 어레이를 만드는 상황을 방지하기 위함
-    var timeDomainBuffer = [Float](repeating: 0,
-                                   count: sampleCount)
+    var timeDomainBuffer = [Float](
+        repeating: 0,
+        count: sampleCount
+    )
 
     /// A resuable array that contains the frequency domain representation of the current frame of
     /// audio data.
-    var frequencyDomainBuffer = [Float](repeating: 0,
-                                        count: sampleCount)
+    var frequencyDomainBuffer = [Float](
+        repeating: 0,
+        count: sampleCount
+    )
 
 
     /*
@@ -222,7 +236,6 @@ public class Spectrogram: CALayer {
         // MARK: <---
 
 
-
         // MARK: forward transform 후 수행되는 작업
         // 진동수(frequency) -> 데시벨
         // 스펙트로그램 색깔 <--> 소리 크기(데시벨) 변환
@@ -248,9 +261,13 @@ public class Spectrogram: CALayer {
     // PlanarF -> ARGB8888 변환 시 사용되는 맥스 RGB 채널 값
     var maxFloat: Float = {
         var maxValue = [Float(Int16.max)]
-        vDSP.convert(amplitude: maxValue,
-                     toDecibels: &maxValue,
-                     zeroReference: Float(Spectrogram.sampleCount))
+
+        vDSP.convert(
+            amplitude: maxValue,
+            toDecibels: &maxValue,
+            zeroReference: Float(Spectrogram.sampleCount)
+        )
+
         return maxValue[0] * 2
     }()
 

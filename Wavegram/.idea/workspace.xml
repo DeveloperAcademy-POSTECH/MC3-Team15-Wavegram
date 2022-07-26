@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="36e0a582-eef9-4a82-947c-660be6c77116" name="Changes" comment="CHORE: 다크모드 기본값으로 설정&#10;&#10;- 앱의 appearance를 기본 다크모드로 설정했습니다.">
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_7_22_22,_3_33_PM_[Changes]/UserInterfaceState.xcuserstate" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_7_22_22,_3_33_PM_[Changes]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_7_22_22__3_33_PM__Changes_.xml" afterDir="false" />
+    <list default="true" id="36e0a582-eef9-4a82-947c-660be6c77116" name="Changes" comment="Fix: 스펙트로그램 실행 오류 픽스&#10;&#10;뷰 컨트롤러 코드 추가로 해결했습니다.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Wavegram.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/Wavegram.xcodeproj/project.pbxproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Wavegram.xcodeproj/project.xcworkspace/xcuserdata/raymondkim.xcuserdatad/UserInterfaceState.xcuserstate" beforeDir="false" afterPath="$PROJECT_DIR$/Wavegram.xcodeproj/project.xcworkspace/xcuserdata/raymondkim.xcuserdatad/UserInterfaceState.xcuserstate" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Wavegram/Controllers/MainTabBarViewController.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Wavegram/Controllers/MainTabBarViewController.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Wavegram/Controllers/SpectrogramViewController.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Wavegram/Controllers/SpectrogramViewController.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Wavegram/Extension/SpectrogramExtension.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Wavegram/Extension/SpectrogramExtension.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Wavegram/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/Wavegram/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Wavegram/Views/Spectrogram.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Wavegram/Views/Spectrogram.swift" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="iphoneos_00008103-0015391221D1001E" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="iphoneos_00008110-001E54A40E98801E" />
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -25,6 +22,13 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GithubProjectSettings">
+    <option name="branchProtectionPatterns">
+      <list>
+        <option value=".*" />
+      </list>
+    </option>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -75,6 +79,9 @@
       <workItem from="1658471213240" duration="5263000" />
       <workItem from="1658533407389" duration="5893000" />
       <workItem from="1658724032872" duration="663000" />
+      <workItem from="1658814068813" duration="3592000" />
+      <workItem from="1658832267081" duration="247000" />
+      <workItem from="1658832851923" duration="607000" />
     </task>
     <task id="LOCAL-00001" summary="디렉토리 패스 수정&#10;&#10;### Motivation&#10;- 논리 경로 - 물리 경로 충돌로 인한 파일 트래킹 불가 이슈 수정 소요 발생&#10;&#10;### Key Changes&#10;- 잘못된 논리 경로 삭제&#10;- 물리 경로 재생성&#10;- 각 파일의 디렉토리 재지정&#10;- 스펙트로그램 파일 일부 재작성&#10;&#10;### To Riviewers&#10;- 땡스 비비~">
       <created>1658470025231</created>
@@ -104,7 +111,21 @@
       <option name="project" value="LOCAL" />
       <updated>1658533948393</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Feat: 폰트 익스텐션 등록&#10;&#10;- 수정 소요는 있으나 밀키와 이야기 해서 폰트의 종류를 줄였습니다.&#10;- 폰트의 종류는 다음과 같습니다.&#10;&#10;헤더 영역&#10;headerID 20 semibold&#10;headerTitle 17 medium&#10;headerButton 17 regular&#10;&#10;바디 영역&#10;bodyTitle 16 semibold&#10;bodyTitleInactive 15 regular&#10;bodyContents 15 regular&#10;bodyContentsSmall 14 regular&#10;&#10;  사용 방법&#10;  예시 1) label.font = .headerID&#10;  예시 2) textField.font = .headerTitle&#10;&#10;사용법은 주석에도 있습니다.">
+      <created>1658814771469</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1658814771469</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Fix: 스펙트로그램 실행 오류 픽스&#10;&#10;뷰 컨트롤러 코드 추가로 해결했습니다.">
+      <created>1658832448630</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1658832448630</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -137,6 +158,8 @@
     <MESSAGE value="디렉토리 패스 수정&#10;&#10;### Motivation&#10;- 논리 경로 - 물리 경로 충돌로 인한 파일 트래킹 불가 이슈 수정 소요 발생&#10;&#10;### Key Changes&#10;- 잘못된 논리 경로 삭제&#10;- 물리 경로 재생성&#10;- 각 파일의 디렉토리 재지정&#10;- 스펙트로그램 파일 일부 재작성&#10;&#10;### To Riviewers&#10;- 땡스 비비~" />
     <MESSAGE value="CHORE: 뷰 컨트롤러 프리뷰 추가&#10;&#10;- 뷰 컨트롤러에 프리뷰를 추가하였습니다.&#10;- 코딩하실 때 화면이 좁아서 잘 안 보인다면 주석 처리를 하시고 작업해 주세요." />
     <MESSAGE value="CHORE: 다크모드 기본값으로 설정&#10;&#10;- 앱의 appearance를 기본 다크모드로 설정했습니다." />
-    <option name="LAST_COMMIT_MESSAGE" value="CHORE: 다크모드 기본값으로 설정&#10;&#10;- 앱의 appearance를 기본 다크모드로 설정했습니다." />
+    <MESSAGE value="Feat: 폰트 익스텐션 등록&#10;&#10;- 수정 소요는 있으나 밀키와 이야기 해서 폰트의 종류를 줄였습니다.&#10;- 폰트의 종류는 다음과 같습니다.&#10;&#10;헤더 영역&#10;headerID 20 semibold&#10;headerTitle 17 medium&#10;headerButton 17 regular&#10;&#10;바디 영역&#10;bodyTitle 16 semibold&#10;bodyTitleInactive 15 regular&#10;bodyContents 15 regular&#10;bodyContentsSmall 14 regular&#10;&#10;  사용 방법&#10;  예시 1) label.font = .headerID&#10;  예시 2) textField.font = .headerTitle&#10;&#10;사용법은 주석에도 있습니다." />
+    <MESSAGE value="Fix: 스펙트로그램 실행 오류 픽스&#10;&#10;뷰 컨트롤러 코드 추가로 해결했습니다." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix: 스펙트로그램 실행 오류 픽스&#10;&#10;뷰 컨트롤러 코드 추가로 해결했습니다." />
   </component>
 </project>
