@@ -122,6 +122,20 @@ class FeedCollectionViewCell: UICollectionViewCell {
         return rect
     }()
     
+    // feedImage
+    private let feedImage: UIImageView = {
+        
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.alpha = 1
+        imageView.isUserInteractionEnabled = true
+        
+        
+        return imageView
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -131,7 +145,8 @@ class FeedCollectionViewCell: UICollectionViewCell {
             profileImage, userName,
             originLabel, originButton,
             additionalButton,
-            rectangle
+            rectangle,
+            feedImage
         ].forEach { addSubview($0) }
     }
     
@@ -173,15 +188,20 @@ class FeedCollectionViewCell: UICollectionViewCell {
             additionalButton.addTarget(self, action: #selector(uploadContributeFeed), for: .touchUpInside)
         }
         
+        // feedImage
+        feedImage.image = UIImage(named: model.imageName)
+        
         applyConstraints(model)
     }
     
     // Constraints
     private func applyConstraints(_ model: Feed) {
         
-        // 상단
         let r = frame.width * 21.0 / 175.0 // ProfileImage 반지름
+        let w = rectangle.frame.width * (33.0 / 35.0) // FeedImage Width
+        let x = rectangle.frame.height / 17.5 // FeedImage TopAnchor
         
+        // 상단
         let profileImageConstraints = [
             profileImage.topAnchor.constraint(equalTo: topAnchor),
             profileImage.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -228,11 +248,22 @@ class FeedCollectionViewCell: UICollectionViewCell {
             rectangle.bottomAnchor.constraint(equalTo: bottomAnchor)
         ]
         
+        let feedImageConstraints = [
+            // image width: 350: 330 = 35:33
+            // topAnchor: 350:20 = 17.5:1
+            feedImage.centerXAnchor.constraint(equalTo: rectangle.centerXAnchor),
+            feedImage.widthAnchor.constraint(equalToConstant: w),
+            feedImage.heightAnchor.constraint(equalToConstant: w),
+            
+            feedImage.topAnchor.constraint(equalTo: rectangle.topAnchor, constant: x)
+        ]
+        
         [
             profileImageConstraints,userNameConstraints,
             originLabelConstraints, originButtonConstraints,
             additionalButtonConstraints,
-            rectangleConstraints
+            rectangleConstraints,
+            feedImageConstraints
         ].forEach { NSLayoutConstraint.activate($0) }
         
     }
