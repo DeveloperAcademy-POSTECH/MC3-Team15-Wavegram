@@ -134,7 +134,10 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeedCollectionViewCell.identifier, for: indexPath) as? FeedCollectionViewCell else {return UICollectionViewCell()}
-        cell.backgroundColor = .white
+
+        let feed = feeds[indexPath.row]
+        cell.configure(with: feed)
+        
         return cell
     }
     

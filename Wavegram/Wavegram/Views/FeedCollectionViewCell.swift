@@ -95,18 +95,24 @@ class FeedCollectionViewCell: UICollectionViewCell {
     public func configure(with model: Feed) {
         self.feeds = model
         
-        profileImage.image = UIImage(named: model.owner.profileImage)
-        userName.text = model.owner.name
+        if model.isOriginal {
+            profileImage.image = UIImage(named: model.owner.profileImage)
+            userName.text = model.owner.name
+        } else {
+            guard let profileImageString = model.contributor?.profileImage else {return}
+            profileImage.image = UIImage(named: profileImageString)
+            userName.text = model.contributor?.name
+        }
+        
         
         // TODO: Need Model Understand
-        if !model.isOriginal {
+        if model.isOriginal {
             originLabel.text = ""
         } else {
             originLabel.text = "Begin by"
-            originButton.setTitle(model.contributor?.name, for: .normal)
+            originButton.setTitle(model.owner.name, for: .normal)
         }
         
-        // TODO: Need to know the App User Name
         let buttonSymbolName = model.owner.name == "woody_." ? "ellipsis" : "rectangle.stack.badge.plus"
         additionalButton.setImage(UIImage(systemName: buttonSymbolName, withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)), for: .normal)
         
