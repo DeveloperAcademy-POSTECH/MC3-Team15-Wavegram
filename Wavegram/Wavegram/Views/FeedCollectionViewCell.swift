@@ -262,7 +262,7 @@ class FeedCollectionViewCell: UICollectionViewCell {
             userName.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor)
         ]
         
-        if model.isOriginal {
+        if !model.isOriginal {
             userNameConstraints = [
                 userName.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 4.96),
                 userName.topAnchor.constraint(equalTo: topAnchor, constant: 5)
