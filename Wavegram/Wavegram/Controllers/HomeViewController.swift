@@ -136,6 +136,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeedCollectionViewCell.identifier, for: indexPath) as? FeedCollectionViewCell else {return UICollectionViewCell()}
 
         let feed = feeds[indexPath.row]
+        cell.viewController = self
         cell.configure(with: feed)
         
         return cell

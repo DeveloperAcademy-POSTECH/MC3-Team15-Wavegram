@@ -11,6 +11,7 @@ import AVFoundation
 class FeedCollectionViewCell: UICollectionViewCell {
     
     var feeds: Feed?
+    weak var viewController: UIViewController?
     
     // Profile Image
     // TODO: UIIMageView -> UIButton
@@ -76,6 +77,37 @@ class FeedCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
+    // Contribute Button
+    @objc func uploadContributeFeed() {
+        // TODO: Move to UploadContributeFeed
+        print("Move to uploadContributeFeed View")
+    }
+    
+    // ActionSheet
+    @objc func displayActionSheet(_sender: UIButton!) {
+        // TODO: Change AlertAction Font Size
+
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let modify = UIAlertAction(title: "수정하기", style: .default) { action in
+            // let vc = ModifyPost()
+            // self.present(vc)
+            print("수정하기")
+        }
+        let delete = UIAlertAction(title: "삭제하기", style: .destructive) { action in
+            print("삭제하기")
+        }
+        let cancel = UIAlertAction(title: "취소하기", style: .cancel) { action in
+            print("취소하기")
+        }
+        
+        actionSheet.addAction(modify)
+        actionSheet.addAction(delete)
+        actionSheet.addAction(cancel)
+        
+        viewController?.present(actionSheet, animated: true)
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -95,6 +127,7 @@ class FeedCollectionViewCell: UICollectionViewCell {
     public func configure(with model: Feed) {
         self.feeds = model
         
+        // profileImage and userName
         if model.isOriginal {
             profileImage.image = UIImage(named: model.owner.profileImage)
             userName.text = model.owner.name
@@ -104,8 +137,7 @@ class FeedCollectionViewCell: UICollectionViewCell {
             userName.text = model.contributor?.name
         }
         
-        
-        // TODO: Need Model Understand
+        // Origin Label and Button
         if model.isOriginal {
             originLabel.text = ""
         } else {
@@ -113,8 +145,16 @@ class FeedCollectionViewCell: UICollectionViewCell {
             originButton.setTitle(model.owner.name, for: .normal)
         }
         
-        let buttonSymbolName = model.owner.name == "woody_." ? "ellipsis" : "rectangle.stack.badge.plus"
+        // Additional Button
+        let isMine = model.contributor?.name == "woody_." || model.contributor == nil
+        let buttonSymbolName = isMine ? "ellipsis" : "rectangle.stack.badge.plus"
         additionalButton.setImage(UIImage(systemName: buttonSymbolName, withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)), for: .normal)
+        
+        if isMine {
+            additionalButton.addTarget(self, action: #selector(displayActionSheet(_sender:)), for: .touchUpInside)
+        } else {
+            additionalButton.addTarget(self, action: #selector(uploadContributeFeed), for: .touchUpInside)
+        }
         
         applyConstraints(model)
     }
