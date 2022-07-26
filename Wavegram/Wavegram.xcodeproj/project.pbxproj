@@ -24,6 +24,7 @@
 		59BEF7E2CE0DEA659F422C7B /* UserViewFeedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59BEFE8BF5D049F3D0CEF035 /* UserViewFeedCollectionViewCell.swift */; };
 		943264D6288A752D003A789A /* Spectrogram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943264D5288A752D003A789A /* Spectrogram.swift */; };
 		943264DA288A9C2E003A789A /* SpectrogramExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943264D9288A9C2E003A789A /* SpectrogramExtension.swift */; };
+		B69B1DF4288ECA21000BB036 /* FeedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69B1DF3288ECA21000BB036 /* FeedCollectionViewCell.swift */; };
 		C651E9FA288542C3002BBAA8 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C651E9F9288542C3002BBAA8 /* UserModel.swift */; };
 		C651E9FC2885458D002BBAA8 /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C651E9FB2885458D002BBAA8 /* FeedModel.swift */; };
 		C651E9FE28854706002BBAA8 /* JsonManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C651E9FD28854706002BBAA8 /* JsonManager.swift */; };
@@ -69,6 +70,7 @@
 		59BEFE8BF5D049F3D0CEF035 /* UserViewFeedCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewFeedCollectionViewCell.swift; sourceTree = "<group>"; };
 		943264D5288A752D003A789A /* Spectrogram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spectrogram.swift; sourceTree = "<group>"; };
 		943264D9288A9C2E003A789A /* SpectrogramExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpectrogramExtension.swift; sourceTree = "<group>"; };
+		B69B1DF3288ECA21000BB036 /* FeedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCollectionViewCell.swift; sourceTree = "<group>"; };
 		C651E9F9288542C3002BBAA8 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		C651E9FB2885458D002BBAA8 /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
 		C651E9FD28854706002BBAA8 /* JsonManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonManager.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 				59BEFDFE9355842A70A4F869 /* SingleFeedViewController.swift */,
 				59BEFE8BF5D049F3D0CEF035 /* UserViewFeedCollectionViewCell.swift */,
 				943264D5288A752D003A789A /* Spectrogram.swift */,
+				B69B1DF3288ECA21000BB036 /* FeedCollectionViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -335,6 +338,7 @@
 			files = (
 				0ABD56EC28853718001DF711 /* UserViewController.swift in Sources */,
 				C651E9FC2885458D002BBAA8 /* FeedModel.swift in Sources */,
+				B69B1DF4288ECA21000BB036 /* FeedCollectionViewCell.swift in Sources */,
 				0ABD5A0B2888471B00B70589 /* StringExtension.swift in Sources */,
 				0ABD56EA28853701001DF711 /* SearchViewController.swift in Sources */,
 				0ABD59C72885B11600B70589 /* LayerExtension.swift in Sources */,
