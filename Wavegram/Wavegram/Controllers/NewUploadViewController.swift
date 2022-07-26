@@ -116,6 +116,7 @@ class NewUploadViewController: UIViewController {
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.white.cgColor
         view.layer.cornerRadius = 4
+
         return view
     }()
 
