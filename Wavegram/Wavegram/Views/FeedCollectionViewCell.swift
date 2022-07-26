@@ -175,6 +175,17 @@ class FeedCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    // contributorLabel
+    private let contributorLabel: UILabel = {
+
+        let label = UILabel()
+        label.font = label.font.withSize(14)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+
+        return label
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -190,7 +201,7 @@ class FeedCollectionViewCell: UICollectionViewCell {
             additionalButton,
             rectangle,
             feedImage, detailLabel,
-            titleLabel
+            titleLabel, contributorLabel
         ].forEach { addSubview($0) }
     }
     
@@ -238,6 +249,14 @@ class FeedCollectionViewCell: UICollectionViewCell {
         // titleLabel
         titleLabel.text = model.title
         
+        // contributorLabel
+        if model.contributor == nil {
+            contributorLabel.text = model.owner.name
+        } else {
+            contributorLabel.text = model.owner.name + ", " + model.contributor!.name
+        }
+        
+        // Constraints
         applyConstraints(model)
     }
     
@@ -319,13 +338,21 @@ class FeedCollectionViewCell: UICollectionViewCell {
             titleLabel.topAnchor.constraint(equalTo: feedImage.bottomAnchor, constant: rectangle.frame.height * (7.0 / 238.0))
         ]
         
+        let contributorConstraints = [
+            contributorLabel.centerXAnchor.constraint(equalTo: rectangle.centerXAnchor),
+            // width: 350:250 = 7:5
+            contributorLabel.widthAnchor.constraint(equalToConstant: rectangle.frame.width * (5.0 / 7.0)),
+
+            contributorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: rectangle.frame.height * (10.0 / 476.0))
+        ]
+        
         [
             profileImageConstraints,userNameConstraints,
             originLabelConstraints, originButtonConstraints,
             additionalButtonConstraints,
             rectangleConstraints,
             feedImageConstraints, detailLabelConstraints,
-            titleLabelConstraints
+            titleLabelConstraints, contributorConstraints
         ].forEach { NSLayoutConstraint.activate($0) }
         
     }
