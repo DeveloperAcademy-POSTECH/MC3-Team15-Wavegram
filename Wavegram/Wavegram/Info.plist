@@ -21,7 +21,9 @@
 			</array>
 		</dict>
 	</dict>
-	<key>applica</key>
-	<string></string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>SFCompact.ttf</string>
+	</array>
 </dict>
 </plist>
