@@ -148,10 +148,30 @@ class FeedCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    // feedImageGesture
+    @objc func gestureFired(_ sender: UITapGestureRecognizer) {
+        
+        // TODO: adjust Alpha -> adjust color Gradation
+        sender.view?.alpha = (sender.view?.alpha == 1) ? 0.3 : 1
+        guard let feeds = feeds else {
+            return
+        }
+
+        if feedImage.alpha == 1 {
+            detailLabel.text = ""
+        } else {
+            detailLabel.text = feeds.description
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         rectangle.frame = frame
+        
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(gestureFired(_:)))
+        gestureRecognizer.numberOfTapsRequired = 1
+        feedImage.addGestureRecognizer(gestureRecognizer)
         
         [
             profileImage, userName,
