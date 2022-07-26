@@ -13,7 +13,7 @@ class HomeViewController: UIViewController {
     // 임시 Data
     private var feeds: [Feed] = [
         Feed(id: 1, owner: User(name: "woody_.", profileImage: "woodyProfile"), contributor: nil, title: "우럭먹다 받은 영감", description: "우럭과 함꼐 블루스", imageName: "woodyFeed", audioName: "happyDay"),
-        Feed(id: 2, owner: User(name: "alice_in_musicland", profileImage: "aliceProfile"), contributor: User(name: "woody_.", profileImage: "woodyProfile"), title: "우럭 마시쏘", description: "우럭우러", imageName: "woodyFeed", audioName: "exampleFile")
+        Feed(id: 2, owner: User(name: "woody_.", profileImage: "woodyProfile"), contributor: User(name: "alice_in_musicland", profileImage: "aliceProfile"), title: "우럭 마시쏘", description: "우럭우러", imageName: "woodyFeed", audioName: "exampleFile")
     ]
     
     // Collection View
@@ -134,10 +134,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeedCollectionViewCell.identifier, for: indexPath) as? FeedCollectionViewCell else {return UICollectionViewCell()}
-        
-        let feed = feeds[indexPath.row]
-        cell.configure(with: feed)
-        
+        cell.backgroundColor = .white
         return cell
     }
     
