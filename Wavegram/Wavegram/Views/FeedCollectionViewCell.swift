@@ -136,6 +136,18 @@ class FeedCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
+    // detail
+    private let detailLabel: UILabel = {
+        
+        let label = UILabel()
+        label.font = label.font.withSize(16)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -146,7 +158,7 @@ class FeedCollectionViewCell: UICollectionViewCell {
             originLabel, originButton,
             additionalButton,
             rectangle,
-            feedImage
+            feedImage, detailLabel
         ].forEach { addSubview($0) }
     }
     
@@ -215,7 +227,6 @@ class FeedCollectionViewCell: UICollectionViewCell {
             userName.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor)
         ]
         
-        // TODO: Need Model Understand
         if model.isOriginal {
             userNameConstraints = [
                 userName.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 4.96),
@@ -258,12 +269,21 @@ class FeedCollectionViewCell: UICollectionViewCell {
             feedImage.topAnchor.constraint(equalTo: rectangle.topAnchor, constant: x)
         ]
         
+        let detailLabelConstraints = [
+            detailLabel.centerXAnchor.constraint(equalTo: feedImage.centerXAnchor),
+            detailLabel.centerYAnchor.constraint(equalTo: feedImage.centerYAnchor),
+            
+            // TODO: Change detailLabel Length as the Design
+            detailLabel.leadingAnchor.constraint(equalTo: feedImage.leadingAnchor, constant: 10),
+            detailLabel.trailingAnchor.constraint(equalTo: feedImage.trailingAnchor, constant: -10)
+        ]
+        
         [
             profileImageConstraints,userNameConstraints,
             originLabelConstraints, originButtonConstraints,
             additionalButtonConstraints,
             rectangleConstraints,
-            feedImageConstraints
+            feedImageConstraints, detailLabelConstraints
         ].forEach { NSLayoutConstraint.activate($0) }
         
     }
