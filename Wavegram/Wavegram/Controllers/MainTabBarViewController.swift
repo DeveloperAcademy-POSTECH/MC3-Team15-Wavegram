@@ -5,7 +5,7 @@
 //  Created by 김상현 on 2022/07/18.
 //
 import UIKit
-import SwiftUI
+//import SwiftUI
 
 class MainTabBarViewController: UITabBarController {
 
@@ -15,7 +15,7 @@ class MainTabBarViewController: UITabBarController {
         
         let vc1 = UINavigationController(rootViewController: HomeViewController())
         let vc2 = UINavigationController(rootViewController: SeacrhViewController())
-        let vc3 = UINavigationController(rootViewController: SpectrogramViewController())
+        let vc3 = UINavigationController(rootViewController: UserViewController())
         
         vc1.tabBarItem.image = UIImage(systemName: "music.note.house.fill")
         vc2.tabBarItem.image = UIImage(systemName: "magnifyingglass")
@@ -33,29 +33,29 @@ class MainTabBarViewController: UITabBarController {
 }
 
 
-// MARK: SwiftUI - Preview 추가
-struct MainTabBarViewControllerPreView: PreviewProvider {
-    static var previews: some View {
-        MainTabBarViewController().uiViewControllerToPreview()
-    }
-}
-
-
-#if DEBUG
-extension UIViewController {
-    private struct Preview: UIViewControllerRepresentable {
-        let viewController: UIViewController
-
-        func makeUIViewController(context: Context) -> UIViewController {
-            return viewController
-        }
-
-        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-        }
-    }
-
-    func uiViewControllerToPreview() -> some View {
-        Preview(viewController: self)
-    }
-}
-#endif
+//// MARK: SwiftUI - Preview 추가
+//struct MainTabBarViewControllerPreView: PreviewProvider {
+//    static var previews: some View {
+//        MainTabBarViewController().uiViewControllerToPreview()
+//    }
+//}
+//
+//
+//#if DEBUG
+//extension UIViewController {
+//    private struct Preview: UIViewControllerRepresentable {
+//        let viewController: UIViewController
+//
+//        func makeUIViewController(context: Context) -> UIViewController {
+//            return viewController
+//        }
+//
+//        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+//        }
+//    }
+//
+//    func uiViewControllerToPreview() -> some View {
+//        Preview(viewController: self)
+//    }
+//}
+//#endif
