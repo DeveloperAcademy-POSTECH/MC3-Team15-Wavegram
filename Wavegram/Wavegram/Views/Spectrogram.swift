@@ -32,6 +32,10 @@ public class Spectrogram: CALayer {
         )
     }
 
+        configureCaptureSession()
+        audioOutput.setSampleBufferDelegate(self,
+                                            queue: captureQueue)
+    }
     // required: 이 생성자가 반드시 구현되어야 한다는 제약조건
     // NSCoder: NextStep Coder. 과거 넥스트 사의 유물... 서브클래스가 오브젝트나 어떤 값을 메모리 - 다른 포맷 간에 변환할 수 있도록 지원함.
     // archiving (오브젝트나 데이터의 저장) 및 distribution (오브젝트나 데이터의 프로세스 또는 스레드 간 복사) 등의 작업을 위해 사용됨.
@@ -58,7 +62,7 @@ public class Spectrogram: CALayer {
 
     // AVCaptureAudioDataOutput() 추가
     // 오디오 녹음 + 오디오 샘플 버퍼에 액세스를 제공하는 캡쳐
-    // 관련 문서: https://developer.apple.com/documentation/avfoundation/avcaptureaudiodataoutput
+    // https://developer.apple.com/documentation/avfoundation/avcaptureaudiodataoutput
     let audioOutput = AVCaptureAudioDataOutput()
 
     let captureSession = AVCaptureSession()
@@ -257,11 +261,13 @@ public class Spectrogram: CALayer {
     // PlanarF -> ARGB8888 변환 시 사용되는 맥스 RGB 채널 값
     var maxFloat: Float = {
         var maxValue = [Float(Int16.max)]
+
         vDSP.convert(
             amplitude: maxValue,
             toDecibels: &maxValue,
             zeroReference: Float(Spectrogram.sampleCount)
         )
+
         return maxValue[0] * 2
     }()
 
@@ -357,8 +363,7 @@ extension Spectrogram {
             &red,
             green: &green,
             blue: &blue,
-            alpha: nil
-        )
+            alpha: nil)
 
         return (
             Pixel_8(green * 255),

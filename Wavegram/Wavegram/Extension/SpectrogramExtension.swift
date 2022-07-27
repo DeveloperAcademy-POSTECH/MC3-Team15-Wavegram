@@ -1,6 +1,6 @@
 //
-//  SpectrogramExtension.swift
-//  Wavegram
+//  AVCaptureAudioDataOutputSampleBufferDelegate.swift
+//  Spectrogram
 //
 //  Created by 김제필 on 7/18/22.
 //
@@ -35,8 +35,7 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
             blockBufferAllocator: nil,
             blockBufferMemoryAllocator: nil,
             flags: kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment,
-            blockBufferOut: &blockBuffer
-        )
+            blockBufferOut: &blockBuffer)
 
         guard let data = audioBufferList.mBuffers.mData else {
             // return: raw 오디오 데이터에 대한 포인터
