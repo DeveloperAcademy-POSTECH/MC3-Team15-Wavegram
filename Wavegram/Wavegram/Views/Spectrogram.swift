@@ -1,10 +1,9 @@
 //
 //  Spectrogram.swift
-//  spectrogram_test
+//  Spectrogram
 //
 //  Created by 김제필 on 7/18/22.
 //
-
 import AVFoundation
 import Accelerate
 import UIKit
@@ -15,7 +14,7 @@ import UIKit
 // 관련 문서: https://developer.apple.com/documentation/quartzcore/calayer
 public class Spectrogram: CALayer {
 
-    // 생성자.
+    // MARK: 생성자.
     // override init(): 상속받은 생성자를 호출하는 생성자.
     override init() {
         super.init()
@@ -24,8 +23,19 @@ public class Spectrogram: CALayer {
         // 컨텐츠의 실제 사이즈가 (w, h) 라면 화면에 표시되는 사이즈는 (w / contentsScale, h / contentsScale)
         // .resize: 컨텐츠가 전체 레이어 크기에 맞게 리사이즈되도록 지정하는 옵션
         contentsGravity = .resize
+
+        configureCaptureSession()
+
+        audioOutput.setSampleBufferDelegate(
+            self,
+            queue: captureQueue
+        )
     }
 
+        configureCaptureSession()
+        audioOutput.setSampleBufferDelegate(self,
+                                            queue: captureQueue)
+    }
     // required: 이 생성자가 반드시 구현되어야 한다는 제약조건
     // NSCoder: NextStep Coder. 과거 넥스트 사의 유물... 서브클래스가 오브젝트나 어떤 값을 메모리 - 다른 포맷 간에 변환할 수 있도록 지원함.
     // archiving (오브젝트나 데이터의 저장) 및 distribution (오브젝트나 데이터의 프로세스 또는 스레드 간 복사) 등의 작업을 위해 사용됨.
@@ -37,42 +47,40 @@ public class Spectrogram: CALayer {
         super.init(layer: layer)
     }
 
-
-    // 스펙트로그램 프로퍼티 정의
+    // MARK: 스펙트로그램 프로퍼티 정의
     // sampleCount: DCT(이산 코사인 변환)를 통과하는 샘플 갯수 및 표시되는 진동수의 해상도. MARK: 변경 금지
     // 관련 문서: https://en.wikipedia.org/wiki/Discrete_cosine_transform
+    // Samples per frame
     static let sampleCount = 1024
 
     // bufferCount: 표시되는 버퍼 수. 버퍼 카운트가 커질 수록 느려짐
-    static let bufferCount = 1000
+    static let bufferCount = 768
 
     // hopCount: 버퍼가 오버랩되는 정도. 오버랩이 커질 수록 느려짐
-    static let hopCount = 500
+    static let hopCount = 1000
 
 
     // AVCaptureAudioDataOutput() 추가
     // 오디오 녹음 + 오디오 샘플 버퍼에 액세스를 제공하는 캡쳐
-    // 관련 문서: https://developer.apple.com/documentation/avfoundation/avcaptureaudiodataoutput
+    // https://developer.apple.com/documentation/avfoundation/avcaptureaudiodataoutput
     let audioOutput = AVCaptureAudioDataOutput()
 
+    let captureSession = AVCaptureSession()
+
+    // DispatchQueue: 스레드 큐. 스레드를 생성하고 실행하는 객체.
     let captureQueue = DispatchQueue(
-        // DispatchQueue: 스레드 큐. 스레드를 생성하고 실행하는 객체.
         label: "captureQueue",
         qos: .userInitiated,
+        attributes: [],
         autoreleaseFrequency: .workItem
     )
-
     let sessionQueue = DispatchQueue(
         label: "sessionQueue",
         attributes: [],
         autoreleaseFrequency: .workItem
     )
 
-    let captureSession = AVCaptureSession()
-
-    let dispatchSemaphore = DispatchSemaphore(value: 1)
-
-    // 스펙트럼 누출(spectral leakage) 감소를 위한 코드
+    // 스펙트럼 누출 (spectral leakage) 감소를 위한 window sequence
     // 해닝 윈도우로 신호 정보를 증폭하고 DCT를 수행
     // 스펙트럼 누출 감소를 위한 이산 푸리에 변환(DFT) + 윈도우 사용(Windowing) 방법: https://developer.apple.com/documentation/accelerate/using_windowing_with_discrete_fourier_transforms
     let hanningWindow = vDSP.window(
@@ -82,73 +90,36 @@ public class Spectrogram: CALayer {
         isHalfWindow: false
     )
 
+    /*
+     vDSP.DCTTransformType.II
+     N: the length given in the setup.
+     h: the input array that contains real numbers.
+     H: the output array that contains real numbers.
+     For 0 <= k < N
+         Or[k] = sum(Ir[j] * cos(k * (j+1/2) * pi / N, 0 <= j < N)
+     관련 문서: https://developer.apple.com/documentation/accelerate/vdsp/dcttransformtype/
+     */
     let forwardDCT = vDSP.DCT(
         count: sampleCount,
         transformType: .II
-        /*
-         vDSP.DCTTransformType.II
+        )!
 
-         N: the length given in the setup.
-         h: the input array that contains real numbers.
-         H: the output array that contains real numbers.
+    let dispatchSemaphore = DispatchSemaphore(value: 1)
 
-         For 0 <= k < N
-             Or[k] = sum(Ir[j] * cos(k * (j+1/2) * pi / N, 0 <= j < N)
-
-         관련 문서: https://developer.apple.com/documentation/accelerate/vdsp/dcttransformtype/
-         */
-    )!
-
-
-
-    static var redTable: [Pixel_8] = (0...255).map {
-        return brgValue(from: $0).red
-    }
-
-    static var greenTable: [Pixel_8] = (0...200).map {
-        return brgValue(from: $0).green
-    }
-
-    static var blueTable: [Pixel_8] = (0...200).map {
-        return brgValue(from: $0).blue
-    }
-
-
+    // AVFoundation의 raw 오디오 데이터를 저장하는 버퍼.
+    var rawAudioData = [Int16]()
 
     // 최고 주파수.
     // AudioSpectrogram.captureOutput(_:didOutput:from:) 첫 호출시 계산됨
     var nyquistFrequency: Float?
 
-    var rawAudioData = [Int16]()
-
-    // timeDomainBuffer: 오디오 데이터의 현재 프레임의 시간 영역을 단정밀도(single-precision) 값으로 내포하는 배열.
-    // 코드 재사용을 위해 정의: 각 iteration별로 어레이를 만드는 상황을 방지하기 위함
-    var timeDomainBuffer = [Float](
-        repeating: 0,
-        count: sampleCount
-    )
-
+    // Raw 주파수값
     var frequencyDomainValues = [Float](
         repeating: 0,
         count: bufferCount * sampleCount
     )
 
-    var frequencyDomainBuffer = [Float](
-        repeating: 0,
-        count: sampleCount
-    )
-
-    var maxFloat: Float = {
-        var maxValue = [Float(Int16.max)]
-        vDSP.convert(
-            amplitude: maxValue,
-            toDecibels: &maxValue,
-            zeroReference: Float(Spectrogram.sampleCount)
-        )
-        return maxValue[0] * 2
-    }()
-
-    // vImage buffer -> to display spectrogram
+    // vImage buffer -> spectrogram
     // 높이: sampleCount, 너비: bufferCount
     // 스펙트로그램의 수평 렌더링 및 스크롤링을 위한 코드
     var rgbImageFormat: vImage_CGImageFormat = {
@@ -159,14 +130,13 @@ public class Spectrogram: CALayer {
             bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.first.rawValue),
             renderingIntent: .defaultIntent
         ) else {
-            fatalError("Cannot create image format.")
+            fatalError("Unable to create image format.")
         }
         return format
     }()
 
 
-
-    // MARK: ---> RGB 이미지 버퍼
+    // MARK: ---> RGB vImage 이미지 버퍼
     // 수직 방향 이미지 버퍼
     lazy var rgbImageBuffer: vImage_Buffer = {
         guard let buffer = try? vImage_Buffer(
@@ -200,12 +170,41 @@ public class Spectrogram: CALayer {
         rotatedImageBuffer.free()
     }
 
+    // 컬러 변환을 위한 Lookup 테이블
+    static var redTable: [Pixel_8] = (0 ... 255).map {
+        return brgValue(from: $0).red
+    }
+
+    static var greenTable: [Pixel_8] = (0 ... 255).map {
+        return brgValue(from: $0).green
+    }
+
+    static var blueTable: [Pixel_8] = (0 ... 255).map {
+        return brgValue(from: $0).blue
+    }
+
+    // timeDomainBuffer: 오디오 데이터의 현재 프레임의 시간 영역을 단정밀도(single-precision) 값으로 내포하는 배열.
+    // 코드 재사용을 위해 정의: 각 iteration별로 어레이를 만드는 상황을 방지하기 위함
+    var timeDomainBuffer = [Float](
+        repeating: 0,
+        count: sampleCount
+    )
+
+    /// A resuable array that contains the frequency domain representation of the current frame of
+    /// audio data.
+    var frequencyDomainBuffer = [Float](
+        repeating: 0,
+        count: sampleCount
+    )
+
 
     /*
+     MARK: Instance 메소드
+
      processData(values: ): DCT(이산 코사인 변환) + 스펙트로그램 이미지를 생성하는 배열에 주파수 영역에 대한 데이터 추가
-        -> vImage 버퍼 및 스펙트로그램 생성
+                            -> vImage 버퍼 및 스펙트로그램 생성
      MARK: Int16 데이터 값 -> 단차원 변환(이산 코사인 변환; DCT)
-     */
+    */
     func processData(values: [Int16]) {
         dispatchSemaphore.wait()
 
@@ -237,7 +236,6 @@ public class Spectrogram: CALayer {
         // MARK: <---
 
 
-
         // MARK: forward transform 후 수행되는 작업
         // 진동수(frequency) -> 데시벨
         // 스펙트로그램 색깔 <--> 소리 크기(데시벨) 변환
@@ -260,8 +258,22 @@ public class Spectrogram: CALayer {
         dispatchSemaphore.signal()
     }
 
+    // PlanarF -> ARGB8888 변환 시 사용되는 맥스 RGB 채널 값
+    var maxFloat: Float = {
+        var maxValue = [Float(Int16.max)]
+
+        vDSP.convert(
+            amplitude: maxValue,
+            toDecibels: &maxValue,
+            zeroReference: Float(Spectrogram.sampleCount)
+        )
+
+        return maxValue[0] * 2
+    }()
+
 
     // MARK: 스펙트로그램 생성
+    // frequencyDomainValues에서 스펙트로그램 이미지 CGImage 생성, spectrogramLayer 레이어에 추가
     func createSpectrogram() {
         let maxFloats: [Float] = [255, maxFloat, maxFloat, maxFloat]
         let minFloats: [Float] = [255, 0, 0, 0]
@@ -315,29 +327,29 @@ public class Spectrogram: CALayer {
 }
 
 
-
+// MARK: Utility functions
 extension Spectrogram {
+
     /*
      MARK: ---> False-color Lookup Tables
-
      false-color 룩업 테이블을 위한 코드
-     파랑 -> 빨강 -> 초록 순서로 변화
-
      false-color: https://terms.naver.com/entry.naver?docId=843190&cid=42346&categoryId=42346
-     */
+
+     value: 밝기 컨트롤. 0: 다크블루, 127: 빨강, 255: 녹색(파랑 -> 빨강 -> 초록 순서로 변화)
+    */
     typealias Color = UIColor
 
-    static func brgValue(from value: Pixel_8) -> (
-        red: Pixel_8,
-        green: Pixel_8,
-        blue: Pixel_8
-    ) {
+    static func brgValue(from value: Pixel_8) -> (red: Pixel_8,
+                                                  green: Pixel_8,
+                                                  blue: Pixel_8) {
         let normalizedValue = CGFloat(value) / 255
-        let colorRange = 0.6666 - (0.6666 * normalizedValue)
+
+        // hue 정의: 파랑 -> 0.0, 빨강 -> 1.0
+        let hue = 0.6666 - (0.6666 * normalizedValue)
         let brightness = sqrt(normalizedValue)
 
         let color = Color(
-            hue: colorRange,
+            hue: hue,
             saturation: 1,
             brightness: brightness,
             alpha: 1
@@ -351,12 +363,11 @@ extension Spectrogram {
             &red,
             green: &green,
             blue: &blue,
-            alpha: nil
-        )
+            alpha: nil)
 
         return (
-            Pixel_8(red * 255),
             Pixel_8(green * 255),
+            Pixel_8(red * 255),
             Pixel_8(blue * 255)
         )
     }

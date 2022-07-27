@@ -17,6 +17,8 @@
 					<string>Default Configuration</string>
 					<key>UISceneDelegateClassName</key>
 					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+					<key>NSMicrophoneUsageDescription</key>
+					<string>Analyse Audio</string>
 				</dict>
 			</array>
 		</dict>

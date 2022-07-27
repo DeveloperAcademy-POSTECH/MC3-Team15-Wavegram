@@ -9,14 +9,14 @@ import Foundation
 import UIKit
 
 extension UITableViewCell {
-    
+
     static var identifier: String {
         NSStringFromClass(self.classForCoder()).components(separatedBy: ".").last!
     }
 }
 
 extension UICollectionViewCell {
-    
+
     static var identifier: String {
         NSStringFromClass(self.classForCoder()).components(separatedBy: ".").last!
     }
