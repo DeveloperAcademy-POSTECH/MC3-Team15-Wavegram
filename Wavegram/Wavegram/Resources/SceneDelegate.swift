@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = SpectrogramViewController()
+        window?.rootViewController = MainTabBarViewController()
         window?.makeKeyAndVisible()
     }
 
