@@ -12,6 +12,32 @@ import SwiftUI
 class ModifyPostViewController: UIViewController {
     private let maxTitleTextLength: Int = 20
     private let maxMemoTextLength: Int = 50
+    private let xButtonString: String = "x.circle"
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.setNavigationBar()
+        [representativeImageLabel, representativeImage, titleLabel, titleTextField, memoLabel, memoTextField, memoTextLengthLabel].forEach { self.view.addSubview($0) }
+        titleTextField.delegate = self
+        memoTextField.delegate = self
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        DispatchQueue.main.async { [self] in
+            self.view.backgroundColor = .black
+            self.setConstraints()
+            self.setTitleTextFieldBorder()
+            
+            guard let xCircleImage = UIImage(systemName: self.xButtonString) else { return }
+            titleTextField.setClearButton(with: xCircleImage, mode: .always)
+            memoTextField.setClearButton(with: xCircleImage, mode: .always)
+        }
+    }
     
     private let memoTextLengthLabel: UILabel = {
         let label = UILabel()
@@ -87,14 +113,6 @@ class ModifyPostViewController: UIViewController {
         return textField
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.setNavigationBar()
-        [representativeImageLabel, representativeImage, titleLabel, titleTextField, memoLabel, memoTextField, memoTextLengthLabel].forEach { self.view.addSubview($0) }
-        titleTextField.delegate = self
-        memoTextField.delegate = self
-    }
-    
     private func setNavigationBar() {
         self.navigationItem.title = "게시물 수정"
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
@@ -102,22 +120,6 @@ class ModifyPostViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = leftBarButtonItem
         let rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onTapRightBarButtonItem))
         self.navigationItem.rightBarButtonItem = rightBarButtonItem
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        DispatchQueue.main.async { [self] in
-            self.view.backgroundColor = .black
-            self.setConstraints()
-            self.setTitleTextFieldBorder()
-            
-            titleTextField.setClearButton(with: UIImage(systemName: "x.circle")!, mode: .always)
-            memoTextField.setClearButton(with: UIImage(systemName: "x.circle")!, mode: .always)
-        }
     }
     
     private func setTitleTextFieldBorder() {

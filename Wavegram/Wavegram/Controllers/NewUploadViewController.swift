@@ -19,8 +19,39 @@ class NewUploadViewController: UIViewController {
     private let maxMemoTextLength: Int = 50
     private var isRecording: Bool = false
     private var isPlaying: Bool = false
+    private let xButtonString: String = "x.circle"
     private lazy var imagegesture = UITapGestureRecognizer(target: self, action: #selector(onTapRepresentativeImage(_:)))
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = .black
+        self.setNavigationBar()
+        [representativeImageLabel, representativeImage, titleLabel, titleTextField, memoLabel, memoTextField, memoTextLengthLabel, recordLabel, recordView, recordToggleButton, playToggleButton].forEach { self.view.addSubview($0) }
+        titleTextField.delegate = self
+        memoTextField.delegate = self
+        imagePicker.delegate = self
+        representativeImage.addGestureRecognizer(imagegesture)
+        recordToggleButton.addTarget(self, action: #selector(onTapRecordButton), for: .touchUpInside)
+        playToggleButton.addTarget(self, action: #selector(onTapPlayButton), for: .touchUpInside)
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        DispatchQueue.main.async {
+            self.setConstraints()
+            self.setTitleTextFieldBorder()
+            self.setRecordToggleButtonBorder()
+
+            guard let xCircleImage = UIImage(systemName: self.xButtonString) else { return }
+            self.titleTextField.setClearButton(with: xCircleImage, mode: .always)
+            self.memoTextField.setClearButton(with: xCircleImage, mode: .always)
+        }
+    }
+    
     private let memoTextLengthLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -127,7 +158,6 @@ class NewUploadViewController: UIViewController {
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         button.tintColor = .red
-        button.addTarget(NewUploadViewController.self, action: #selector(onTapRecordButton), for: .touchUpInside)
 
         return button
     }()
@@ -140,21 +170,9 @@ class NewUploadViewController: UIViewController {
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         button.tintColor = .red
-        button.addTarget(NewUploadViewController.self, action: #selector(onTapPlayButton), for: .touchUpInside)
 
         return button
     }()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = .black
-        self.setNavigationBar()
-        [representativeImageLabel, representativeImage, titleLabel, titleTextField, memoLabel, memoTextField, memoTextLengthLabel, recordLabel, recordView, recordToggleButton, playToggleButton].forEach { self.view.addSubview($0) }
-        titleTextField.delegate = self
-        memoTextField.delegate = self
-        imagePicker.delegate = self
-        representativeImage.addGestureRecognizer(imagegesture)
-    }
 
     private func setNavigationBar() {
         self.navigationItem.title = "게시물 업로드"
@@ -163,23 +181,6 @@ class NewUploadViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = leftBarButtonItem
         let rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onTapRightBarButtonItem))
         self.navigationItem.rightBarButtonItem = rightBarButtonItem
-    }
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        DispatchQueue.main.async {
-            self.setConstraints()
-            self.setTitleTextFieldBorder()
-            self.setRecordToggleButtonBorder()
-
-            guard let xCircleImage = UIImage(systemName: "x.circle") else { return }
-            self.titleTextField.setClearButton(with: xCircleImage, mode: .always)
-            self.memoTextField.setClearButton(with: xCircleImage, mode: .always)
-        }
     }
 
     private func setTitleTextFieldBorder() {
