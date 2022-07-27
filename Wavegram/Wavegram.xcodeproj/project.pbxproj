@@ -26,6 +26,7 @@
 		943264DA288A9C2E003A789A /* SpectrogramExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943264D9288A9C2E003A789A /* SpectrogramExtension.swift */; };
 		94E382BF288FC61D00026EA8 /* SpectrogramViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E382BE288FC61D00026EA8 /* SpectrogramViewController.swift */; };
 		B69B1DF4288ECA21000BB036 /* FeedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69B1DF3288ECA21000BB036 /* FeedCollectionViewCell.swift */; };
+		B6DCADAA28910FA500061CA3 /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DCADA928910FA500061CA3 /* FontExtension.swift */; };
 		C651E9FA288542C3002BBAA8 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C651E9F9288542C3002BBAA8 /* UserModel.swift */; };
 		C651E9FC2885458D002BBAA8 /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C651E9FB2885458D002BBAA8 /* FeedModel.swift */; };
 		C651E9FE28854706002BBAA8 /* JsonManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C651E9FD28854706002BBAA8 /* JsonManager.swift */; };
@@ -73,6 +74,7 @@
 		943264D9288A9C2E003A789A /* SpectrogramExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpectrogramExtension.swift; sourceTree = "<group>"; };
 		94E382BE288FC61D00026EA8 /* SpectrogramViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpectrogramViewController.swift; sourceTree = "<group>"; };
 		B69B1DF3288ECA21000BB036 /* FeedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCollectionViewCell.swift; sourceTree = "<group>"; };
+		B6DCADA928910FA500061CA3 /* FontExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
 		C651E9F9288542C3002BBAA8 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		C651E9FB2885458D002BBAA8 /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
 		C651E9FD28854706002BBAA8 /* JsonManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonManager.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 		C651EA0228855081002BBAA8 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				B6DCADA928910FA500061CA3 /* FontExtension.swift */,
 				0ABD56DB28853555001DF711 /* Extensions.swift */,
 				0ABD56F028857F9B001DF711 /* TextFieldExtension.swift */,
 				0ABD59C62885B11600B70589 /* LayerExtension.swift */,
@@ -359,6 +362,7 @@
 				0ABD56DC28853555001DF711 /* Extensions.swift in Sources */,
 				59BEF138584DA7C80B1E05B6 /* SingleFeedViewController.swift in Sources */,
 				59BEF7E2CE0DEA659F422C7B /* UserViewFeedCollectionViewCell.swift in Sources */,
+				B6DCADAA28910FA500061CA3 /* FontExtension.swift in Sources */,
 				943264D6288A752D003A789A /* Spectrogram.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
