@@ -226,10 +226,12 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         return slider
     }()
     
+    // isSeeking 변수 toggle
     @objc func toggleIsSeeking() {
         isSeeking.toggle()
     }
     
+    // UISlider 움직여서 Audio 시간 변경할 때 사용
     @objc func seek(_sender: UISlider!) {
         
         guard let currentItem = player.currentItem else { return }
@@ -240,6 +242,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         player.seek(to: time)
     }
     
+    // UISlider 움직일 때 사용
     var isSeeking: Bool = false
     
     override init(frame: CGRect) {
