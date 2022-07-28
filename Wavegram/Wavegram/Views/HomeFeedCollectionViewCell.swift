@@ -195,13 +195,13 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         // TODO: Change playButton Font Size
         let button = UIButton()
         button.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        button.addTarget(self, action: #selector(play(_sender:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(pressButton(_sender:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
     }()
     
-    @objc func play(_sender: UIButton!) {
+    @objc func pressButton(_sender: UIButton!) {
         isPlaying.toggle()
         
         if isPlaying {
