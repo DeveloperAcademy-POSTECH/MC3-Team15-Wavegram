@@ -213,8 +213,34 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
             print("PAUSE")
             _sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
         }
-        
     }
+    
+    let timeSlider: UISlider = {
+        
+        let slider = UISlider()
+        slider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidBegin)
+        slider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidEnd)
+        slider.addTarget(self, action: #selector(seek(_sender:)), for: .valueChanged)
+        slider.translatesAutoresizingMaskIntoConstraints = false
+        
+        return slider
+    }()
+    
+    @objc func toggleIsSeeking() {
+        isSeeking.toggle()
+    }
+    
+    @objc func seek(_sender: UISlider!) {
+        
+        guard let currentItem = player.currentItem else { return }
+        let position = Double(_sender.value)
+        let seconds = position * currentItem.duration.seconds
+        let time = CMTime(seconds: seconds, preferredTimescale: 100)
+        
+        player.seek(to: time)
+    }
+    
+    var isSeeking: Bool = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -232,7 +258,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
             rectangle,
             feedImage, detailLabel,
             titleLabel, contributorLabel,
-            playButton
+            playButton, timeSlider
         ].forEach { addSubview($0) }
         
         
@@ -292,6 +318,8 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         applyConstraints(model)
         
         configurePlayer(model.audioName)
+        
+        configureObserver()
     }
     
     // Constraints
@@ -386,6 +414,14 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
             playButton.bottomAnchor.constraint(equalTo: rectangle.bottomAnchor, constant: -rectangle.frame.height * (6.0 / 196))
         ]
         
+        let timeSliderConstraints = [
+            // 350: 14
+            timeSlider.rightAnchor.constraint(equalTo: rectangle.rightAnchor, constant: -rectangle.frame.width * (14.0 / 350)),
+            // 350 : 254
+            timeSlider.widthAnchor.constraint(equalToConstant: rectangle.frame.width * (286.0 / 350)),
+            timeSlider.centerYAnchor.constraint(equalTo: playButton.centerYAnchor)
+        ]
+        
         [
             profileImageConstraints,userNameConstraints,
             originLabelConstraints, originButtonConstraints,
@@ -393,7 +429,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
             rectangleConstraints,
             feedImageConstraints, detailLabelConstraints,
             titleLabelConstraints, contributorConstraints,
-            playButtonConstraints
+            playButtonConstraints, timeSliderConstraints
         ].forEach { NSLayoutConstraint.activate($0) }
         
     }
@@ -407,6 +443,25 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         
         let item = AVPlayerItem(url: url)
         player.replaceCurrentItem(with: item)
+    }
+    
+    // UISlider value 변경
+    func updateTime() {
+
+        let currentTime = self.player.currentItem?.currentTime().seconds ?? 0
+        let totalTime = self.player.currentItem?.duration.seconds ?? 0
+
+        if !isSeeking {
+            self.timeSlider.value = Float(currentTime / totalTime)
+        }
+    }
+    
+    // Audio 음악 재생 구간 이동
+    func configureObserver() {
+        let interval = CMTime(seconds: 1, preferredTimescale: 100)
+        player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [weak self] _ in
+            self?.updateTime()
+        }
     }
     
 }
