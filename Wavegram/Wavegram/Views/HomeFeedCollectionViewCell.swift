@@ -187,7 +187,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     
     // Audio
     let player = AVPlayer()
-    var play: Bool = false
+    var isPlaying: Bool = false
     
     // Play & Pause Button
     let playButton: UIButton = {
@@ -202,9 +202,9 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     }()
     
     @objc func play(_sender: UIButton!) {
-        play.toggle()
+        isPlaying.toggle()
         
-        if play {
+        if isPlaying {
             player.play()
             print("PLAY")
             _sender.setImage(UIImage(systemName: "pause.fill"), for: .normal)
@@ -435,7 +435,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     }
     
     // Audio 연결
-    func configurePlayer(_ music: String) {
+    private func configurePlayer(_ music: String) {
         guard let url = Bundle.main.url(forResource: music, withExtension: "mp3") else {
             print("Failed to Load Sound")
             return
@@ -446,7 +446,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     }
     
     // UISlider value 변경
-    func updateTime() {
+    private func updateTime() {
 
         let currentTime = self.player.currentItem?.currentTime().seconds ?? 0
         let totalTime = self.player.currentItem?.duration.seconds ?? 0
@@ -457,7 +457,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     }
     
     // Audio 음악 재생 구간 이동
-    func configureObserver() {
+    private func configureObserver() {
         let interval = CMTime(seconds: 1, preferredTimescale: 100)
         player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [weak self] _ in
             self?.updateTime()
