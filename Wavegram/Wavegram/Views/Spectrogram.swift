@@ -32,10 +32,6 @@ public class Spectrogram: CALayer {
         )
     }
 
-        configureCaptureSession()
-        audioOutput.setSampleBufferDelegate(self,
-                                            queue: captureQueue)
-    }
     // required: 이 생성자가 반드시 구현되어야 한다는 제약조건
     // NSCoder: NextStep Coder. 과거 넥스트 사의 유물... 서브클래스가 오브젝트나 어떤 값을 메모리 - 다른 포맷 간에 변환할 수 있도록 지원함.
     // archiving (오브젝트나 데이터의 저장) 및 distribution (오브젝트나 데이터의 프로세스 또는 스레드 간 복사) 등의 작업을 위해 사용됨.
