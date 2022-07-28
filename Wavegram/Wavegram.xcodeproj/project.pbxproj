@@ -26,6 +26,8 @@
 		943264DA288A9C2E003A789A /* SpectrogramExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943264D9288A9C2E003A789A /* SpectrogramExtension.swift */; };
 		94E382BF288FC61D00026EA8 /* SpectrogramViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E382BE288FC61D00026EA8 /* SpectrogramViewController.swift */; };
 		B69B1DF4288ECA21000BB036 /* HomeFeedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69B1DF3288ECA21000BB036 /* HomeFeedCollectionViewCell.swift */; };
+		B6A859C1289275CE00912725 /* happyDay.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B6A859C0289275CE00912725 /* happyDay.mp3 */; };
+		B6A859C3289275D400912725 /* exampleFile.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B6A859C2289275D400912725 /* exampleFile.mp3 */; };
 		C651E9FA288542C3002BBAA8 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C651E9F9288542C3002BBAA8 /* UserModel.swift */; };
 		C651E9FC2885458D002BBAA8 /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C651E9FB2885458D002BBAA8 /* FeedModel.swift */; };
 		C651E9FE28854706002BBAA8 /* JsonManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C651E9FD28854706002BBAA8 /* JsonManager.swift */; };
@@ -75,6 +77,8 @@
 		943264D9288A9C2E003A789A /* SpectrogramExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpectrogramExtension.swift; sourceTree = "<group>"; };
 		94E382BE288FC61D00026EA8 /* SpectrogramViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpectrogramViewController.swift; sourceTree = "<group>"; };
 		B69B1DF3288ECA21000BB036 /* HomeFeedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFeedCollectionViewCell.swift; sourceTree = "<group>"; };
+		B6A859C0289275CE00912725 /* happyDay.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = happyDay.mp3; sourceTree = "<group>"; };
+		B6A859C2289275D400912725 /* exampleFile.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = exampleFile.mp3; sourceTree = "<group>"; };
 		C651E9F9288542C3002BBAA8 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		C651E9FB2885458D002BBAA8 /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
 		C651E9FD28854706002BBAA8 /* JsonManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonManager.swift; sourceTree = "<group>"; };
@@ -173,6 +177,15 @@
 			path = Font;
 			sourceTree = "<group>";
 		};
+		B6A859BF289275BB00912725 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				B6A859C0289275CE00912725 /* happyDay.mp3 */,
+				B6A859C2289275D400912725 /* exampleFile.mp3 */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
 		C651E9F128853E6F002BBAA8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -194,6 +207,7 @@
 		C651E9FF28854811002BBAA8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B6A859BF289275BB00912725 /* Audio */,
 				94BEF125288E910E00B0683F /* Font */,
 				0ABD56AB288534A2001DF711 /* AppDelegate.swift */,
 				0ABD56AD288534A2001DF711 /* SceneDelegate.swift */,
@@ -320,7 +334,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				C651EA012885483C002BBAA8 /* Feed.json in Resources */,
+				B6A859C3289275D400912725 /* exampleFile.mp3 in Resources */,
 				0ABD56B5288534A3001DF711 /* Assets.xcassets in Resources */,
+				B6A859C1289275CE00912725 /* happyDay.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

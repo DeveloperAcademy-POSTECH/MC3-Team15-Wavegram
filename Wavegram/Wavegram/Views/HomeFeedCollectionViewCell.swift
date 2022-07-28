@@ -185,6 +185,37 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    // Audio
+    let player = AVPlayer()
+    var play: Bool = false
+    
+    // Play & Pause Button
+    let playButton: UIButton = {
+        
+        // TODO: Change playButton Font Size
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        button.addTarget(self, action: #selector(play(_sender:)), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    }()
+    
+    @objc func play(_sender: UIButton!) {
+        play.toggle()
+        
+        if play {
+            player.play()
+            print("PLAY")
+            _sender.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+        } else {
+            player.pause()
+            print("PAUSE")
+            _sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        }
+        
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -200,7 +231,8 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
             additionalButton,
             rectangle,
             feedImage, detailLabel,
-            titleLabel, contributorLabel
+            titleLabel, contributorLabel,
+            playButton
         ].forEach { addSubview($0) }
         
         
@@ -258,6 +290,8 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         }
         
         applyConstraints(model)
+        
+        configurePlayer(model.audioName)
     }
     
     // Constraints
@@ -344,15 +378,35 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
             contributorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: rectangle.frame.height * (10.0 / 476.0))
         ]
         
+        let playButtonConstraints = [
+            // 350:16 = 175:8p
+            playButton.leftAnchor.constraint(equalTo: rectangle.leftAnchor, constant: rectangle.frame.width * (8.0 / 175.0)),
+            playButton.widthAnchor.constraint(equalToConstant: 27),
+            // 476:24 = 119:6
+            playButton.bottomAnchor.constraint(equalTo: rectangle.bottomAnchor, constant: -rectangle.frame.height * (6.0 / 196))
+        ]
+        
         [
             profileImageConstraints,userNameConstraints,
             originLabelConstraints, originButtonConstraints,
             additionalButtonConstraints,
             rectangleConstraints,
             feedImageConstraints, detailLabelConstraints,
-            titleLabelConstraints, contributorConstraints
+            titleLabelConstraints, contributorConstraints,
+            playButtonConstraints
         ].forEach { NSLayoutConstraint.activate($0) }
         
+    }
+    
+    // Audio 연결
+    func configurePlayer(_ music: String) {
+        guard let url = Bundle.main.url(forResource: music, withExtension: "mp3") else {
+            print("Failed to Load Sound")
+            return
+        }
+        
+        let item = AVPlayerItem(url: url)
+        player.replaceCurrentItem(with: item)
     }
     
 }
