@@ -406,6 +406,9 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
                 self.isRecording.toggle()
             }
             self.spectrogram.stopRunning()
+            guard let player = self.audioPlayer else { return }
+            player.pause()
+            
 //            if let record = self.audioRecorder {
 //                record.stop()
 //                let session = AVAudioSession.sharedInstance()
@@ -424,7 +427,13 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
                 self.isRecording.toggle()
             }
             self.spectrogram.startRunning()
-
+            if let musicURL = Bundle.main.url(forResource: "GuitarAndVocal", withExtension: "mp3") {
+                self.audioPlayer = AVPlayer(url: musicURL)
+                self.audioPlayer.volume = 1
+                self.audioPlayer.play()
+                print("오디오 재생")
+            }
+            self.setPlayTimeLabel()
 //            let session = AVAudioSession.sharedInstance()
 //
 //            do{
