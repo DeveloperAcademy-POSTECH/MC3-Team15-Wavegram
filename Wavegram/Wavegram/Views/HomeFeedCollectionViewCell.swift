@@ -92,7 +92,8 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         let modify = UIAlertAction(title: "수정하기", style: .default) { action in
             let vc = ModifyPostViewController()
             vc.modalPresentationStyle = .fullScreen
-            self.viewController?.present(vc, animated: true)
+            self.viewController?.navigationController?.pushViewController(vc, animated: true)
+//            self.viewController?.present(vc, animated: true)
             print("수정하기")
         }
         let delete = UIAlertAction(title: "삭제하기", style: .destructive) { action in

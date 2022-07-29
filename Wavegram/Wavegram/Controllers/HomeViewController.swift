@@ -70,7 +70,8 @@ class HomeViewController: UIViewController {
     @objc func uploadNewFeed() {
         let vc = NewUploadViewController()
         vc.modalPresentationStyle = .fullScreen
-        self.present(vc, animated: false)
+        self.navigationController?.pushViewController(vc, animated: false)
+//        self.present(vc, animated: false)
         print("Move To Upload Feed View")
     }
     
