@@ -11,13 +11,17 @@ struct DataManager {
 
     static var shared = DataManager()
 
-    let user: User = User(name: "woody", profileImage: "woodyProfileImage")
+    static let loggedInUser = User.loggedInUser
 
-    private lazy var feeds: [Feed] = Array(repeating: Feed(id: 1001, owner: user, contributor: nil, title: "some title", description: "some description", imageName: "someImage", audioName: "someAudio"), count: 50)
+    private let jsonManager = JsonManager()
 
-    mutating func fetchData(currentPage: Int, completion: @escaping (Result<([Feed], Bool), Error>) -> Void) {
+    private lazy var userOwnedFeeds: [Feed] = jsonManager.load("UserOwnedFeeds.json")
 
-        let lastPage = self.feeds.count
+    private lazy var userContributedFeeds: [Feed] = jsonManager.load("UserContributedFeeds.json")
+
+    mutating func requestUserOwnedFeeds(currentPage: Int, completion: @escaping (Result<([Feed], Bool), Error>) -> Void) {
+
+        let lastPage = self.userOwnedFeeds.count
 
         guard currentPage < lastPage else { return }
 
@@ -26,10 +30,10 @@ struct DataManager {
             guard 0 < lastPage else { return }
 
             if 12 < lastPage {
-                let result = Array(self.feeds[0...11])
+                let result = Array(self.userOwnedFeeds[0...11])
                 completion(.success((result, true)))
             } else {
-                let result = Array(self.feeds[0...(lastPage - 1)])
+                let result = Array(self.userOwnedFeeds[0...(lastPage - 1)])
                 completion(.success((result, false)))
             }
         }
@@ -37,10 +41,10 @@ struct DataManager {
         // if more
         if currentPage > 0 {
             if currentPage + 9 < lastPage {
-                let result = Array(self.feeds[currentPage...currentPage + 8])
+                let result = Array(self.userOwnedFeeds[currentPage...currentPage + 8])
                 completion(.success((result, true)))
             } else {
-                let result = Array(self.feeds[currentPage...lastPage - 1])
+                let result = Array(self.userOwnedFeeds[currentPage...lastPage - 1])
                 completion(.success((result, false)))
             }
         }
