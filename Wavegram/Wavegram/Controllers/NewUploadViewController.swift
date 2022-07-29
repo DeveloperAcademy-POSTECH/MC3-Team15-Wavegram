@@ -2,7 +2,7 @@
 //  NewUploadViewController.swift
 //  Wavegram
 //
-//  Created by 김상현 on 2022/07/20.
+//  Created by 김상현, 김제필 on 2022/07/20.
 //
 
 
@@ -14,6 +14,7 @@ import SwiftUI
 class NewUploadViewController: UIViewController {
     var audioPlayer : AVAudioPlayer!
     var audioRecorder : AVAudioRecorder!
+    let spectrogram = Spectrogram()
     let imagePicker = UIImagePickerController()
     private let maxTitleTextLength: Int = 20
     private let maxMemoTextLength: Int = 50
@@ -25,8 +26,17 @@ class NewUploadViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .black
+        
+        spectrogram.contentsGravity = .resize
+        spectrogramView.layer.addSublayer(spectrogram)
+        
+        spectrogram.startRunning()
+        
         self.setNavigationBar()
-        [representativeImageLabel, representativeImage, titleLabel, titleTextField, memoLabel, memoTextField, memoTextLengthLabel, recordLabel, recordView, recordToggleButton, playToggleButton].forEach { self.view.addSubview($0) }
+        // recordview에 서브뷰 추가
+        [spectrogramView, recordToggleButton, playToggleButton].forEach{ self.recordView.addSubview($0) }
+        // vc superview에 서브뷰 추가
+        [representativeImageLabel, representativeImage, titleLabel, titleTextField, memoLabel, memoTextField, memoTextLengthLabel, recordLabel, recordView].forEach { self.view.addSubview($0) }
         titleTextField.delegate = self
         memoTextField.delegate = self
         imagePicker.delegate = self
@@ -49,6 +59,8 @@ class NewUploadViewController: UIViewController {
             guard let xCircleImage = UIImage(systemName: self.xButtonString) else { return }
             self.titleTextField.setClearButton(with: xCircleImage, mode: .always)
             self.memoTextField.setClearButton(with: xCircleImage, mode: .always)
+            // spectrogram layer 활성화를 위한 frame 주기
+            self.spectrogram.frame = CGRect(x: 0, y: 0, width: self.recordView.bounds.width - 20, height: self.recordView.bounds.height * 0.3)
         }
     }
     
@@ -65,9 +77,9 @@ class NewUploadViewController: UIViewController {
     private let representativeImageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        let attributedString = NSMutableAttributedString(string: "대표 이미지 *")
-        attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSString(string: "대표 이미지 *").range(of: "대표 이미지"))
-        attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: NSString(string: "대표 이미지 *").range(of: "*"))
+        let attributedString = NSMutableAttributedString(string: "Image *")
+        attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSString(string: "Image *").range(of: "Image"))
+        attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: NSString(string: "Image *").range(of: "*"))
         label.attributedText = attributedString
         label.font = .systemFont(ofSize: 17, weight: .semibold)
 
@@ -88,9 +100,9 @@ class NewUploadViewController: UIViewController {
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        let attributedString = NSMutableAttributedString(string: "제목 *")
-        attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSString(string: "제목 *").range(of: "제목"))
-        attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: NSString(string: "제목 *").range(of: "*"))
+        let attributedString = NSMutableAttributedString(string: "Title *")
+        attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSString(string: "Title *").range(of: "Title"))
+        attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: NSString(string: "Title *").range(of: "*"))
         label.attributedText = attributedString
         label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -112,7 +124,7 @@ class NewUploadViewController: UIViewController {
     private let memoLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "메모"
+        label.text = "Memo"
         label.textColor = .white
         label.font = .systemFont(ofSize: 17, weight: .semibold)
 
@@ -131,9 +143,9 @@ class NewUploadViewController: UIViewController {
 
     private let recordLabel: UILabel = {
         let label = UILabel()
-        let attributedString = NSMutableAttributedString(string: "녹음 *")
-        attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSString(string: "녹음 *").range(of: "녹음"))
-        attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: NSString(string: "녹음 *").range(of: "*"))
+        let attributedString = NSMutableAttributedString(string: "Recording *")
+        attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSString(string: "Recording *").range(of: "Recording"))
+        attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: NSString(string: "Recording *").range(of: "*"))
         label.attributedText = attributedString
         label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -147,6 +159,13 @@ class NewUploadViewController: UIViewController {
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.white.cgColor
         view.layer.cornerRadius = 4
+        return view
+    }()
+    
+    // 스펙트로그램 보여질 뷰
+    private let spectrogramView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
@@ -196,62 +215,68 @@ class NewUploadViewController: UIViewController {
 
     // MARK: SetConstraints
     private func setConstraints() {
-        let representativeImageLabelConstraints = [
-            representativeImageLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            representativeImageLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20)
-        ]
-        let representativeImageConstraints = [
-            representativeImage.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            representativeImage.topAnchor.constraint(equalTo: representativeImageLabel.bottomAnchor, constant: 10),
-            representativeImage.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.2),
-            representativeImage.heightAnchor.constraint(equalTo: representativeImage.widthAnchor)
-        ]
-        let titleLabelConstraints = [
-            titleLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            titleLabel.topAnchor.constraint(equalTo: representativeImage.bottomAnchor, constant: 50)
-        ]
-        let titleTextFieldConstraints = [
-            titleTextField.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            titleTextField.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
-            titleTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
-        ]
-        let memoLabelConstraints = [
-            memoLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            memoLabel.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 20)
-        ]
-        let memoTextFieldConstraints = [
-            memoTextField.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            memoTextField.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
-            memoTextField.topAnchor.constraint(equalTo: memoLabel.bottomAnchor, constant: 10),
-
-        ]
-        let memoTextLengthLabelConstraints = [
-            memoTextLengthLabel.trailingAnchor.constraint(equalTo: memoTextField.trailingAnchor),
-            memoTextLengthLabel.topAnchor.constraint(equalTo: memoTextField.bottomAnchor, constant: 5)
-        ]
         let recordLabelConstraints = [
             recordLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            recordLabel.topAnchor.constraint(equalTo: memoTextField.bottomAnchor, constant: 20)
+            recordLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20)
         ]
         let recordViewConstraints = [
             recordView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
             recordView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
-            recordView.topAnchor.constraint(equalTo: recordLabel.bottomAnchor, constant: 10),
-            recordView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            recordView.topAnchor.constraint(equalTo: recordLabel.bottomAnchor, constant: 15),
+        ]
+        let spectrogramViewConstraints = [
+            spectrogramView.leadingAnchor.constraint(equalTo: recordView.leadingAnchor, constant: 10),
+            spectrogramView.trailingAnchor.constraint(equalTo: recordView.trailingAnchor, constant: -10),
+            spectrogramView.topAnchor.constraint(equalTo: recordView.topAnchor, constant: 10),
+            spectrogramView.bottomAnchor.constraint(equalTo: recordToggleButton.topAnchor, constant: -10)
         ]
         let recordToggleButtonConstraints = [
             recordToggleButton.trailingAnchor.constraint(equalTo: recordView.centerXAnchor, constant: -10),
-            recordToggleButton.centerYAnchor.constraint(equalTo: recordView.centerYAnchor),
+            recordToggleButton.bottomAnchor.constraint(equalTo: recordView.bottomAnchor),
             recordToggleButton.widthAnchor.constraint(equalToConstant: 50),
             recordToggleButton.heightAnchor.constraint(equalToConstant: 50)
         ]
         let playToggleButtonConstraints = [
             playToggleButton.leadingAnchor.constraint(equalTo: recordView.centerXAnchor, constant: 10),
-            playToggleButton.centerYAnchor.constraint(equalTo: recordView.centerYAnchor),
+            playToggleButton.bottomAnchor.constraint(equalTo: recordView.bottomAnchor),
             playToggleButton.widthAnchor.constraint(equalToConstant: 50),
             playToggleButton.heightAnchor.constraint(equalToConstant: 50)
         ]
-        [representativeImageLabelConstraints, representativeImageConstraints, titleLabelConstraints, titleTextFieldConstraints, memoLabelConstraints, memoTextFieldConstraints, memoTextLengthLabelConstraints, recordLabelConstraints, recordViewConstraints, recordToggleButtonConstraints, playToggleButtonConstraints].forEach{ NSLayoutConstraint.activate($0) }
+        let representativeImageLabelConstraints = [
+            representativeImageLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            representativeImageLabel.topAnchor.constraint(equalTo: recordView.bottomAnchor, constant: 35)
+        ]
+        let representativeImageConstraints = [
+            representativeImage.topAnchor.constraint(equalTo: representativeImageLabel.bottomAnchor, constant: 15),
+            representativeImage.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            representativeImage.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.2),
+            representativeImage.heightAnchor.constraint(equalTo: representativeImage.widthAnchor)
+        ]
+        let titleLabelConstraints = [
+            titleLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            titleLabel.topAnchor.constraint(equalTo: representativeImage.bottomAnchor, constant: 35)
+        ]
+        let titleTextFieldConstraints = [
+            titleTextField.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            titleTextField.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            titleTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
+        ]
+        let memoLabelConstraints = [
+            memoLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            memoLabel.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 35)
+        ]
+        let memoTextFieldConstraints = [
+            memoTextField.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            memoTextField.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            memoTextField.topAnchor.constraint(equalTo: memoLabel.bottomAnchor, constant: 15),
+        ]
+        let memoTextLengthLabelConstraints = [
+            memoTextLengthLabel.trailingAnchor.constraint(equalTo: memoTextField.trailingAnchor),
+            memoTextLengthLabel.topAnchor.constraint(equalTo: memoTextField.bottomAnchor, constant: 5),
+            memoTextLengthLabel.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        ]
+        
+        [representativeImageLabelConstraints, representativeImageConstraints, titleLabelConstraints, titleTextFieldConstraints, memoLabelConstraints, memoTextFieldConstraints, memoTextLengthLabelConstraints, recordLabelConstraints, recordViewConstraints, spectrogramViewConstraints, recordToggleButtonConstraints, playToggleButtonConstraints].forEach{ NSLayoutConstraint.activate($0) }
     }
 
     // MARK: OnTapGesture
