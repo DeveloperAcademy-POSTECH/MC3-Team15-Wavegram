@@ -220,7 +220,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         let slider = UISlider()
         slider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidBegin)
         slider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidEnd)
-        slider.addTarget(self, action: #selector(seek(_sender:)), for: .valueChanged)
+        slider.addTarget(self, action: #selector(seekAudio(_sender:)), for: .valueChanged)
         slider.translatesAutoresizingMaskIntoConstraints = false
         
         return slider
@@ -228,11 +228,11 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     
     // isSeeking 변수 toggle
     @objc func toggleIsSeeking() {
-        isSeeking.toggle()
+        isSeekingAudio.toggle()
     }
     
     // UISlider 움직여서 Audio 시간 변경할 때 사용
-    @objc func seek(_sender: UISlider!) {
+    @objc func seekAudio(_sender: UISlider!) {
         
         guard let currentItem = player.currentItem else { return }
         let position = Double(_sender.value)
@@ -243,7 +243,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     }
     
     // UISlider 움직일 때 사용
-    var isSeeking: Bool = false
+    var isSeekingAudio: Bool = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -454,7 +454,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         let currentTime = self.player.currentItem?.currentTime().seconds ?? 0
         let totalTime = self.player.currentItem?.duration.seconds ?? 0
 
-        if !isSeeking {
+        if !isSeekingAudio {
             self.timeSlider.value = Float(currentTime / totalTime)
         }
     }
