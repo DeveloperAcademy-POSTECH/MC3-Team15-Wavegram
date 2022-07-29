@@ -12,7 +12,7 @@ import SwiftUI
 
 // MARK: UIViewController
 class NewUploadViewController: UIViewController {
-    var audioPlayer : AVAudioPlayer!
+    var audioPlayer : AVPlayer!
     var audioRecorder : AVAudioRecorder!
     let spectrogram = Spectrogram()
     let imagePicker = UIImagePickerController()
@@ -33,9 +33,7 @@ class NewUploadViewController: UIViewController {
         
         spectrogram.contentsGravity = .resize
         spectrogramView.layer.addSublayer(spectrogram)
-        
-        spectrogram.startRunning()
-        
+                
         self.setNavigationBar()
         // recordview에 서브뷰 추가
         [spectrogramView, playTimeLabel, recordToggleButton, playToggleButton].forEach{ self.recordView.addSubview($0) }
@@ -175,7 +173,7 @@ class NewUploadViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 10, weight: .regular)
         label.textColor = .white
-        label.text = "03:15"
+        label.text = "00:00"
         
         return label
     }()
@@ -221,12 +219,17 @@ class NewUploadViewController: UIViewController {
         self.titleTextField.layer.addBorder([.bottom], color: .white, width: 1)
         self.memoTextField.layer.addBorder([.bottom], color: .white, width: 1)
     }
-//
-//    private func setRecordToggleButtonBorder() {
-//        recordToggleButton.layer.borderColor = UIColor.gray.cgColor
-//        recordToggleButton.layer.borderWidth = 5
-//        recordToggleButton.layer.cornerRadius = recordToggleButton.frame.width * 0.5
-//    }
+    
+    private func setPlayTimeLabel() {
+        self.audioPlayer?.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 1), queue: .main, using: { time in
+            if self.audioPlayer?.currentItem?.status == .readyToPlay {
+                let currentTime = CMTimeGetSeconds((self.audioPlayer?.currentTime())!)
+                
+                let secs = Int(currentTime)
+                self.playTimeLabel.text = NSString(format: "%02d:%02d", secs/60, secs%60) as String
+            }
+        })
+    }
 
     // MARK: SetConstraints
     private func setConstraints() {
@@ -369,16 +372,16 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
                 self.isRecording.toggle()
             }
 
-            if let record = self.audioRecorder {
-                record.stop()
-                let session = AVAudioSession.sharedInstance()
-                do{
-                    try session.setActive(false)
-                }
-                catch{
-                    print("\(error)")
-                }
-            }
+//            if let record = self.audioRecorder {
+//                record.stop()
+//                let session = AVAudioSession.sharedInstance()
+//                do{
+//                    try session.setActive(false)
+//                }
+//                catch{
+//                    print("\(error)")
+//                }
+//            }
 
         case false:
             DispatchQueue.main.async {
@@ -386,24 +389,25 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
                 self.recordToggleButton.setImage(playToggleButtonImage, for: .normal)
                 self.isRecording.toggle()
             }
+            self.spectrogram.startRunning()
 
-            let session = AVAudioSession.sharedInstance()
-
-            do{
-                try session.setCategory(AVAudioSession.Category.playAndRecord)
-                try session.setActive(true)
-                session.requestRecordPermission({ (allowed : Bool) -> Void in
-                    if allowed {
-                        self.startRecording()
-                    }
-                    else{
-                        print("녹음 권한 없음")
-                    }
-                })
-            }
-            catch{
-                print("\(error)")
-            }
+//            let session = AVAudioSession.sharedInstance()
+//
+//            do{
+//                try session.setCategory(AVAudioSession.Category.playAndRecord)
+//                try session.setActive(true)
+//                session.requestRecordPermission({ (allowed : Bool) -> Void in
+//                    if allowed {
+//                        self.startRecording()
+//                    }
+//                    else{
+//                        print("녹음 권한 없음")
+//                    }
+//                })
+//            }
+//            catch{
+//                print("\(error)")
+//            }
         }
     }
 
@@ -415,7 +419,7 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
                         
             self.isPlaying.toggle()
             guard let player = self.audioPlayer else { return }
-            player.stop()
+            player.pause()
 
         case false:
             DispatchQueue.main.async {
@@ -423,19 +427,34 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
                 self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
                 
                 self.isPlaying.toggle()
-                if let data = NSData(contentsOfFile: self.audioFilePath()) {
-                    do {
-                        self.audioPlayer = try AVAudioPlayer(data: data as Data)
-                        self.audioPlayer.delegate = self
-                        self.audioPlayer.volume = 100
-                        self.audioPlayer.prepareToPlay()
-                        self.audioPlayer.play()
-                        print("Audio 재생")
-                    }
-                    catch {
-                        print("\(error)")
-                    }
+                self.spectrogram.startRunning()
+
+                if let musicURL = Bundle.main.url(forResource: "GuitarAndVocal", withExtension: "mp3") {
+                    self.audioPlayer = AVPlayer(url: musicURL)
+                    self.audioPlayer.volume = 1
+                    self.audioPlayer.play()
+                    print("오디오 재생")
                 }
+                self.setPlayTimeLabel()
+
+//                guard let playToggleButtonImage = UIImage(named: self.playStartButton) else { return }
+//                self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
+//                self.isPlaying = false
+
+                
+//                if let data = NSData(contentsOfFile: self.audioFilePath()) {
+//                    do {
+//                        self.audioPlayer = try AVAudioPlayer(data: data as Data)
+//                        self.audioPlayer.delegate = self
+//                        self.audioPlayer.volume = 100
+//                        self.audioPlayer.prepareToPlay()
+//                        self.audioPlayer.play()
+//                        print("Audio 재생")
+//                    }
+//                    catch {
+//                        print("\(error)")
+//                    }
+//                }
             }
         }
     }
@@ -471,29 +490,29 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
         return settings
     }
 
-    //MARK: AVAudioPlayerDelegate
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        if flag == true {
-            print("Player 재생완료 성공")
-            guard let playToggleButtonImage = UIImage(named: playStartButton) else { return }
-            self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
-            self.isPlaying = false
-        }
-        else{
-            print("Player 오류")
-        }
-    }
-
-    //MARK: AVAudioRecorderDelegate
-    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        if flag == true {
-            print("녹음 완료 성공")
-            print(recorder.url)
-        }
-        else{
-            print("녹음 실패 종료")
-        }
-    }
+//    //MARK: AVAudioPlayerDelegate
+//    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+//        if flag == true {
+//            print("Player 재생완료 성공")
+//            guard let playToggleButtonImage = UIImage(named: playStartButton) else { return }
+//            self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
+//            self.isPlaying = false
+//        }
+//        else{
+//            print("Player 오류")
+//        }
+//    }
+//
+//    //MARK: AVAudioRecorderDelegate
+//    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+//        if flag == true {
+//            print("녹음 완료 성공")
+//            print(recorder.url)
+//        }
+//        else{
+//            print("녹음 실패 종료")
+//        }
+//    }
 }
 
 // MARK: Imagepicker Delegate
