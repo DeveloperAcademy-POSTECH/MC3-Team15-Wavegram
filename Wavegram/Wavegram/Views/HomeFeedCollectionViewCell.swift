@@ -320,7 +320,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         
         applyConstraints(model)
         
-        configurePlayer(model.audioName)
+        configurePlayer(model.audioName!)
         
         configureObserver()
     }
