@@ -68,7 +68,9 @@ class HomeViewController: UIViewController {
     
     // NavBar Right Button Function
     @objc func uploadNewFeed() {
-        // TODO: Move to Uploading a New Feed
+        let vc = NewUploadViewController()
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: false)
         print("Move To Upload Feed View")
     }
     
