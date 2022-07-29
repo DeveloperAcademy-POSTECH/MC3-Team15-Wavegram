@@ -21,6 +21,10 @@ class NewUploadViewController: UIViewController {
     private var isRecording: Bool = false
     private var isPlaying: Bool = false
     private let xButtonString: String = "x.circle"
+    private let recordStartButton: String = "recordButton"
+    private let recordStopButton: String = "stopButton"
+    private let playStartButton: String = "playButton"
+    private let playStopButton: String = "pauseButton"
     private lazy var imagegesture = UITapGestureRecognizer(target: self, action: #selector(onTapRepresentativeImage(_:)))
 
     override func viewDidLoad() {
@@ -43,6 +47,11 @@ class NewUploadViewController: UIViewController {
         representativeImage.addGestureRecognizer(imagegesture)
         recordToggleButton.addTarget(self, action: #selector(onTapRecordButton), for: .touchUpInside)
         playToggleButton.addTarget(self, action: #selector(onTapPlayButton), for: .touchUpInside)
+      
+        guard let recordToggleButtonImage = UIImage(named: recordStartButton) else { return }
+        guard let playToggleButtonImage = UIImage(named: playStartButton) else { return }
+        recordToggleButton.setImage(recordToggleButtonImage, for: .normal)
+        playToggleButton.setImage(playToggleButtonImage, for: .normal)
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -54,7 +63,6 @@ class NewUploadViewController: UIViewController {
         DispatchQueue.main.async {
             self.setConstraints()
             self.setTitleTextFieldBorder()
-            self.setRecordToggleButtonBorder()
 
             guard let xCircleImage = UIImage(systemName: self.xButtonString) else { return }
             self.titleTextField.setClearButton(with: xCircleImage, mode: .always)
@@ -182,8 +190,6 @@ class NewUploadViewController: UIViewController {
     private let recordToggleButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        guard let image = UIImage(systemName: "circle.fill") else { return UIButton() }
-        button.setImage(image, for: .normal)
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         button.tintColor = .red
@@ -194,8 +200,7 @@ class NewUploadViewController: UIViewController {
     private let playToggleButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        guard let image = UIImage(systemName: "play.fill") else { return UIButton() }
-        button.setImage(image, for: .normal)
+        
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         button.tintColor = .red
@@ -216,12 +221,12 @@ class NewUploadViewController: UIViewController {
         self.titleTextField.layer.addBorder([.bottom], color: .white, width: 1)
         self.memoTextField.layer.addBorder([.bottom], color: .white, width: 1)
     }
-
-    private func setRecordToggleButtonBorder() {
-        recordToggleButton.layer.borderColor = UIColor.gray.cgColor
-        recordToggleButton.layer.borderWidth = 5
-        recordToggleButton.layer.cornerRadius = recordToggleButton.frame.width * 0.5
-    }
+//
+//    private func setRecordToggleButtonBorder() {
+//        recordToggleButton.layer.borderColor = UIColor.gray.cgColor
+//        recordToggleButton.layer.borderWidth = 5
+//        recordToggleButton.layer.cornerRadius = recordToggleButton.frame.width * 0.5
+//    }
 
     // MARK: SetConstraints
     private func setConstraints() {
@@ -241,8 +246,8 @@ class NewUploadViewController: UIViewController {
         let spectrogramViewConstraints = [
             spectrogramView.leadingAnchor.constraint(equalTo: recordView.leadingAnchor, constant: 10),
             spectrogramView.trailingAnchor.constraint(equalTo: recordView.trailingAnchor, constant: -10),
-            spectrogramView.topAnchor.constraint(equalTo: playTimeLabel.bottomAnchor, constant: -20),
-            spectrogramView.bottomAnchor.constraint(equalTo: recordToggleButton.topAnchor, constant: -20)
+            spectrogramView.topAnchor.constraint(equalTo: playTimeLabel.bottomAnchor, constant: 10),
+            spectrogramView.bottomAnchor.constraint(equalTo: recordToggleButton.topAnchor, constant: -10)
         ]
         let recordToggleButtonConstraints = [
             recordToggleButton.trailingAnchor.constraint(equalTo: recordView.centerXAnchor, constant: -10),
@@ -359,7 +364,8 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
         switch isRecording {
         case true:
             DispatchQueue.main.async {
-                self.recordToggleButton.imageView?.image = UIImage(systemName: "circle.fill")
+                guard let playToggleButtonImage = UIImage(named: self.recordStartButton) else { return }
+                self.recordToggleButton.setImage(playToggleButtonImage, for: .normal)
                 self.isRecording.toggle()
             }
 
@@ -376,7 +382,8 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
 
         case false:
             DispatchQueue.main.async {
-                self.recordToggleButton.imageView?.image = UIImage(systemName: "stop.circle.fill")
+                guard let playToggleButtonImage = UIImage(named: self.recordStopButton) else { return }
+                self.recordToggleButton.setImage(playToggleButtonImage, for: .normal)
                 self.isRecording.toggle()
             }
 
@@ -403,16 +410,18 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
     @objc func onTapPlayButton() {
         switch isPlaying {
         case true:
-            let image = UIImage(systemName: "play.fill")
-            self.playToggleButton.setImage(image, for: .normal)
+            guard let playToggleButtonImage = UIImage(named: playStartButton) else { return }
+            self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
+                        
             self.isPlaying.toggle()
             guard let player = self.audioPlayer else { return }
             player.stop()
 
         case false:
             DispatchQueue.main.async {
-                let image = UIImage(systemName: "pause.fill")
-                self.playToggleButton.setImage(image, for: .normal)
+                guard let playToggleButtonImage = UIImage(named: self.playStopButton) else { return }
+                self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
+                
                 self.isPlaying.toggle()
                 if let data = NSData(contentsOfFile: self.audioFilePath()) {
                     do {
@@ -466,8 +475,8 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         if flag == true {
             print("Player 재생완료 성공")
-            let image = UIImage(systemName: "play.fill")
-            self.playToggleButton.setImage(image, for: .normal)
+            guard let playToggleButtonImage = UIImage(named: playStartButton) else { return }
+            self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
             self.isPlaying = false
         }
         else{
@@ -510,31 +519,3 @@ extension NewUploadViewController: UIImagePickerControllerDelegate, UINavigation
         dismiss(animated: true, completion: nil)
     }
 }
-
-
-//// MARK: SwiftUI - Preview 추가
-//struct NewUploadViewControllerPreView: PreviewProvider {
-//    static var previews: some View {
-//        NewUploadViewController().newUploadViewControllerToPreview()
-//    }
-//}
-//
-//
-//#if DEBUG
-//extension UIViewController {
-//    private struct Preview: UIViewControllerRepresentable {
-//        let viewController: UIViewController
-//
-//        func makeUIViewController(context: Context) -> UIViewController {
-//            return viewController
-//        }
-//
-//        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-//        }
-//    }
-//
-//    func newUploadViewControllerToPreview() -> some View {
-//        Preview(viewController: self)
-//    }
-//}
-//#endif
