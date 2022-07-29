@@ -9,7 +9,8 @@ import UIKit
 
 class UserViewController: UIViewController {
 
-    let user = DataManager.shared.user
+    let user = DataManager.loggedInUser
+
     lazy var feeds: [Feed] = []
     private var currentPage: Int = 0
     private var hasNextPage: Bool = true
@@ -39,7 +40,7 @@ class UserViewController: UIViewController {
         feedCollectionView.delegate = self
         feedCollectionView.dataSource = self
 
-        DataManager.shared.fetchData(currentPage: currentPage) { [weak self] result in
+        DataManager.shared.requestUserOwnedFeeds(currentPage: currentPage) { [weak self] result in
 
             switch result {
             case .success(let response):
@@ -160,7 +161,7 @@ extension UserViewController: UIScrollViewDelegate {
 
             isLoading = true
 
-            DataManager.shared.fetchData(currentPage: currentPage) { [weak self] result in
+            DataManager.shared.requestUserOwnedFeeds(currentPage: currentPage) { [weak self] result in
                 switch result {
                 case .success(let response):
 

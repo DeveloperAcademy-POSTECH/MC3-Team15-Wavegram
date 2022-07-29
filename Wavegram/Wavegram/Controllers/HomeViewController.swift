@@ -22,7 +22,7 @@ class HomeViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         
         let feedCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        feedCollectionView.register(FeedCollectionViewCell.self, forCellWithReuseIdentifier: FeedCollectionViewCell.identifier)
+        feedCollectionView.register(HomeFeedCollectionViewCell.self, forCellWithReuseIdentifier: HomeFeedCollectionViewCell.identifier)
         feedCollectionView.translatesAutoresizingMaskIntoConstraints = false
         feedCollectionView.backgroundColor = .systemBackground
         return feedCollectionView
@@ -133,7 +133,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     // cell data
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeedCollectionViewCell.identifier, for: indexPath) as? FeedCollectionViewCell else {return UICollectionViewCell()}
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeFeedCollectionViewCell.identifier, for: indexPath) as? HomeFeedCollectionViewCell else {return UICollectionViewCell()}
 
         let feed = feeds[indexPath.row]
         cell.viewController = self
