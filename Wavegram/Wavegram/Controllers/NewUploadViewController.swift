@@ -34,7 +34,7 @@ class NewUploadViewController: UIViewController {
         
         self.setNavigationBar()
         // recordview에 서브뷰 추가
-        [spectrogramView, recordToggleButton, playToggleButton].forEach{ self.recordView.addSubview($0) }
+        [spectrogramView, playTimeLabel, recordToggleButton, playToggleButton].forEach{ self.recordView.addSubview($0) }
         // vc superview에 서브뷰 추가
         [representativeImageLabel, representativeImage, titleLabel, titleTextField, memoLabel, memoTextField, memoTextLengthLabel, recordLabel, recordView].forEach { self.view.addSubview($0) }
         titleTextField.delegate = self
@@ -162,6 +162,16 @@ class NewUploadViewController: UIViewController {
         return view
     }()
     
+    private let playTimeLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 10, weight: .regular)
+        label.textColor = .white
+        label.text = "03:15"
+        
+        return label
+    }()
+    
     // 스펙트로그램 보여질 뷰
     private let spectrogramView: UIView = {
         let view = UIView()
@@ -224,21 +234,25 @@ class NewUploadViewController: UIViewController {
             recordView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
             recordView.topAnchor.constraint(equalTo: recordLabel.bottomAnchor, constant: 15),
         ]
+        let playTimeLabelConstraints = [
+            playTimeLabel.centerXAnchor.constraint(equalTo: recordView.centerXAnchor),
+            playTimeLabel.topAnchor.constraint(equalTo: recordView.topAnchor, constant: 10)
+        ]
         let spectrogramViewConstraints = [
             spectrogramView.leadingAnchor.constraint(equalTo: recordView.leadingAnchor, constant: 10),
             spectrogramView.trailingAnchor.constraint(equalTo: recordView.trailingAnchor, constant: -10),
-            spectrogramView.topAnchor.constraint(equalTo: recordView.topAnchor, constant: 10),
-            spectrogramView.bottomAnchor.constraint(equalTo: recordToggleButton.topAnchor, constant: -10)
+            spectrogramView.topAnchor.constraint(equalTo: playTimeLabel.bottomAnchor, constant: -20),
+            spectrogramView.bottomAnchor.constraint(equalTo: recordToggleButton.topAnchor, constant: -20)
         ]
         let recordToggleButtonConstraints = [
             recordToggleButton.trailingAnchor.constraint(equalTo: recordView.centerXAnchor, constant: -10),
-            recordToggleButton.bottomAnchor.constraint(equalTo: recordView.bottomAnchor),
+            recordToggleButton.bottomAnchor.constraint(equalTo: recordView.bottomAnchor, constant: -35),
             recordToggleButton.widthAnchor.constraint(equalToConstant: 50),
             recordToggleButton.heightAnchor.constraint(equalToConstant: 50)
         ]
         let playToggleButtonConstraints = [
             playToggleButton.leadingAnchor.constraint(equalTo: recordView.centerXAnchor, constant: 10),
-            playToggleButton.bottomAnchor.constraint(equalTo: recordView.bottomAnchor),
+            playToggleButton.bottomAnchor.constraint(equalTo: recordView.bottomAnchor, constant: -35),
             playToggleButton.widthAnchor.constraint(equalToConstant: 50),
             playToggleButton.heightAnchor.constraint(equalToConstant: 50)
         ]
@@ -276,7 +290,19 @@ class NewUploadViewController: UIViewController {
             memoTextLengthLabel.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
         ]
         
-        [representativeImageLabelConstraints, representativeImageConstraints, titleLabelConstraints, titleTextFieldConstraints, memoLabelConstraints, memoTextFieldConstraints, memoTextLengthLabelConstraints, recordLabelConstraints, recordViewConstraints, spectrogramViewConstraints, recordToggleButtonConstraints, playToggleButtonConstraints].forEach{ NSLayoutConstraint.activate($0) }
+        [representativeImageLabelConstraints,
+         representativeImageConstraints,
+         titleLabelConstraints,
+         titleTextFieldConstraints,
+         memoLabelConstraints,
+         memoTextFieldConstraints,
+         memoTextLengthLabelConstraints,
+         recordLabelConstraints,
+         recordViewConstraints,
+         playTimeLabelConstraints,
+         spectrogramViewConstraints,
+         recordToggleButtonConstraints,
+         playToggleButtonConstraints].forEach{ NSLayoutConstraint.activate($0) }
     }
 
     // MARK: OnTapGesture
