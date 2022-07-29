@@ -31,6 +31,7 @@
 		C651EA012885483C002BBAA8 /* Feed.json in Resources */ = {isa = PBXBuildFile; fileRef = C651EA002885483C002BBAA8 /* Feed.json */; };
 		C688BE4228925D4300E876B8 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C688BE4128925D4300E876B8 /* DataManager.swift */; };
 		C688BE4428925F5700E876B8 /* UserFeedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C688BE4328925F5700E876B8 /* UserFeedCollectionViewCell.swift */; };
+		C688BE4928939B9000E876B8 /* UserOwnedFeeds.json in Resources */ = {isa = PBXBuildFile; fileRef = C688BE4828939B9000E876B8 /* UserOwnedFeeds.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,8 @@
 		C651EA002885483C002BBAA8 /* Feed.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Feed.json; sourceTree = "<group>"; };
 		C688BE4128925D4300E876B8 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		C688BE4328925F5700E876B8 /* UserFeedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeedCollectionViewCell.swift; sourceTree = "<group>"; };
+		C688BE4828939B9000E876B8 /* UserOwnedFeeds.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = UserOwnedFeeds.json; sourceTree = "<group>"; };
+		C688BE4A28939BA700E876B8 /* UserContributedFeeds.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = UserContributedFeeds.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,6 +196,7 @@
 			children = (
 				94BEF125288E910E00B0683F /* Font */,
 				0ABD56AB288534A2001DF711 /* AppDelegate.swift */,
+				C688BE4728939B6C00E876B8 /* Jsons */,
 				0ABD56AD288534A2001DF711 /* SceneDelegate.swift */,
 				0ABD56B4288534A3001DF711 /* Assets.xcassets */,
 				C651EA002885483C002BBAA8 /* Feed.json */,
@@ -210,6 +214,15 @@
 				943264D9288A9C2E003A789A /* SpectrogramExtension.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		C688BE4728939B6C00E876B8 /* Jsons */ = {
+			isa = PBXGroup;
+			children = (
+				C688BE4828939B9000E876B8 /* UserOwnedFeeds.json */,
+				C688BE4A28939BA700E876B8 /* UserContributedFeeds.json */,
+			);
+			path = Jsons;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -317,6 +330,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C651EA012885483C002BBAA8 /* Feed.json in Resources */,
+				C688BE4928939B9000E876B8 /* UserOwnedFeeds.json in Resources */,
 				0ABD56B5288534A3001DF711 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

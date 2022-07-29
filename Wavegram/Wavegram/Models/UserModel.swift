@@ -10,4 +10,6 @@ import Foundation
 struct User: Hashable, Codable {
     let name: String
     let profileImage: String
+
+    static let loggedInUser = User(name: "woody__.", profileImage: "woodyProfile")
 }
