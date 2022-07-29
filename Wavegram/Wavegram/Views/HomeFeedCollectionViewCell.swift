@@ -185,6 +185,66 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    // Audio
+    let player = AVPlayer()
+    var isPlaying: Bool = false
+    
+    // Play & Pause Button
+    let playButton: UIButton = {
+        
+        // TODO: Change playButton Font Size
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        button.addTarget(self, action: #selector(pressButton(_sender:)), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    }()
+    
+    @objc func pressButton(_sender: UIButton!) {
+        isPlaying.toggle()
+        
+        if isPlaying {
+            player.play()
+            print("PLAY")
+            _sender.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+        } else {
+            player.pause()
+            print("PAUSE")
+            _sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        }
+    }
+    
+    let timeSlider: UISlider = {
+        
+        let slider = UISlider()
+        slider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidBegin)
+        slider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidEnd)
+        slider.addTarget(self, action: #selector(seekAudio(_sender:)), for: .valueChanged)
+        slider.translatesAutoresizingMaskIntoConstraints = false
+        
+        return slider
+    }()
+    
+    // isSeeking 변수 toggle
+    @objc func toggleIsSeeking() {
+        isSeekingAudio.toggle()
+    }
+    
+    // UISlider 움직여서 Audio 시간 변경할 때 사용
+    @objc func seekAudio(_sender: UISlider!) {
+        
+        guard let currentItem = player.currentItem else { return }
+        let position = Double(_sender.value)
+        let seconds = position * currentItem.duration.seconds
+        let time = CMTime(seconds: seconds, preferredTimescale: 100)
+        
+        player.seek(to: time)
+    }
+    
+    // UISlider 움직일 때 사용
+    var isSeekingAudio: Bool = false
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -200,7 +260,8 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
             additionalButton,
             rectangle,
             feedImage, detailLabel,
-            titleLabel, contributorLabel
+            titleLabel, contributorLabel,
+            playButton, timeSlider
         ].forEach { addSubview($0) }
         
         
@@ -258,6 +319,10 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         }
         
         applyConstraints(model)
+        
+        configurePlayer(model.audioName)
+        
+        configureObserver()
     }
     
     // Constraints
@@ -344,15 +409,62 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
             contributorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: rectangle.frame.height * (10.0 / 476.0))
         ]
         
+        let playButtonConstraints = [
+            // 350:16 = 175:8p
+            playButton.leftAnchor.constraint(equalTo: rectangle.leftAnchor, constant: rectangle.frame.width * (8.0 / 175.0)),
+            playButton.widthAnchor.constraint(equalToConstant: 27),
+            // 476:24 = 119:6
+            playButton.bottomAnchor.constraint(equalTo: rectangle.bottomAnchor, constant: -rectangle.frame.height * (6.0 / 196))
+        ]
+        
+        let timeSliderConstraints = [
+            // 350: 14
+            timeSlider.rightAnchor.constraint(equalTo: rectangle.rightAnchor, constant: -rectangle.frame.width * (14.0 / 350)),
+            // 350 : 254
+            timeSlider.widthAnchor.constraint(equalToConstant: rectangle.frame.width * (286.0 / 350)),
+            timeSlider.centerYAnchor.constraint(equalTo: playButton.centerYAnchor)
+        ]
+        
         [
             profileImageConstraints,userNameConstraints,
             originLabelConstraints, originButtonConstraints,
             additionalButtonConstraints,
             rectangleConstraints,
             feedImageConstraints, detailLabelConstraints,
-            titleLabelConstraints, contributorConstraints
+            titleLabelConstraints, contributorConstraints,
+            playButtonConstraints, timeSliderConstraints
         ].forEach { NSLayoutConstraint.activate($0) }
         
+    }
+    
+    // Audio 연결
+    private func configurePlayer(_ music: String) {
+        guard let url = Bundle.main.url(forResource: music, withExtension: "mp3") else {
+            print("Failed to Load Sound")
+            return
+        }
+        
+        let item = AVPlayerItem(url: url)
+        player.replaceCurrentItem(with: item)
+    }
+    
+    // UISlider value 변경
+    private func updateTime() {
+
+        let currentTime = self.player.currentItem?.currentTime().seconds ?? 0
+        let totalTime = self.player.currentItem?.duration.seconds ?? 0
+
+        if !isSeekingAudio {
+            self.timeSlider.value = Float(currentTime / totalTime)
+        }
+    }
+    
+    // Audio 음악 재생 구간 이동
+    private func configureObserver() {
+        let interval = CMTime(seconds: 1, preferredTimescale: 100)
+        player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [weak self] _ in
+            self?.updateTime()
+        }
     }
     
 }
