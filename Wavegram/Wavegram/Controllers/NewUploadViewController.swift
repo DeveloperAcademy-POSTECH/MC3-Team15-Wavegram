@@ -371,7 +371,7 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
                 self.recordToggleButton.setImage(playToggleButtonImage, for: .normal)
                 self.isRecording.toggle()
             }
-
+            self.spectrogram.stopRunning()
 //            if let record = self.audioRecorder {
 //                record.stop()
 //                let session = AVAudioSession.sharedInstance()
@@ -420,7 +420,8 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
             self.isPlaying.toggle()
             guard let player = self.audioPlayer else { return }
             player.pause()
-
+            self.spectrogram.stopRunning()
+            
         case false:
             DispatchQueue.main.async {
                 guard let playToggleButtonImage = UIImage(named: self.playStopButton) else { return }
