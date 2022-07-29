@@ -90,11 +90,14 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         let modify = UIAlertAction(title: "수정하기", style: .default) { action in
-            // let vc = ModifyPost()
-            // self.present(vc)
+            let vc = ModifyPostViewController()
+            vc.modalPresentationStyle = .fullScreen
+            self.viewController?.navigationController?.pushViewController(vc, animated: true)
+//            self.viewController?.present(vc, animated: true)
             print("수정하기")
         }
         let delete = UIAlertAction(title: "삭제하기", style: .destructive) { action in
+            // TODO: 게시물 삭제하기
             print("삭제하기")
         }
         let cancel = UIAlertAction(title: "취소하기", style: .cancel) { action in
