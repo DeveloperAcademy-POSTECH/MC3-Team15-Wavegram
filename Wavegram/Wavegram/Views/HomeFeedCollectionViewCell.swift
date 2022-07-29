@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-class FeedCollectionViewCell: UICollectionViewCell {
+class HomeFeedCollectionViewCell: UICollectionViewCell {
     
     var feeds: Feed?
     weak var viewController: UIViewController?
@@ -108,14 +108,102 @@ class FeedCollectionViewCell: UICollectionViewCell {
         viewController?.present(actionSheet, animated: true)
     }
     
+    // 하단
+    // rectangle
+    private let rectangle: UIView = {
+        
+        let rect = UIView()
+        rect.layer.borderWidth = 1
+        rect.layer.backgroundColor = UIColor.clear.cgColor
+        rect.layer.borderColor = UIColor.white.cgColor
+        rect.translatesAutoresizingMaskIntoConstraints = false
+        
+        return rect
+    }()
+    
+    // feedImage
+    private let feedImage: UIImageView = {
+        
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.alpha = 1
+        imageView.isUserInteractionEnabled = true
+        
+        
+        return imageView
+    }()
+    
+    // detail
+    private let detailLabel: UILabel = {
+        
+        let label = UILabel()
+        label.font = label.font.withSize(16)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
+    // feedImageGesture
+    @objc func gestureFired(_ sender: UITapGestureRecognizer) {
+        
+        // TODO: adjust Alpha -> adjust color Gradation
+        sender.view?.alpha = (sender.view?.alpha == 1) ? 0.3 : 1
+        guard let feeds = feeds else {
+            return
+        }
+
+        if feedImage.alpha == 1 {
+            detailLabel.text = ""
+        } else {
+            detailLabel.text = feeds.description
+        }
+    }
+    
+    // titlelabel
+    private let titleLabel: UILabel = {
+
+        let label = UILabel()
+        label.font = label.font.withSize(16)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
+    // contributorLabel
+    private let contributorLabel: UILabel = {
+
+        let label = UILabel()
+        label.font = label.font.withSize(14)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+
+        return label
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        rectangle.frame = frame
+        
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(gestureFired(_:)))
+        gestureRecognizer.numberOfTapsRequired = 1
+        feedImage.addGestureRecognizer(gestureRecognizer)
         
         [
             profileImage, userName,
             originLabel, originButton,
-            additionalButton
+            additionalButton,
+            rectangle,
+            feedImage, detailLabel,
+            titleLabel, contributorLabel
         ].forEach { addSubview($0) }
+        
+        
     }
     
     // Basic Setting
@@ -156,12 +244,27 @@ class FeedCollectionViewCell: UICollectionViewCell {
             additionalButton.addTarget(self, action: #selector(uploadContributeFeed), for: .touchUpInside)
         }
         
+        // feedImage
+        feedImage.image = UIImage(named: model.imageName ?? "someImage")
+        
+        // titleLabel
+        titleLabel.text = model.title
+        
+        // contributorLabel
+        if model.contributor == nil {
+            contributorLabel.text = model.owner.name
+        } else {
+            contributorLabel.text = model.owner.name + ", " + model.contributor!.name
+        }
+        
         applyConstraints(model)
     }
     
     // Constraints
     private func applyConstraints(_ model: Feed) {
         let r = frame.width * 21.0 / 175.0 // ProfileImage 반지름
+        let w = rectangle.frame.width * (33.0 / 35.0) // FeedImage Width
+        let x = rectangle.frame.height / 17.5 // FeedImage TopAnchor
         
         let profileImageConstraints = [
             profileImage.topAnchor.constraint(equalTo: topAnchor),
@@ -176,8 +279,7 @@ class FeedCollectionViewCell: UICollectionViewCell {
             userName.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor)
         ]
         
-        // TODO: Need Model Understand
-        if model.isOriginal {
+        if !model.isOriginal {
             userNameConstraints = [
                 userName.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 4.96),
                 userName.topAnchor.constraint(equalTo: topAnchor, constant: 5)
@@ -200,10 +302,55 @@ class FeedCollectionViewCell: UICollectionViewCell {
             additionalButton.topAnchor.constraint(equalTo: topAnchor, constant: 12.5),
         ]
         
+        // 하단
+        let rectangleConstraints = [
+            // 350:476
+            rectangle.leadingAnchor.constraint(equalTo: leadingAnchor),
+            rectangle.trailingAnchor.constraint(equalTo: trailingAnchor),
+            rectangle.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 6.82),
+            rectangle.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ]
+        
+        let feedImageConstraints = [
+            // image width: 350: 330 = 35:33
+            // topAnchor: 350:20 = 17.5:1
+            feedImage.centerXAnchor.constraint(equalTo: rectangle.centerXAnchor),
+            feedImage.widthAnchor.constraint(equalToConstant: w),
+            feedImage.heightAnchor.constraint(equalToConstant: w),
+            
+            feedImage.topAnchor.constraint(equalTo: rectangle.topAnchor, constant: x)
+        ]
+        
+        let detailLabelConstraints = [
+            detailLabel.centerXAnchor.constraint(equalTo: feedImage.centerXAnchor),
+            detailLabel.centerYAnchor.constraint(equalTo: feedImage.centerYAnchor),
+            
+            // TODO: Change detailLabel Length as the Design
+            detailLabel.leadingAnchor.constraint(equalTo: feedImage.leadingAnchor, constant: 10),
+            detailLabel.trailingAnchor.constraint(equalTo: feedImage.trailingAnchor, constant: -10)
+        ]
+        
+        let titleLabelConstraints = [
+            titleLabel.centerXAnchor.constraint(equalTo: rectangle.centerXAnchor),
+            // topAnchor: 476:14 = 238:7
+            titleLabel.topAnchor.constraint(equalTo: feedImage.bottomAnchor, constant: rectangle.frame.height * (7.0 / 238.0))
+        ]
+        
+        let contributorConstraints = [
+            contributorLabel.centerXAnchor.constraint(equalTo: rectangle.centerXAnchor),
+            // width: 350:250 = 7:5
+            contributorLabel.widthAnchor.constraint(equalToConstant: rectangle.frame.width * (5.0 / 7.0)),
+
+            contributorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: rectangle.frame.height * (10.0 / 476.0))
+        ]
+        
         [
             profileImageConstraints,userNameConstraints,
             originLabelConstraints, originButtonConstraints,
-            additionalButtonConstraints
+            additionalButtonConstraints,
+            rectangleConstraints,
+            feedImageConstraints, detailLabelConstraints,
+            titleLabelConstraints, contributorConstraints
         ].forEach { NSLayoutConstraint.activate($0) }
         
     }
