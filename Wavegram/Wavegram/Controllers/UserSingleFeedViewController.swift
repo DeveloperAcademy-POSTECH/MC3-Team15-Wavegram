@@ -11,6 +11,20 @@ class UserSingleFeedViewController: UIViewController {
     
     private var currentFeed: Feed
     
+    // NavigationBar의 subtitle
+    private let subtitleLabel: UILabel = {
+        let subtitleLabel = UILabel()
+        subtitleLabel.backgroundColor = UIColor.clear
+        subtitleLabel.textColor = UIColor.white
+        subtitleLabel.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        subtitleLabel.text = "게시물"
+        subtitleLabel.textAlignment = .center
+        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        subtitleLabel.backgroundColor = .systemGray6
+        
+        return subtitleLabel
+    }()
+    
     init(feed: Feed) {
         self.currentFeed = feed
         super.init(nibName: nil, bundle: nil)
@@ -26,7 +40,12 @@ class UserSingleFeedViewController: UIViewController {
         
         navigationItem.title = DataManager.loggedInUser.name
         
+        [
+            subtitleLabel
+        ].forEach { view.addSubview($0) }
+
         configureNavBar()
+        applyConstraints(_model: currentFeed)
     }
     
     override func viewWillLayoutSubviews() {
@@ -46,6 +65,19 @@ class UserSingleFeedViewController: UIViewController {
         backButton.title = ""
         
         self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
+    }
+    
+    // Constarints
+    private func applyConstraints(_model: Feed) {
+        
+        // subtitleLabel
+        let subtitleConstraints = [
+            subtitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            subtitleLabel.widthAnchor.constraint(equalToConstant: view.frame.width),
+            subtitleLabel.heightAnchor.constraint(equalToConstant: 48)
+        ]
+        
+        NSLayoutConstraint.activate(subtitleConstraints)
     }
     
 }
