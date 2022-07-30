@@ -23,10 +23,29 @@ class UserSingleFeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
+        navigationItem.title = DataManager.loggedInUser.name
+        
+        configureNavBar()
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewDidLayoutSubviews()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+    }
+    
+    // Navigation Bar
+    private func configureNavBar() {
+        self.navigationController?.navigationBar.backgroundColor = .systemGray6
+        
+        // backButton
+        let backButton = UIBarButtonItem()
+        backButton.title = ""
+        
+        self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
     }
     
 }
