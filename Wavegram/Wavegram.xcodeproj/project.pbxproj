@@ -24,6 +24,8 @@
 		0ABD5A092887EA7500B70589 /* NewUploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD5A082887EA7500B70589 /* NewUploadViewController.swift */; };
 		0ABD5A0B2888471B00B70589 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD5A0A2888471B00B70589 /* StringExtension.swift */; };
 		59BEF7E2CE0DEA659F422C7B /* UserFeedCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59BEFE8BF5D049F3D0CEF035 /* UserFeedCollectionReusableView.swift */; };
+		9409743B2893D567007A9B6A /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409743A2893D567007A9B6A /* FontExtension.swift */; };
+		9409743D2893D573007A9B6A /* SFCompact.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9409743C2893D573007A9B6A /* SFCompact.ttf */; };
 		943264D6288A752D003A789A /* Spectrogram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943264D5288A752D003A789A /* Spectrogram.swift */; };
 		943264DA288A9C2E003A789A /* SpectrogramExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943264D9288A9C2E003A789A /* SpectrogramExtension.swift */; };
 		94E382BF288FC61D00026EA8 /* SpectrogramViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E382BE288FC61D00026EA8 /* SpectrogramViewController.swift */; };
@@ -78,6 +80,8 @@
 		0ABD5A082887EA7500B70589 /* NewUploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUploadViewController.swift; sourceTree = "<group>"; };
 		0ABD5A0A2888471B00B70589 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		59BEFE8BF5D049F3D0CEF035 /* UserFeedCollectionReusableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserFeedCollectionReusableView.swift; sourceTree = "<group>"; };
+		9409743A2893D567007A9B6A /* FontExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
+		9409743C2893D573007A9B6A /* SFCompact.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SFCompact.ttf; sourceTree = "<group>"; };
 		943264D5288A752D003A789A /* Spectrogram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spectrogram.swift; sourceTree = "<group>"; };
 		943264D9288A9C2E003A789A /* SpectrogramExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpectrogramExtension.swift; sourceTree = "<group>"; };
 		94E382BE288FC61D00026EA8 /* SpectrogramViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpectrogramViewController.swift; sourceTree = "<group>"; };
@@ -179,6 +183,7 @@
 		94BEF125288E910E00B0683F /* Font */ = {
 			isa = PBXGroup;
 			children = (
+				9409743C2893D573007A9B6A /* SFCompact.ttf */,
 			);
 			path = Font;
 			sourceTree = "<group>";
@@ -230,6 +235,7 @@
 		C651EA0228855081002BBAA8 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				9409743A2893D567007A9B6A /* FontExtension.swift */,
 				0ABD56DB28853555001DF711 /* Extensions.swift */,
 				0ABD56F028857F9B001DF711 /* TextFieldExtension.swift */,
 				0ABD59C62885B11600B70589 /* LayerExtension.swift */,
@@ -353,6 +359,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C651EA012885483C002BBAA8 /* Feed.json in Resources */,
+				9409743D2893D573007A9B6A /* SFCompact.ttf in Resources */,
 				C688BE4928939B9000E876B8 /* UserOwnedFeeds.json in Resources */,
 				0A08F1252893CF0700971224 /* VocalOnly.mp3 in Resources */,
 				0A08F1242893CF0700971224 /* GuitarAndVocal.mp3 in Resources */,
@@ -401,6 +408,7 @@
 				0ABD56AE288534A2001DF711 /* SceneDelegate.swift in Sources */,
 				C651E9FE28854706002BBAA8 /* JsonManager.swift in Sources */,
 				0ABD56F128857F9B001DF711 /* TextFieldExtension.swift in Sources */,
+				9409743B2893D567007A9B6A /* FontExtension.swift in Sources */,
 				C651E9FA288542C3002BBAA8 /* UserModel.swift in Sources */,
 				0ABD56DC28853555001DF711 /* Extensions.swift in Sources */,
 				C688BE4228925D4300E876B8 /* DataManager.swift in Sources */,

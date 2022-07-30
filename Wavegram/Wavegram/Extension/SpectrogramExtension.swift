@@ -140,7 +140,7 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
             }
         }
     }
-    
+
     // spectrogram 종료
     func stopRunning() {
         sessionQueue.async {
