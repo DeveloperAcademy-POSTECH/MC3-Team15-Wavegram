@@ -26,16 +26,20 @@ class ContributionUploadViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .black
-        
-        spectrogram.contentsGravity = .resize
-        spectrogramView.layer.addSublayer(spectrogram)
-                
-        self.setNavigationBar()
-        // recordview에 서브뷰 추가
-        [spectrogramView, playTimeLabel, recordToggleButton, playToggleButton].forEach{ self.recordView.addSubview($0) }
-        // vc superview에 서브뷰 추가
-        [representativeImageLabel, representativeImage, titleLabel, titleTextField, memoLabel, memoTextField, memoTextLengthLabel, recordLabel, recordView].forEach { self.view.addSubview($0) }
+        DispatchQueue.main.async {
+            self.view.backgroundColor = .black
+            
+            self.spectrogram.contentsGravity = .resize
+            self.spectrogramView.layer.addSublayer(self.spectrogram)
+                    
+            self.setNavigationBar()
+            self.view.addSubview(self.scrollView)
+            self.scrollView.addSubview(self.scrollContentView)
+            // recordview에 서브뷰 추가
+            [self.spectrogramView, self.playTimeLabel, self.recordToggleButton, self.playToggleButton].forEach{ self.recordView.addSubview($0) }
+            // vc superview에 서브뷰 추가
+            [self.representativeImageLabel, self.representativeImage, self.titleLabel, self.titleTextField, self.memoLabel, self.memoTextField, self.memoTextLengthLabel, self.recordLabel, self.recordView].forEach { self.scrollContentView.addSubview($0) }
+        }
         titleTextField.delegate = self
         memoTextField.delegate = self
         imagePicker.delegate = self
@@ -47,10 +51,6 @@ class ContributionUploadViewController: UIViewController {
         guard let playToggleButtonImage = UIImage(named: playStartButton) else { return }
         recordToggleButton.setImage(recordToggleButtonImage, for: .normal)
         playToggleButton.setImage(playToggleButtonImage, for: .normal)
-    }
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
     }
 
     override func viewDidLayoutSubviews() {
@@ -84,6 +84,24 @@ class ContributionUploadViewController: UIViewController {
 
         return label
     }()
+    
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.keyboardDismissMode = .onDrag
+
+        return scrollView
+    }()
+    
+    private let scrollContentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+//        view.addGestureRecognizer(UIGestureRecognizer(target: self, action: #selector(onTapScrollContentView)))
+        return view
+    }()
+//    @objc func onTapScrollContentView() {
+//        keyboardWillHide(<#T##noti: NSNotification##NSNotification#>)
+//    }
 
     private let representativeImageLabel: UILabel = {
         let label = UILabel()
@@ -238,13 +256,27 @@ class ContributionUploadViewController: UIViewController {
 
     // MARK: SetConstraints
     private func setConstraints() {
+        let scrollViewConstraints = [
+            scrollView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+        ]
+        let scrollContentViewConstraints = [
+            scrollContentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            scrollContentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            scrollContentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            scrollContentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            scrollContentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            scrollContentView.heightAnchor.constraint(equalToConstant: 1000)
+          ]
         let recordLabelConstraints = [
-            recordLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            recordLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20)
+            recordLabel.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 20),
+            recordLabel.topAnchor.constraint(equalTo: scrollContentView.safeAreaLayoutGuide.topAnchor, constant: 20)
         ]
         let recordViewConstraints = [
-            recordView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            recordView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            recordView.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 20),
+            recordView.trailingAnchor.constraint(equalTo: scrollContentView.trailingAnchor, constant: -20),
             recordView.topAnchor.constraint(equalTo: recordLabel.bottomAnchor, constant: 15),
         ]
         let playTimeLabelConstraints = [
@@ -270,40 +302,42 @@ class ContributionUploadViewController: UIViewController {
             playToggleButton.heightAnchor.constraint(equalToConstant: 50)
         ]
         let representativeImageLabelConstraints = [
-            representativeImageLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            representativeImageLabel.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 20),
             representativeImageLabel.topAnchor.constraint(equalTo: recordView.bottomAnchor, constant: 35)
         ]
         let representativeImageConstraints = [
             representativeImage.topAnchor.constraint(equalTo: representativeImageLabel.bottomAnchor, constant: 15),
-            representativeImage.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            representativeImage.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.2),
+            representativeImage.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 20),
+            representativeImage.widthAnchor.constraint(equalTo: scrollContentView.widthAnchor, multiplier: 0.2),
             representativeImage.heightAnchor.constraint(equalTo: representativeImage.widthAnchor)
         ]
         let titleLabelConstraints = [
-            titleLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            titleLabel.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 20),
             titleLabel.topAnchor.constraint(equalTo: representativeImage.bottomAnchor, constant: 35)
         ]
         let titleTextFieldConstraints = [
-            titleTextField.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            titleTextField.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            titleTextField.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 20),
+            titleTextField.trailingAnchor.constraint(equalTo: scrollContentView.trailingAnchor, constant: -20),
             titleTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
         ]
         let memoLabelConstraints = [
-            memoLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            memoLabel.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 20),
             memoLabel.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 35)
         ]
         let memoTextFieldConstraints = [
-            memoTextField.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            memoTextField.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            memoTextField.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 20),
+            memoTextField.trailingAnchor.constraint(equalTo: scrollContentView.trailingAnchor, constant: -20),
             memoTextField.topAnchor.constraint(equalTo: memoLabel.bottomAnchor, constant: 15),
         ]
         let memoTextLengthLabelConstraints = [
             memoTextLengthLabel.trailingAnchor.constraint(equalTo: memoTextField.trailingAnchor),
             memoTextLengthLabel.topAnchor.constraint(equalTo: memoTextField.bottomAnchor, constant: 5),
-            memoTextLengthLabel.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+            memoTextLengthLabel.bottomAnchor.constraint(equalTo: scrollContentView.safeAreaLayoutGuide.bottomAnchor, constant: -10)
         ]
         
-        [representativeImageLabelConstraints,
+        [scrollViewConstraints,
+         scrollContentViewConstraints,
+         representativeImageLabelConstraints,
          representativeImageConstraints,
          titleLabelConstraints,
          titleTextFieldConstraints,
@@ -352,18 +386,20 @@ class ContributionUploadViewController: UIViewController {
     }
     
     @objc func keyboardWillShow(_ noti: NSNotification){
-        if let keyboardFrame: NSValue = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keyboardRectangle.height
-            self.view.frame.origin.y -= keyboardHeight
+        DispatchQueue.main.async {
+            if let keyboardFrame: NSValue = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                let keyboardRectangle = keyboardFrame.cgRectValue
+                let keyboardHeight = keyboardRectangle.height
+                let cons = self.scrollContentView.constraints.filter{$0.firstItem as! NSObject == self.scrollContentView && $0.firstAttribute == .bottom}
+                cons.forEach{$0.constant = keyboardHeight}
+            }
         }
     }
 
     @objc func keyboardWillHide(_ noti: NSNotification){
-        if let keyboardFrame: NSValue = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keyboardRectangle.height
-            self.view.frame.origin.y += keyboardHeight
+        DispatchQueue.main.async {
+            let cons = self.scrollContentView.constraints.filter{$0.firstItem as! NSObject == self.scrollContentView && $0.firstAttribute == .bottom}
+            cons.forEach{$0.constant = 0}
         }
     }
 }
@@ -580,4 +616,10 @@ extension ContributionUploadViewController: UIImagePickerControllerDelegate, UIN
     }
     
 
+}
+
+extension ContributionUploadViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        self.view.endEditing(true)
+    }
 }
