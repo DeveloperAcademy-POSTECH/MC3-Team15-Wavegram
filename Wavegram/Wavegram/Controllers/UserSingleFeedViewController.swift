@@ -38,8 +38,6 @@ class UserSingleFeedViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         
-        navigationItem.title = DataManager.loggedInUser.name
-        
         [
             subtitleLabel
         ].forEach { view.addSubview($0) }
@@ -76,6 +74,9 @@ class UserSingleFeedViewController: UIViewController {
     // Navigation Bar
     private func configureNavBar() {
         self.navigationController?.navigationBar.backgroundColor = .systemGray6
+        
+        // title
+        navigationItem.title = DataManager.loggedInUser.name
         
         // backButton
         let backButton = UIBarButtonItem()
