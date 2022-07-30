@@ -13,10 +13,13 @@ class ContributionUploadViewController: UIViewController {
     private var audioRecorder : AVAudioRecorder!
     private let spectrogram = Spectrogram()
     private let imagePicker = UIImagePickerController()
+    private let scrollViewHeight: CGFloat = 1000
     private let maxTitleTextLength: Int = 20
     private let maxMemoTextLength: Int = 50
     private var isRecording: Bool = false
     private var isPlaying: Bool = false
+    private let speakerImageString: String = "speaker"
+    private let mutedSpeakerImageString: String = "mutedSpeaker"
     private let xButtonString: String = "x.circle"
     private let recordStartButton: String = "recordButton"
     private let recordStopButton: String = "stopButton"
@@ -36,7 +39,7 @@ class ContributionUploadViewController: UIViewController {
             self.view.addSubview(self.scrollView)
             self.scrollView.addSubview(self.scrollContentView)
             // recordview에 서브뷰 추가
-            [self.spectrogramView, self.playTimeLabel, self.recordToggleButton, self.playToggleButton].forEach{ self.recordView.addSubview($0) }
+            [self.spectrogramView, self.playMusicTitleLabel, self.recordToggleButton, self.playToggleButton, self.originalMusicTitle].forEach{ self.recordView.addSubview($0) }
             // vc superview에 서브뷰 추가
             [self.representativeImageLabel, self.representativeImage, self.titleLabel, self.titleTextField, self.memoLabel, self.memoTextField, self.memoTextLengthLabel, self.recordLabel, self.recordView].forEach { self.scrollContentView.addSubview($0) }
         }
@@ -96,12 +99,9 @@ class ContributionUploadViewController: UIViewController {
     private let scrollContentView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-//        view.addGestureRecognizer(UIGestureRecognizer(target: self, action: #selector(onTapScrollContentView)))
+
         return view
     }()
-//    @objc func onTapScrollContentView() {
-//        keyboardWillHide(<#T##noti: NSNotification##NSNotification#>)
-//    }
 
     private let representativeImageLabel: UILabel = {
         let label = UILabel()
@@ -191,12 +191,27 @@ class ContributionUploadViewController: UIViewController {
         return view
     }()
     
-    private let playTimeLabel: UILabel = {
+    private let playMusicTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 10, weight: .regular)
+        label.font = .systemFont(ofSize: 15, weight: .medium)
         label.textColor = .white
-        label.text = "00:00"
+        label.text = "우럭먹다 받은 영감"
+        
+        return label
+    }()
+    
+    private lazy var originalMusicTitle: UILabel = {
+        let label = UILabel()
+        label.semanticContentAttribute = .forceRightToLeft
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.textColor = .white
+        let attributedString = NSMutableAttributedString(string: "Original")
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = UIImage(named: speakerImageString)
+        attributedString.append(NSAttributedString(attachment: imageAttachment))
+        label.attributedText = attributedString
         
         return label
     }()
@@ -249,7 +264,7 @@ class ContributionUploadViewController: UIViewController {
                 let currentTime = CMTimeGetSeconds((self.audioPlayer?.currentTime())!)
                 
                 let secs = Int(currentTime)
-                self.playTimeLabel.text = NSString(format: "%02d:%02d", secs/60, secs%60) as String
+                self.playMusicTitleLabel.text = NSString(format: "%02d:%02d", secs/60, secs%60) as String
             }
         })
     }
@@ -268,7 +283,7 @@ class ContributionUploadViewController: UIViewController {
             scrollContentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
             scrollContentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
             scrollContentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
-            scrollContentView.heightAnchor.constraint(equalToConstant: 1000)
+            scrollContentView.heightAnchor.constraint(equalToConstant: scrollViewHeight)
           ]
         let recordLabelConstraints = [
             recordLabel.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 20),
@@ -279,14 +294,19 @@ class ContributionUploadViewController: UIViewController {
             recordView.trailingAnchor.constraint(equalTo: scrollContentView.trailingAnchor, constant: -20),
             recordView.topAnchor.constraint(equalTo: recordLabel.bottomAnchor, constant: 15),
         ]
-        let playTimeLabelConstraints = [
-            playTimeLabel.centerXAnchor.constraint(equalTo: recordView.centerXAnchor),
-            playTimeLabel.topAnchor.constraint(equalTo: recordView.topAnchor, constant: 10)
+        let playMusicTitleLabelConstraints = [
+            playMusicTitleLabel.centerXAnchor.constraint(equalTo: recordView.centerXAnchor),
+            playMusicTitleLabel.topAnchor.constraint(equalTo: recordView.topAnchor, constant: 10)
+        ]
+        let originalMusicTitleConstraints = [
+            originalMusicTitle.leadingAnchor.constraint(equalTo: recordView.leadingAnchor, constant: 12),
+            originalMusicTitle.topAnchor.constraint(equalTo: playMusicTitleLabel.bottomAnchor, constant: 20)
+            
         ]
         let spectrogramViewConstraints = [
             spectrogramView.leadingAnchor.constraint(equalTo: recordView.leadingAnchor, constant: 10),
             spectrogramView.trailingAnchor.constraint(equalTo: recordView.trailingAnchor, constant: -10),
-            spectrogramView.topAnchor.constraint(equalTo: playTimeLabel.bottomAnchor, constant: 10),
+            spectrogramView.topAnchor.constraint(equalTo: originalMusicTitle.bottomAnchor, constant: 10),
             spectrogramView.bottomAnchor.constraint(equalTo: recordToggleButton.topAnchor, constant: -10)
         ]
         let recordToggleButtonConstraints = [
@@ -346,7 +366,8 @@ class ContributionUploadViewController: UIViewController {
          memoTextLengthLabelConstraints,
          recordLabelConstraints,
          recordViewConstraints,
-         playTimeLabelConstraints,
+         playMusicTitleLabelConstraints,
+         originalMusicTitleConstraints,
          spectrogramViewConstraints,
          recordToggleButtonConstraints,
          playToggleButtonConstraints].forEach{ NSLayoutConstraint.activate($0) }
@@ -614,10 +635,9 @@ extension ContributionUploadViewController: UIImagePickerControllerDelegate, UIN
         }
         dismiss(animated: true, completion: nil)
     }
-    
-
 }
 
+// MARK: UIScrollViewDelegate
 extension ContributionUploadViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.view.endEditing(true)
