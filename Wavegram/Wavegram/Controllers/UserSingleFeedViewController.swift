@@ -56,6 +56,23 @@ class UserSingleFeedViewController: UIViewController {
         super.viewDidLayoutSubviews()
     }
     
+    // Status Bar
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = false
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = .systemGray6
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.titleTextAttributes = [.font: UIFont.systemFont(ofSize: 20, weight: .semibold)]
+        appearance.shadowColor = .clear
+        
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+    }
+    
     // Navigation Bar
     private func configureNavBar() {
         self.navigationController?.navigationBar.backgroundColor = .systemGray6
@@ -66,6 +83,8 @@ class UserSingleFeedViewController: UIViewController {
         
         self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
     }
+    
+    
     
     // Constarints
     private func applyConstraints(_model: Feed) {
