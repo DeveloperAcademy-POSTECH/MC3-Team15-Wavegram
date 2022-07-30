@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A08F1232893CF0700971224 /* GuitarOnly.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0A08F1202893CF0700971224 /* GuitarOnly.mp3 */; };
+		0A08F1242893CF0700971224 /* GuitarAndVocal.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0A08F1212893CF0700971224 /* GuitarAndVocal.mp3 */; };
+		0A08F1252893CF0700971224 /* VocalOnly.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0A08F1222893CF0700971224 /* VocalOnly.mp3 */; };
 		0ABD56AC288534A2001DF711 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD56AB288534A2001DF711 /* AppDelegate.swift */; };
 		0ABD56AE288534A2001DF711 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABD56AD288534A2001DF711 /* SceneDelegate.swift */; };
 		0ABD56B5288534A3001DF711 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0ABD56B4288534A3001DF711 /* Assets.xcassets */; };
@@ -57,6 +60,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A08F1202893CF0700971224 /* GuitarOnly.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = GuitarOnly.mp3; sourceTree = "<group>"; };
+		0A08F1212893CF0700971224 /* GuitarAndVocal.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = GuitarAndVocal.mp3; sourceTree = "<group>"; };
+		0A08F1222893CF0700971224 /* VocalOnly.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = VocalOnly.mp3; sourceTree = "<group>"; };
 		0ABD56A8288534A2001DF711 /* Wavegram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wavegram.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0ABD56AB288534A2001DF711 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0ABD56AD288534A2001DF711 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -188,6 +194,9 @@
 		B6A859BF289275BB00912725 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				0A08F1212893CF0700971224 /* GuitarAndVocal.mp3 */,
+				0A08F1202893CF0700971224 /* GuitarOnly.mp3 */,
+				0A08F1222893CF0700971224 /* VocalOnly.mp3 */,
 				B6A859C0289275CE00912725 /* happyDay.mp3 */,
 				B6A859C2289275D400912725 /* exampleFile.mp3 */,
 			);
@@ -355,8 +364,11 @@
 				C651EA012885483C002BBAA8 /* Feed.json in Resources */,
 				9409743D2893D573007A9B6A /* SFCompact.ttf in Resources */,
 				C688BE4928939B9000E876B8 /* UserOwnedFeeds.json in Resources */,
+				0A08F1252893CF0700971224 /* VocalOnly.mp3 in Resources */,
+				0A08F1242893CF0700971224 /* GuitarAndVocal.mp3 in Resources */,
 				B6A859C3289275D400912725 /* exampleFile.mp3 in Resources */,
 				0ABD56B5288534A3001DF711 /* Assets.xcassets in Resources */,
+				0A08F1232893CF0700971224 /* GuitarOnly.mp3 in Resources */,
 				B6A859C1289275CE00912725 /* happyDay.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
