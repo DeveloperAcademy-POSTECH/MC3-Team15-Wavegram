@@ -12,10 +12,10 @@ import SwiftUI
 
 // MARK: UIViewController
 class NewUploadViewController: UIViewController {
-    var audioPlayer : AVPlayer!
-    var audioRecorder : AVAudioRecorder!
-    let spectrogram = Spectrogram()
-    let imagePicker = UIImagePickerController()
+    private var audioPlayer : AVPlayer!
+    private var audioRecorder : AVAudioRecorder!
+    private let spectrogram = Spectrogram()
+    private let imagePicker = UIImagePickerController()
     private let maxTitleTextLength: Int = 20
     private let maxMemoTextLength: Int = 50
     private var isRecording: Bool = false
