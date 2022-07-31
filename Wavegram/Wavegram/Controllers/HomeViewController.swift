@@ -29,9 +29,9 @@ class HomeViewController: UIViewController {
         
         // Logo
         let logoButton = UIButton()
-        logoButton.frame = CGRect(x: 0, y: 0, width: 114, height: 19)
-        logoButton.setTitle("Wavegram", for: .normal)
-        logoButton.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        logoButton.frame = CGRect(x: 0, y: 0, width: 120, height: 28)
+        logoButton.setTitle("MIX TAPE", for: .normal)
+        logoButton.titleLabel?.font = UIFont(name: "RockSalt", size: 15)
         
         // NavBar Left
         let leftBarButtonItem = UIBarButtonItem(customView: logoButton)
