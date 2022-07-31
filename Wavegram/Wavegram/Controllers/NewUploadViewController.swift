@@ -63,7 +63,6 @@ class NewUploadViewController: UIViewController {
     var audioPowers: [CGFloat] = []
 
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .black
@@ -570,7 +569,7 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
         let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
         let powerLevelPath = path.stringByAppendingPathComponent(path: "test.data") as String
 
-        return powerPath
+        return powerLevelPath
     }
 
     func audioRecorderSettings() -> [String : AnyObject] {
