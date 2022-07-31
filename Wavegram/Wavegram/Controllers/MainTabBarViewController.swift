@@ -14,7 +14,7 @@ class MainTabBarViewController: UITabBarController {
         view.backgroundColor = .systemBackground
         
         let vc1 = UINavigationController(rootViewController: HomeViewController())
-        let vc2 = UINavigationController(rootViewController: ContributionUploadViewController())
+        let vc2 = UINavigationController(rootViewController: SeacrhViewController())
         let vc3 = UINavigationController(rootViewController: UserViewController())
         
         vc1.tabBarItem.image = UIImage(systemName: "music.note.house.fill")

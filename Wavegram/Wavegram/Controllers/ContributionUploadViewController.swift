@@ -281,9 +281,10 @@ class ContributionUploadViewController: UIViewController {
     private func setNavigationBar() {
         self.navigationItem.title = "게시물 업로드"
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        let leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(onTapLeftBarButtonItem))
+        let leftBarButtonItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(onTapLeftBarButtonItem))
+        leftBarButtonItem.tintColor = .white
         self.navigationItem.leftBarButtonItem = leftBarButtonItem
-        let rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onTapRightBarButtonItem))
+        let rightBarButtonItem = UIBarButtonItem(title: "공유", style: .plain, target: self, action: #selector(onTapRightBarButtonItem))
         self.navigationItem.rightBarButtonItem = rightBarButtonItem
     }
 
