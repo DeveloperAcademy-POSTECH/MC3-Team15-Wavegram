@@ -197,10 +197,11 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         
         // TODO: Change playButton Font Size
         let button = UIButton()
-        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
+//        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        button.setImage(UIImage(systemName: "play.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .light)), for: .normal)
         button.addTarget(self, action: #selector(pressButton(_sender:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
-        
+        button.tintColor = .white
         return button
     }()
     
@@ -210,11 +211,11 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         if isPlaying {
             player.play()
             print("PLAY")
-            _sender.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            _sender.setImage(UIImage(systemName: "pause.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .light)), for: .normal)
         } else {
             player.pause()
             print("PAUSE")
-            _sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            _sender.setImage(UIImage(systemName: "play.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .light)), for: .normal)
         }
     }
     
