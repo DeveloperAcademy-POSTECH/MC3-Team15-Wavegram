@@ -298,7 +298,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         }
         
         // Additional Button
-        let isMine = model.contributor?.name == "woody_." || model.contributor == nil
+        let isMine = (model.owner.name == DataManager.loggedInUser.name) && (model.contributor == nil)
         let buttonSymbolName = isMine ? "ellipsis" : "rectangle.stack.badge.plus"
         additionalButton.setImage(UIImage(systemName: buttonSymbolName, withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)), for: .normal)
         
