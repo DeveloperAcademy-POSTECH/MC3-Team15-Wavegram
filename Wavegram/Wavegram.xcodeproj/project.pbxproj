@@ -30,6 +30,7 @@
 		943264D6288A752D003A789A /* Spectrogram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943264D5288A752D003A789A /* Spectrogram.swift */; };
 		943264DA288A9C2E003A789A /* SpectrogramExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943264D9288A9C2E003A789A /* SpectrogramExtension.swift */; };
 		94E382BF288FC61D00026EA8 /* SpectrogramViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E382BE288FC61D00026EA8 /* SpectrogramViewController.swift */; };
+		B67F8F95289526110098083A /* UserSingleFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67F8F94289526110098083A /* UserSingleFeedViewController.swift */; };
 		B69B1DF4288ECA21000BB036 /* HomeFeedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69B1DF3288ECA21000BB036 /* HomeFeedCollectionViewCell.swift */; };
 		B6A859C1289275CE00912725 /* happyDay.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B6A859C0289275CE00912725 /* happyDay.mp3 */; };
 		B6A859C3289275D400912725 /* exampleFile.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B6A859C2289275D400912725 /* exampleFile.mp3 */; };
@@ -87,6 +88,7 @@
 		943264D5288A752D003A789A /* Spectrogram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spectrogram.swift; sourceTree = "<group>"; };
 		943264D9288A9C2E003A789A /* SpectrogramExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpectrogramExtension.swift; sourceTree = "<group>"; };
 		94E382BE288FC61D00026EA8 /* SpectrogramViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpectrogramViewController.swift; sourceTree = "<group>"; };
+		B67F8F94289526110098083A /* UserSingleFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSingleFeedViewController.swift; sourceTree = "<group>"; };
 		B69B1DF3288ECA21000BB036 /* HomeFeedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFeedCollectionViewCell.swift; sourceTree = "<group>"; };
 		B6A859C0289275CE00912725 /* happyDay.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = happyDay.mp3; sourceTree = "<group>"; };
 		B6A859C2289275D400912725 /* exampleFile.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = exampleFile.mp3; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 				0ABD5A082887EA7500B70589 /* NewUploadViewController.swift */,
 				94E382BE288FC61D00026EA8 /* SpectrogramViewController.swift */,
 				0A2687DD2895507100F4B626 /* ContributionUploadViewController.swift */,
+				B67F8F94289526110098083A /* UserSingleFeedViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -413,6 +416,7 @@
 				C651E9FE28854706002BBAA8 /* JsonManager.swift in Sources */,
 				0ABD56F128857F9B001DF711 /* TextFieldExtension.swift in Sources */,
 				9409743B2893D567007A9B6A /* FontExtension.swift in Sources */,
+				B67F8F95289526110098083A /* UserSingleFeedViewController.swift in Sources */,
 				C651E9FA288542C3002BBAA8 /* UserModel.swift in Sources */,
 				0ABD56DC28853555001DF711 /* Extensions.swift in Sources */,
 				C688BE4228925D4300E876B8 /* DataManager.swift in Sources */,
