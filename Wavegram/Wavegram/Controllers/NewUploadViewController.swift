@@ -14,18 +14,54 @@ import SwiftUI
 class NewUploadViewController: UIViewController {
     private var audioPlayer : AVPlayer!
     private var audioRecorder : AVAudioRecorder!
+    private var soundWavePlayer: AVAudioPlayer!
+    private var soundWaveTimer: Timer!
+
     private let spectrogram = Spectrogram()
-    private let imagePicker = UIImagePickerController()
-    private let maxTitleTextLength: Int = 20
-    private let maxMemoTextLength: Int = 50
+    private var soundWaveView: UIView!
+
     private var isRecording: Bool = false
     private var isPlaying: Bool = false
-    private let xButtonString: String = "x.circle"
+
     private let recordStartButton: String = "recordButton"
     private let recordStopButton: String = "stopButton"
     private let playStartButton: String = "playButton"
     private let playStopButton: String = "pauseButton"
+
+    private let soundWaveLineWidth: Double = 2.0
+    private let soundWaveLineLength: Double = 20.0
+    private let soundWaveHorizontalMargin: Double = 5.0
+    private let soundWaveSampleRate: Double = 0.1
+
+    private let imagePicker = UIImagePickerController()
+    private let maxTitleTextLength: Int = 20
+    private let maxMemoTextLength: Int = 50
+    private let xButtonString: String = "x.circle"
     private lazy var imagegesture = UITapGestureRecognizer(target: self, action: #selector(onTapRepresentativeImage(_:)))
+
+    private lazy var totalSamples = Int(soundWaveLineLength / soundWaveSampleRate)
+    private lazy var sampleSpace = (soundWaveEndPoint.x - soundWaveStartingPoint.x) / CGFloat(totalSamples)
+
+    // 1차 베지에(Bazier) 곡선으로 렌더링
+    // 1차 베지에 곡선: B(t) = (1-t)P0 + iP1, 이 때 P0, P1은 좌표계
+    // 관련 문서: https://developer.apple.com/documentation/uikit/uibezierpath
+    private var soundWaveRecordingBazierPath: UIBezierPath?
+    private var soundWavePlayingBazierPath: UIBezierPath?
+
+    // P0: 첫 번째 조절점(control point)
+    private lazy var soundWaveStartingPoint = CGPoint(x: soundWaveView.bounds.size.width,
+                                              y: soundWaveView.bounds.midY)
+    // P1: 마지막 조절점(1차 베지에 곡선은 조절점이 2개니까)
+    private lazy var soundWaveEndPoint = CGPoint(x: soundWaveView.bounds.size.width - soundWaveHorizontalMargin,
+                                         y: soundWaveView.bounds.midY)
+    private var recordSoundWaveLayer = CAShapeLayer()
+    private var playSoundWaveLayer = CAShapeLayer()
+    private var renderingStartingPoint: CGPoint!
+
+    let audioURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("test.mp4")
+    let audioPowersURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("test.data")
+    var audioPowers: [CGFloat] = []
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -524,8 +560,16 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
     func audioFilePath() -> String {
         let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
         let filePath = path.stringByAppendingPathComponent(path: "test.m4a") as String
-        
+
         return filePath
+    }
+
+    // 오디오의 세기를 저장하는 코드
+    func audioPowerPath() -> String {
+        let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
+        let powerLevelPath = path.stringByAppendingPathComponent(path: "test.data") as String
+
+        return powerLevelPath
     }
 
     func audioRecorderSettings() -> [String : AnyObject] {
