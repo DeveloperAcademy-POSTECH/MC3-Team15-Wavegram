@@ -56,7 +56,6 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         button.setTitleColor(.systemBlue, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(moveToOriginFeed), for: .touchUpInside)
         
         return button
     }()
@@ -199,7 +198,6 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         let button = UIButton()
 //        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
         button.setImage(UIImage(systemName: "play.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .light)), for: .normal)
-        button.addTarget(self, action: #selector(pressButton(_sender:)), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .white
         return button
@@ -222,9 +220,6 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     let timeSlider: UISlider = {
         
         let slider = UISlider()
-        slider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidBegin)
-        slider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidEnd)
-        slider.addTarget(self, action: #selector(seekAudio(_sender:)), for: .valueChanged)
         slider.translatesAutoresizingMaskIntoConstraints = false
         
         return slider
@@ -322,11 +317,23 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
             contributorLabel.text = model.owner.name + ", " + model.contributor!.name
         }
         
+        buttonTargets()
+        
         applyConstraints(model)
         
         configurePlayer(model.audioName ?? "")
         
         configureObserver()
+        
+    }
+    
+    private func buttonTargets() {
+        originButton.addTarget(self, action: #selector(moveToOriginFeed), for: .touchUpInside)
+        playButton.addTarget(self, action: #selector(pressButton(_sender:)), for: .touchUpInside)
+        timeSlider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidBegin)
+        timeSlider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidEnd)
+        timeSlider.addTarget(self, action: #selector(seekAudio(_sender:)), for: .valueChanged)
+
     }
     
     // Constraints
