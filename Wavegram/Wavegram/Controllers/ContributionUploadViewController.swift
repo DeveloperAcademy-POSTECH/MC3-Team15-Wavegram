@@ -11,13 +11,15 @@ import AVFoundation
 class ContributionUploadViewController: UIViewController {
     private var audioPlayer : AVPlayer!
     private var audioRecorder : AVAudioRecorder!
-    private let spectrogram = Spectrogram()
+    private let originalSpectrogram = Spectrogram()
+    private let myTrackSpectrogram = Spectrogram()
     private let imagePicker = UIImagePickerController()
-    private let scrollViewHeight: CGFloat = 1000
+    private let scrollViewHeight: CGFloat = 900
     private let maxTitleTextLength: Int = 20
     private let maxMemoTextLength: Int = 50
     private var isRecording: Bool = false
     private var isPlaying: Bool = false
+    private lazy var spectrogramFrame: CGRect = CGRect(x: 0, y: 0, width: self.recordView.frame.width - 20, height: self.recordView.frame.height * 0.2)
     private let speakerImageBound: CGRect = CGRect(x: 0, y: -2, width: 22.5, height: 16)
     private let speakerImageString: String = "speaker"
     private let mutedSpeakerImageString: String = "mutedSpeaker"
@@ -33,14 +35,16 @@ class ContributionUploadViewController: UIViewController {
         DispatchQueue.main.async {
             self.view.backgroundColor = .black
             
-            self.spectrogram.contentsGravity = .resize
-            self.spectrogramView.layer.addSublayer(self.spectrogram)
-                    
+            self.originalSpectrogram.contentsGravity = .resize
+            self.originalSpectrogramView.layer.addSublayer(self.originalSpectrogram)
+            self.myTrackSpectrogram.contentsGravity = .resize
+            self.myTrackSpectrogramView.layer.addSublayer(self.myTrackSpectrogram)
+            
             self.setNavigationBar()
             self.view.addSubview(self.scrollView)
             self.scrollView.addSubview(self.scrollContentView)
             // recordview에 서브뷰 추가
-            [self.spectrogramView, self.playMusicTitleLabel, self.recordToggleButton, self.playToggleButton, self.originalMusicTitle, self.myTrackMusicTitle].forEach{ self.recordView.addSubview($0) }
+            [self.originalSpectrogramView, self.myTrackSpectrogramView, self.playMusicTitleLabel, self.recordToggleButton, self.playToggleButton, self.originalMusicTitle, self.myTrackMusicTitle].forEach{ self.recordView.addSubview($0) }
             // vc superview에 서브뷰 추가
             [self.representativeImageLabel, self.representativeImage, self.titleLabel, self.titleTextField, self.memoLabel, self.memoTextField, self.memoTextLengthLabel, self.recordLabel, self.recordView].forEach { self.scrollContentView.addSubview($0) }
         }
@@ -67,7 +71,8 @@ class ContributionUploadViewController: UIViewController {
             self.titleTextField.setClearButton(with: xCircleImage, mode: .always)
             self.memoTextField.setClearButton(with: xCircleImage, mode: .always)
             // spectrogram layer 활성화를 위한 frame 주기
-            self.spectrogram.frame = CGRect(x: 0, y: 0, width: self.recordView.frame.width - 20, height: self.recordView.frame.height * 0.2)
+            self.originalSpectrogram.frame = CGRect(x: 0, y: 0, width: self.recordView.frame.width - 20, height: self.recordView.frame.height * 0.25)//self.spectrogramFrame
+            self.myTrackSpectrogram.frame = CGRect(x: 0, y: 0, width: self.recordView.frame.width - 20, height: self.recordView.frame.height * 0.25)//self.spectrogramFrame
         }
     }
     
@@ -123,7 +128,7 @@ class ContributionUploadViewController: UIViewController {
         imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .gray
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 4
+        imageView.layer.cornerRadius = 10
         imageView.isUserInteractionEnabled = true
 
         return imageView
@@ -236,7 +241,13 @@ class ContributionUploadViewController: UIViewController {
     }()
     
     // 스펙트로그램 보여질 뷰
-    private let spectrogramView: UIView = {
+    private let originalSpectrogramView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let myTrackSpectrogramView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -323,13 +334,19 @@ class ContributionUploadViewController: UIViewController {
         ]
         let myTrackMusicTitleConstraints = [
             myTrackMusicTitle.leadingAnchor.constraint(equalTo: recordView.leadingAnchor, constant: 12),
-            myTrackMusicTitle.topAnchor.constraint(equalTo: spectrogramView.bottomAnchor, constant: 20)
+            myTrackMusicTitle.topAnchor.constraint(equalTo: originalSpectrogramView.bottomAnchor, constant: 20)
         ]
-        let spectrogramViewConstraints = [
-            spectrogramView.leadingAnchor.constraint(equalTo: recordView.leadingAnchor, constant: 10),
-            spectrogramView.trailingAnchor.constraint(equalTo: recordView.trailingAnchor, constant: -10),
-            spectrogramView.topAnchor.constraint(equalTo: originalMusicTitle.bottomAnchor, constant: 10),
-            spectrogramView.heightAnchor.constraint(equalTo: recordView.heightAnchor, multiplier: 0.2)
+        let originalSpectrogramViewConstraints = [
+            originalSpectrogramView.leadingAnchor.constraint(equalTo: recordView.leadingAnchor, constant: 10),
+            originalSpectrogramView.trailingAnchor.constraint(equalTo: recordView.trailingAnchor, constant: -10),
+            originalSpectrogramView.topAnchor.constraint(equalTo: originalMusicTitle.bottomAnchor, constant: 10),
+            originalSpectrogramView.heightAnchor.constraint(equalTo: recordView.heightAnchor, multiplier: 0.25)
+        ]
+        let myTrackSpectrogramViewConstraints = [
+            myTrackSpectrogramView.leadingAnchor.constraint(equalTo: recordView.leadingAnchor, constant: 10),
+            myTrackSpectrogramView.trailingAnchor.constraint(equalTo: recordView.trailingAnchor, constant: -10),
+            myTrackSpectrogramView.topAnchor.constraint(equalTo: myTrackMusicTitle.bottomAnchor, constant: 10),
+            myTrackSpectrogramView.heightAnchor.constraint(equalTo: recordView.heightAnchor, multiplier: 0.25)
         ]
         let recordToggleButtonConstraints = [
             recordToggleButton.trailingAnchor.constraint(equalTo: recordView.centerXAnchor, constant: -10),
@@ -391,7 +408,8 @@ class ContributionUploadViewController: UIViewController {
          playMusicTitleLabelConstraints,
          originalMusicTitleConstraints,
          myTrackMusicTitleConstraints,
-         spectrogramViewConstraints,
+         originalSpectrogramViewConstraints,
+         myTrackSpectrogramViewConstraints,
          recordToggleButtonConstraints,
          playToggleButtonConstraints].forEach{ NSLayoutConstraint.activate($0) }
     }
@@ -482,28 +500,17 @@ extension ContributionUploadViewController: AVAudioPlayerDelegate, AVAudioRecord
                 self.recordToggleButton.setImage(playToggleButtonImage, for: .normal)
                 self.isRecording.toggle()
             }
-            self.spectrogram.stopRunning()
+            self.myTrackSpectrogram.stopRunning()
             guard let player = self.audioPlayer else { return }
             player.pause()
             
-//            if let record = self.audioRecorder {
-//                record.stop()
-//                let session = AVAudioSession.sharedInstance()
-//                do{
-//                    try session.setActive(false)
-//                }
-//                catch{
-//                    print("\(error)")
-//                }
-//            }
-
         case false:
             DispatchQueue.main.async {
                 guard let playToggleButtonImage = UIImage(named: self.recordStopButton) else { return }
                 self.recordToggleButton.setImage(playToggleButtonImage, for: .normal)
                 self.isRecording.toggle()
             }
-            self.spectrogram.startRunning()
+            self.myTrackSpectrogram.startRunning()
             if let musicURL = Bundle.main.url(forResource: "GuitarAndVocal", withExtension: "mp3") {
                 self.audioPlayer = AVPlayer(url: musicURL)
                 self.audioPlayer.volume = 1
@@ -511,23 +518,6 @@ extension ContributionUploadViewController: AVAudioPlayerDelegate, AVAudioRecord
                 print("오디오 재생")
             }
             self.setPlayTimeLabel()
-//            let session = AVAudioSession.sharedInstance()
-//
-//            do{
-//                try session.setCategory(AVAudioSession.Category.playAndRecord)
-//                try session.setActive(true)
-//                session.requestRecordPermission({ (allowed : Bool) -> Void in
-//                    if allowed {
-//                        self.startRecording()
-//                    }
-//                    else{
-//                        print("녹음 권한 없음")
-//                    }
-//                })
-//            }
-//            catch{
-//                print("\(error)")
-//            }
         }
     }
 
@@ -540,7 +530,7 @@ extension ContributionUploadViewController: AVAudioPlayerDelegate, AVAudioRecord
             self.isPlaying.toggle()
             guard let player = self.audioPlayer else { return }
             player.pause()
-            self.spectrogram.stopRunning()
+            self.originalSpectrogram.stopRunning()
             
         case false:
             DispatchQueue.main.async {
@@ -548,7 +538,7 @@ extension ContributionUploadViewController: AVAudioPlayerDelegate, AVAudioRecord
                 self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
                 
                 self.isPlaying.toggle()
-                self.spectrogram.startRunning()
+                self.originalSpectrogram.startRunning()
 
                 if let musicURL = Bundle.main.url(forResource: "GuitarAndVocal", withExtension: "mp3") {
                     self.audioPlayer = AVPlayer(url: musicURL)
@@ -557,25 +547,6 @@ extension ContributionUploadViewController: AVAudioPlayerDelegate, AVAudioRecord
                     print("오디오 재생")
                 }
                 self.setPlayTimeLabel()
-
-//                guard let playToggleButtonImage = UIImage(named: self.playStartButton) else { return }
-//                self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
-//                self.isPlaying = false
-
-                
-//                if let data = NSData(contentsOfFile: self.audioFilePath()) {
-//                    do {
-//                        self.audioPlayer = try AVAudioPlayer(data: data as Data)
-//                        self.audioPlayer.delegate = self
-//                        self.audioPlayer.volume = 100
-//                        self.audioPlayer.prepareToPlay()
-//                        self.audioPlayer.play()
-//                        print("Audio 재생")
-//                    }
-//                    catch {
-//                        print("\(error)")
-//                    }
-//                }
             }
         }
     }
@@ -610,30 +581,6 @@ extension ContributionUploadViewController: AVAudioPlayerDelegate, AVAudioRecord
         
         return settings
     }
-
-//    //MARK: AVAudioPlayerDelegate
-//    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-//        if flag == true {
-//            print("Player 재생완료 성공")
-//            guard let playToggleButtonImage = UIImage(named: playStartButton) else { return }
-//            self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
-//            self.isPlaying = false
-//        }
-//        else{
-//            print("Player 오류")
-//        }
-//    }
-//
-//    //MARK: AVAudioRecorderDelegate
-//    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-//        if flag == true {
-//            print("녹음 완료 성공")
-//            print(recorder.url)
-//        }
-//        else{
-//            print("녹음 실패 종료")
-//        }
-//    }
 }
 
 // MARK: Imagepicker Delegate
