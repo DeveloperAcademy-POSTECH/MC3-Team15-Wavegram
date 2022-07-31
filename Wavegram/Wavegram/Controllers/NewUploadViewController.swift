@@ -56,7 +56,7 @@ class NewUploadViewController: UIViewController {
                                          y: soundWaveView.bounds.midY)
     private var recordSoundWaveLayer = CAShapeLayer()
     private var playSoundWaveLayer = CAShapeLayer()
-    private var redneringStartingPoint: CGPoint!
+    private var renderingStartingPoint: CGPoint!
 
     let audioURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("test.mp4")
     let audioPowersURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("test.data")
@@ -561,8 +561,16 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
     func audioFilePath() -> String {
         let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
         let filePath = path.stringByAppendingPathComponent(path: "test.m4a") as String
-        
+
         return filePath
+    }
+
+    // 오디오의 세기를 저장하는 코드
+    func audioPowerPath() -> String {
+        let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
+        let powerLevelPath = path.stringByAppendingPathComponent(path: "test.data") as String
+
+        return powerPath
     }
 
     func audioRecorderSettings() -> [String : AnyObject] {
