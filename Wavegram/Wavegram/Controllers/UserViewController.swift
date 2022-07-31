@@ -90,9 +90,14 @@ extension UserViewController {
         let leftButtonItem = UIBarButtonItem(customView: leftButton)
 
         // plus button
-        let image = UIImage(systemName: "plus.square")
-        let rightButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
+        let image = UIImage(systemName: "plus.square", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30, weight: .light))
+        let rightButton = UIButton(type: .system)
+        rightButton.setImage(image, for: .normal)
+        rightButton.addTarget(self, action: #selector(uploadNewFeed), for: .touchUpInside)
+        let rightButtonItem = UIBarButtonItem(customView: rightButton)
 
+        rightButtonItem.customView?.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        rightButtonItem.customView?.widthAnchor.constraint(equalToConstant: 30).isActive = true
 
         navigationItem.leftBarButtonItem = leftButtonItem
         navigationItem.rightBarButtonItem = rightButtonItem
@@ -117,6 +122,14 @@ extension UserViewController {
             .forEach { item in
                 NSLayoutConstraint.activate(item)
             }
+    }
+
+    @objc private func uploadNewFeed() {
+        let vc = NewUploadViewController()
+        vc.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(vc, animated: false)
+//        self.present(vc, animated: false)
+        print("Move To Upload Feed View")
     }
 }
 
