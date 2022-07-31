@@ -32,9 +32,7 @@ class ContributionUploadViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        DispatchQueue.main.async {
-            self.view.backgroundColor = .black
-            
+        DispatchQueue.main.async {            
             self.originalSpectrogram.contentsGravity = .resize
             self.originalSpectrogramView.layer.addSublayer(self.originalSpectrogram)
             self.myTrackSpectrogram.contentsGravity = .resize
