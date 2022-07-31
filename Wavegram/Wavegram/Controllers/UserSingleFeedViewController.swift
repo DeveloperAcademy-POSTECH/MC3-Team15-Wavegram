@@ -25,6 +25,19 @@ class UserSingleFeedViewController: UIViewController {
         return subtitleLabel
     }()
     
+    // Collection View
+    private let singleFeedCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        
+        let singleFeedCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        singleFeedCollectionView.register(HomeFeedCollectionViewCell.self, forCellWithReuseIdentifier: HomeFeedCollectionViewCell.identifier)
+        singleFeedCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        singleFeedCollectionView.backgroundColor = .systemBackground
+        
+        return singleFeedCollectionView
+    }()
+
+    
     init(feed: Feed) {
         self.currentFeed = feed
         super.init(nibName: nil, bundle: nil)
@@ -39,10 +52,15 @@ class UserSingleFeedViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         [
-            subtitleLabel
+            subtitleLabel,
+            singleFeedCollectionView
         ].forEach { view.addSubview($0) }
 
         configureNavBar()
+        
+        singleFeedCollectionView.delegate = self
+        singleFeedCollectionView.dataSource = self
+        
         applyConstraints(_model: currentFeed)
     }
     
@@ -91,13 +109,59 @@ class UserSingleFeedViewController: UIViewController {
     private func applyConstraints(_model: Feed) {
         
         // subtitleLabel
-        let subtitleConstraints = [
+        let subtitleLabelConstraints = [
             subtitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             subtitleLabel.widthAnchor.constraint(equalToConstant: view.frame.width),
             subtitleLabel.heightAnchor.constraint(equalToConstant: 48)
         ]
         
-        NSLayoutConstraint.activate(subtitleConstraints)
+        // collectionView
+        let singleFeedCollectionViewConstraints = [
+            singleFeedCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            singleFeedCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            // 390:23
+            singleFeedCollectionView.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: view.frame.width * (23.0/390)),
+            singleFeedCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ]
+        
+        [
+            subtitleLabelConstraints,
+            singleFeedCollectionViewConstraints
+        ].forEach { NSLayoutConstraint.activate($0) }
+        
     }
     
 }
+
+extension UserSingleFeedViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    // cell 수
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    // Section 수 -> 1
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    // cell data
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeFeedCollectionViewCell.identifier, for: indexPath) as? HomeFeedCollectionViewCell else {return UICollectionViewCell()}
+
+        cell.viewController = self
+        cell.configure(with: currentFeed)
+        
+        return cell
+    }
+    
+     // cell size
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        // 350:525 = 70:105 = 14:21
+        let width = collectionView.frame.width
+        return CGSize(width: width, height:  width * (21.0/14.0))
+    }
+    
+}
+
