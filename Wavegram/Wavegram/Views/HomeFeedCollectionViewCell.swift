@@ -56,7 +56,6 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         button.setTitleColor(.systemBlue, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(moveToOriginFeed), for: .touchUpInside)
         
         return button
     }()
@@ -197,10 +196,10 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         
         // TODO: Change playButton Font Size
         let button = UIButton()
-        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        button.addTarget(self, action: #selector(pressButton(_sender:)), for: .touchUpInside)
+//        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        button.setImage(UIImage(systemName: "play.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .light)), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        
+        button.tintColor = .white
         return button
     }()
     
@@ -210,20 +209,17 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         if isPlaying {
             player.play()
             print("PLAY")
-            _sender.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            _sender.setImage(UIImage(systemName: "pause.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .light)), for: .normal)
         } else {
             player.pause()
             print("PAUSE")
-            _sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            _sender.setImage(UIImage(systemName: "play.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .light)), for: .normal)
         }
     }
     
     let timeSlider: UISlider = {
         
         let slider = UISlider()
-        slider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidBegin)
-        slider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidEnd)
-        slider.addTarget(self, action: #selector(seekAudio(_sender:)), for: .valueChanged)
         slider.translatesAutoresizingMaskIntoConstraints = false
         
         return slider
@@ -298,7 +294,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         }
         
         // Additional Button
-        let isMine = model.contributor?.name == "woody_." || model.contributor == nil
+        let isMine = (model.owner.name == DataManager.loggedInUser.name) && (model.contributor == nil)
         let buttonSymbolName = isMine ? "ellipsis" : "rectangle.stack.badge.plus"
         additionalButton.setImage(UIImage(systemName: buttonSymbolName, withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)), for: .normal)
         
@@ -321,11 +317,23 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
             contributorLabel.text = model.owner.name + ", " + model.contributor!.name
         }
         
+        buttonTargets()
+        
         applyConstraints(model)
         
         configurePlayer(model.audioName ?? "")
         
         configureObserver()
+        
+    }
+    
+    private func buttonTargets() {
+        originButton.addTarget(self, action: #selector(moveToOriginFeed), for: .touchUpInside)
+        playButton.addTarget(self, action: #selector(pressButton(_sender:)), for: .touchUpInside)
+        timeSlider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidBegin)
+        timeSlider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidEnd)
+        timeSlider.addTarget(self, action: #selector(seekAudio(_sender:)), for: .valueChanged)
+
     }
     
     // Constraints
