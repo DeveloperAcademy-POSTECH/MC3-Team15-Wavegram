@@ -20,7 +20,7 @@ class ContributionUploadViewController: UIViewController {
     private var isRecording: Bool = false
     private var isPlaying: Bool = false
     private lazy var spectrogramFrame: CGRect = CGRect(x: 0, y: 0, width: self.recordView.frame.width - 20, height: self.recordView.frame.height * 0.2)
-    private let speakerImageBound: CGRect = CGRect(x: 0, y: -2, width: 22.5, height: 16)
+    private let speakerImageBound: CGRect = CGRect(x: 0, y: -3, width: 22.5, height: 18)
     private let speakerImageString: String = "speaker"
     private let mutedSpeakerImageString: String = "mutedSpeaker"
     private let xButtonString: String = "x.circle"
@@ -44,7 +44,7 @@ class ContributionUploadViewController: UIViewController {
             self.view.addSubview(self.scrollView)
             self.scrollView.addSubview(self.scrollContentView)
             // recordview에 서브뷰 추가
-            [self.originalSpectrogramView, self.myTrackSpectrogramView, self.playMusicTitleLabel, self.recordToggleButton, self.playToggleButton, self.originalMusicTitle, self.myTrackMusicTitle].forEach{ self.recordView.addSubview($0) }
+            [self.originalSpectrogramView, self.myTrackSpectrogramView, self.originalFeedTitleLabel, self.recordToggleButton, self.playToggleButton, self.originalMusicTitle, self.myTrackMusicTitle, self.originalMusicPlayTimeLabel].forEach{ self.recordView.addSubview($0) }
             // vc superview에 서브뷰 추가
             [self.representativeImageLabel, self.representativeImage, self.titleLabel, self.titleTextField, self.memoLabel, self.memoTextField, self.memoTextLengthLabel, self.recordLabel, self.recordView].forEach { self.scrollContentView.addSubview($0) }
         }
@@ -52,8 +52,8 @@ class ContributionUploadViewController: UIViewController {
         memoTextField.delegate = self
         imagePicker.delegate = self
         representativeImage.addGestureRecognizer(imagegesture)
-        recordToggleButton.addTarget(self, action: #selector(onTapRecordButton), for: .touchUpInside)
-        playToggleButton.addTarget(self, action: #selector(onTapPlayButton), for: .touchUpInside)
+        playToggleButton.addTarget(self, action: #selector(onTapRecordButton), for: .touchUpInside)
+        recordToggleButton.addTarget(self, action: #selector(onTapPlayButton), for: .touchUpInside)
       
         guard let recordToggleButtonImage = UIImage(named: recordStartButton) else { return }
         guard let playToggleButtonImage = UIImage(named: playStartButton) else { return }
@@ -198,7 +198,7 @@ class ContributionUploadViewController: UIViewController {
         return view
     }()
     
-    private let playMusicTitleLabel: UILabel = {
+    private let originalFeedTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15, weight: .medium)
@@ -214,12 +214,9 @@ class ContributionUploadViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 16, weight: .semibold)
         label.textColor = .white
-        let attributedString = NSMutableAttributedString(string: "Original ")
-        let imageAttachment = NSTextAttachment()
-        imageAttachment.bounds = self.speakerImageBound
-        imageAttachment.image = UIImage(named: self.speakerImageString)
-        attributedString.append(NSAttributedString(attachment: imageAttachment))
+        let attributedString = self.retrieveSpeakerImageAttributedString("Original ", self.mutedSpeakerImageString)
         label.attributedText = attributedString
+        label.autoresizesSubviews = true
         
         return label
     }()
@@ -230,12 +227,19 @@ class ContributionUploadViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 16, weight: .semibold)
         label.textColor = .white
-        let attributedString = NSMutableAttributedString(string: "My Track ")
-        let imageAttachment = NSTextAttachment()
-        imageAttachment.bounds = self.speakerImageBound
-        imageAttachment.image = UIImage(named: self.speakerImageString)
-        attributedString.append(NSAttributedString(attachment: imageAttachment))
+        let attributedString = self.retrieveSpeakerImageAttributedString("My Track ", self.mutedSpeakerImageString)
         label.attributedText = attributedString
+        label.autoresizesSubviews = true
+
+        return label
+    }()
+    
+    private let originalMusicPlayTimeLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 10, weight: .regular)
+        label.textColor = .white
+        label.text = "00:00"
         
         return label
     }()
@@ -294,7 +298,7 @@ class ContributionUploadViewController: UIViewController {
                 let currentTime = CMTimeGetSeconds((self.audioPlayer?.currentTime())!)
                 
                 let secs = Int(currentTime)
-                self.playMusicTitleLabel.text = NSString(format: "%02d:%02d", secs/60, secs%60) as String
+                self.originalMusicPlayTimeLabel.text = NSString(format: "%02d:%02d", secs/60, secs%60) as String
             }
         })
     }
@@ -325,12 +329,12 @@ class ContributionUploadViewController: UIViewController {
             recordView.topAnchor.constraint(equalTo: recordLabel.bottomAnchor, constant: 15),
         ]
         let playMusicTitleLabelConstraints = [
-            playMusicTitleLabel.centerXAnchor.constraint(equalTo: recordView.centerXAnchor),
-            playMusicTitleLabel.topAnchor.constraint(equalTo: recordView.topAnchor, constant: 10)
+            originalFeedTitleLabel.centerXAnchor.constraint(equalTo: recordView.centerXAnchor),
+            originalFeedTitleLabel.topAnchor.constraint(equalTo: recordView.topAnchor, constant: 10)
         ]
         let originalMusicTitleConstraints = [
             originalMusicTitle.leadingAnchor.constraint(equalTo: recordView.leadingAnchor, constant: 12),
-            originalMusicTitle.topAnchor.constraint(equalTo: playMusicTitleLabel.bottomAnchor, constant: 20)
+            originalMusicTitle.topAnchor.constraint(equalTo: originalFeedTitleLabel.bottomAnchor, constant: 20)
         ]
         let myTrackMusicTitleConstraints = [
             myTrackMusicTitle.leadingAnchor.constraint(equalTo: recordView.leadingAnchor, constant: 12),
@@ -347,6 +351,11 @@ class ContributionUploadViewController: UIViewController {
             myTrackSpectrogramView.trailingAnchor.constraint(equalTo: recordView.trailingAnchor, constant: -10),
             myTrackSpectrogramView.topAnchor.constraint(equalTo: myTrackMusicTitle.bottomAnchor, constant: 10),
             myTrackSpectrogramView.heightAnchor.constraint(equalTo: recordView.heightAnchor, multiplier: 0.25)
+        ]
+        let originalMusicPlayTimeLabelConstraints = [
+            originalMusicPlayTimeLabel.topAnchor.constraint(equalTo: originalSpectrogramView.bottomAnchor),
+            originalMusicPlayTimeLabel.bottomAnchor.constraint(equalTo: myTrackMusicTitle.topAnchor),
+            originalMusicPlayTimeLabel.centerXAnchor.constraint(equalTo: recordView.centerXAnchor)
         ]
         let recordToggleButtonConstraints = [
             recordToggleButton.trailingAnchor.constraint(equalTo: recordView.centerXAnchor, constant: -10),
@@ -408,10 +417,21 @@ class ContributionUploadViewController: UIViewController {
          playMusicTitleLabelConstraints,
          originalMusicTitleConstraints,
          myTrackMusicTitleConstraints,
+         originalMusicPlayTimeLabelConstraints,
          originalSpectrogramViewConstraints,
          myTrackSpectrogramViewConstraints,
          recordToggleButtonConstraints,
          playToggleButtonConstraints].forEach{ NSLayoutConstraint.activate($0) }
+    }
+    
+    private func retrieveSpeakerImageAttributedString(_ title: String, _ imageName: String) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: title)
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.bounds = self.speakerImageBound
+        imageAttachment.image = UIImage(named: imageName)
+        attributedString.append(NSAttributedString(attachment: imageAttachment))
+        
+        return attributedString
     }
 
     private func addKeyboardNotifications(){
@@ -492,26 +512,29 @@ extension ContributionUploadViewController: UITextFieldDelegate {
 }
 
 extension ContributionUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegate {
+    // MARK: Original Play
     @objc func onTapRecordButton() {
         switch isRecording {
         case true:
             DispatchQueue.main.async {
-                guard let playToggleButtonImage = UIImage(named: self.recordStartButton) else { return }
-                self.recordToggleButton.setImage(playToggleButtonImage, for: .normal)
+                guard let playToggleButtonImage = UIImage(named: self.playStartButton) else { return }
+                self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
                 self.isRecording.toggle()
             }
-            self.myTrackSpectrogram.stopRunning()
+            self.originalSpectrogram.stopRunning()
+            self.originalMusicTitle.attributedText = self.retrieveSpeakerImageAttributedString("Original ", self.mutedSpeakerImageString)
             guard let player = self.audioPlayer else { return }
             player.pause()
             
         case false:
             DispatchQueue.main.async {
-                guard let playToggleButtonImage = UIImage(named: self.recordStopButton) else { return }
-                self.recordToggleButton.setImage(playToggleButtonImage, for: .normal)
+                guard let playToggleButtonImage = UIImage(named: self.playStopButton) else { return }
+                self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
                 self.isRecording.toggle()
             }
-            self.myTrackSpectrogram.startRunning()
-            if let musicURL = Bundle.main.url(forResource: "GuitarAndVocal", withExtension: "mp3") {
+            self.originalSpectrogram.startRunning()
+            self.originalMusicTitle.attributedText = self.retrieveSpeakerImageAttributedString("Original ", self.speakerImageString)
+            if let musicURL = Bundle.main.url(forResource: "GuitarOnly", withExtension: "mp3") {
                 self.audioPlayer = AVPlayer(url: musicURL)
                 self.audioPlayer.volume = 1
                 self.audioPlayer.play()
@@ -520,33 +543,33 @@ extension ContributionUploadViewController: AVAudioPlayerDelegate, AVAudioRecord
             self.setPlayTimeLabel()
         }
     }
-
+    // MARK: My Track Play
     @objc func onTapPlayButton() {
         switch isPlaying {
         case true:
-            guard let playToggleButtonImage = UIImage(named: playStartButton) else { return }
-            self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
+            guard let playToggleButtonImage = UIImage(named: recordStartButton) else { return }
+            self.recordToggleButton.setImage(playToggleButtonImage, for: .normal)
                         
             self.isPlaying.toggle()
             guard let player = self.audioPlayer else { return }
             player.pause()
-            self.originalSpectrogram.stopRunning()
-            
+            self.myTrackSpectrogram.stopRunning()
+            self.myTrackMusicTitle.attributedText = self.retrieveSpeakerImageAttributedString("My Track ", self.mutedSpeakerImageString)
         case false:
             DispatchQueue.main.async {
-                guard let playToggleButtonImage = UIImage(named: self.playStopButton) else { return }
-                self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
+                guard let playToggleButtonImage = UIImage(named: self.recordStopButton) else { return }
+                self.recordToggleButton.setImage(playToggleButtonImage, for: .normal)
                 
                 self.isPlaying.toggle()
-                self.originalSpectrogram.startRunning()
-
+                self.myTrackSpectrogram.startRunning()
+                self.myTrackMusicTitle.attributedText = self.retrieveSpeakerImageAttributedString("My Track ", self.speakerImageString)
                 if let musicURL = Bundle.main.url(forResource: "GuitarAndVocal", withExtension: "mp3") {
                     self.audioPlayer = AVPlayer(url: musicURL)
                     self.audioPlayer.volume = 1
                     self.audioPlayer.play()
                     print("오디오 재생")
                 }
-                self.setPlayTimeLabel()
+//                self.setPlayTimeLabel()
             }
         }
     }
