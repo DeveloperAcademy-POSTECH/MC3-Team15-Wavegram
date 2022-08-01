@@ -14,11 +14,10 @@ import SwiftUI
 class NewUploadViewController: UIViewController {
     private var audioPlayer : AVPlayer!
     private var audioRecorder : AVAudioRecorder!
-    private var soundWavePlayer: AVAudioPlayer!
-    private var soundWaveTimer: Timer!
+    var soundWavePlayer: AVAudioPlayer!
+    var soundWaveTimer: Timer!
 
     private let spectrogram = Spectrogram()
-    private var soundWaveView: UIView!
 
     private var isRecording: Bool = false
     private var isPlaying: Bool = false
@@ -28,10 +27,10 @@ class NewUploadViewController: UIViewController {
     private let playStartButton: String = "playButton"
     private let playStopButton: String = "pauseButton"
 
-    private let soundWaveLineWidth: Double = 2.0
-    private let soundWaveLineLength: Double = 20.0
-    private let soundWaveHorizontalMargin: Double = 5.0
-    private let soundWaveSampleRate: Double = 0.1
+    let soundWaveLineWidth: Double = 2.0
+    let soundWaveLineLength: Double = 20.0
+    let soundWaveHorizontalMargin: Double = 5.0
+    let soundWaveSampleRate: Double = 0.1
 
     private let imagePicker = UIImagePickerController()
     private let maxTitleTextLength: Int = 20
@@ -45,18 +44,18 @@ class NewUploadViewController: UIViewController {
     // 1차 베지에(Bazier) 곡선으로 렌더링
     // 1차 베지에 곡선: B(t) = (1-t)P0 + iP1, 이 때 P0, P1은 좌표계
     // 관련 문서: https://developer.apple.com/documentation/uikit/uibezierpath
-    private var soundWaveRecordingBazierPath: UIBezierPath?
-    private var soundWavePlayingBazierPath: UIBezierPath?
+    var soundWaveRecordingBazierPath: UIBezierPath?
+    var soundWavePlayingBazierPath: UIBezierPath?
 
     // P0: 첫 번째 조절점(control point)
-    private lazy var soundWaveStartingPoint = CGPoint(x: soundWaveView.bounds.size.width,
-                                              y: soundWaveView.bounds.midY)
+    lazy var soundWaveStartingPoint = CGPoint(x: spectrogramView.bounds.size.width,
+                                                      y: spectrogramView.bounds.midY)
     // P1: 마지막 조절점(1차 베지에 곡선은 조절점이 2개니까)
-    private lazy var soundWaveEndPoint = CGPoint(x: soundWaveView.bounds.size.width - soundWaveHorizontalMargin,
-                                         y: soundWaveView.bounds.midY)
-    private var recordSoundWaveLayer = CAShapeLayer()
-    private var playSoundWaveLayer = CAShapeLayer()
-    private var renderingStartingPoint: CGPoint!
+    lazy var soundWaveEndPoint = CGPoint(x: spectrogramView.bounds.size.width - soundWaveHorizontalMargin,
+                                                 y: spectrogramView.bounds.midY)
+    var recordSoundWaveLayer = CAShapeLayer()
+    var playSoundWaveLayer = CAShapeLayer()
+    var renderingStartingPoint: CGPoint!
 
     let audioURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("test.mp4")
     let audioPowersURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("test.data")
@@ -72,9 +71,26 @@ class NewUploadViewController: UIViewController {
                 
         self.setNavigationBar()
         // recordview에 서브뷰 추가
-        [spectrogramView, playTimeLabel, recordToggleButton, playToggleButton].forEach{ self.recordView.addSubview($0) }
+        [
+            spectrogramView,
+            playTimeLabel,
+            recordToggleButton,
+            playToggleButton
+        ].forEach{ self.recordView.addSubview($0) }
+
         // vc superview에 서브뷰 추가
-        [representativeImageLabel, representativeImage, titleLabel, titleTextField, memoLabel, memoTextField, memoTextLengthLabel, recordLabel, recordView].forEach { self.view.addSubview($0) }
+        [
+            representativeImageLabel,
+            representativeImage,
+            titleLabel,
+            titleTextField,
+            memoLabel,
+            memoTextField,
+            memoTextLengthLabel,
+            recordLabel,
+            recordView
+        ].forEach { self.view.addSubview($0) }
+
         titleTextField.delegate = self
         memoTextField.delegate = self
         imagePicker.delegate = self
@@ -223,7 +239,7 @@ class NewUploadViewController: UIViewController {
     }()
     
     // 스펙트로그램 보여질 뷰
-    private let spectrogramView: UIView = {
+    let spectrogramView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
