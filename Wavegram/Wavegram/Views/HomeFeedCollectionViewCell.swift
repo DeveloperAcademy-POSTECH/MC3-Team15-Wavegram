@@ -262,12 +262,18 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
             playButton, timeSlider
         ].forEach { addSubview($0) }
         
-        
     }
-    
+
     // Basic Setting
     required init?(coder: NSCoder) {
         fatalError()
+    }
+    
+    // Cell Reuse
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        originButton.setTitle("", for: .normal)
+        originLabel.text = ""
     }
     
     // Configure
