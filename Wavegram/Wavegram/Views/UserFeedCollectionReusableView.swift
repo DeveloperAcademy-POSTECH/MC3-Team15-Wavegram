@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol UserFeedCollectionReusableViewDelegate: AnyObject {
+    func segmentedControlDidTapSection(feeds : [Feed])
+}
+
 class UserFeedCollectionReusableView: UICollectionReusableView {
 
     static let identifier = "FeedCollectionReusableView"
@@ -15,6 +19,8 @@ class UserFeedCollectionReusableView: UICollectionReusableView {
     private let stackWidth: CGFloat = 50
     private let leadingPadding: CGFloat = 20
     private let trailingPadding: CGFloat = -20
+
+    var delegate: UserFeedCollectionReusableViewDelegate?
 
     // fullCoverView
     private let fullCoverView: UIView = {
@@ -110,6 +116,7 @@ class UserFeedCollectionReusableView: UICollectionReusableView {
        segment.backgroundColor = .black
        segment.tintColor = .gray
        segment.translatesAutoresizingMaskIntoConstraints = false
+       segment.addTarget(self, action: #selector(segmentedValueChanged(_:)), for: .valueChanged)
 
        return segment
    }()
@@ -130,6 +137,16 @@ extension UserFeedCollectionReusableView {
     func configure(with user: User) {
         profileImageView.image = UIImage(named: user.profileImage)
     }
+
+    @objc func segmentedValueChanged(_ sender:UISegmentedControl) {
+        print("Selected Segment Index is : \(sender.selectedSegmentIndex)")
+
+        if sender.selectedSegmentIndex == 0 {
+            delegate?.segmentedControlDidTapSection(feeds: DataManager.shared.userOwnedFeeds)
+        } else {
+            delegate?.segmentedControlDidTapSection(feeds: DataManager.shared.userContributedFeeds)
+        }
+     }
 
     private func configureView() {
         [fullCoverView, segmentedControl]
