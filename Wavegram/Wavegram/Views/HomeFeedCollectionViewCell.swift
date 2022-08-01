@@ -78,7 +78,8 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     
     // Contribute Button
     @objc func uploadContributeFeed() {
-        // TODO: Move to UploadContributeFeed
+        let vc = ContributionUploadViewController()
+        self.viewController?.navigationController?.pushViewController(vc, animated: false)
         print("Move to uploadContributeFeed View")
     }
     
@@ -90,7 +91,6 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         
         let modify = UIAlertAction(title: "수정하기", style: .default) { action in
             let vc = ModifyPostViewController()
-            vc.modalPresentationStyle = .fullScreen
             self.viewController?.navigationController?.pushViewController(vc, animated: true)
             print("수정하기")
         }
