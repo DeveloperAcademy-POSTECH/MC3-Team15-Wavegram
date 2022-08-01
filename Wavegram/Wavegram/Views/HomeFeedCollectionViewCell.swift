@@ -31,7 +31,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = label.font.withSize(17)
+        label.font = .bodyContents
         label.textAlignment = .left
         
         return label
@@ -40,7 +40,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     // originLabel
     private let originLabel: UILabel = {
         let label = UILabel()
-        label.font = label.font.withSize(12)
+        label.font = .bodyContentsSmall
         label.textColor = .systemGray
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -53,7 +53,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         
         let button = UIButton()
         
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        button.titleLabel?.font = .bodyContentsSmall
         button.setTitleColor(.systemBlue, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -92,7 +92,6 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
             let vc = ModifyPostViewController()
             vc.modalPresentationStyle = .fullScreen
             self.viewController?.navigationController?.pushViewController(vc, animated: true)
-//            self.viewController?.present(vc, animated: true)
             print("수정하기")
         }
         let delete = UIAlertAction(title: "삭제하기", style: .destructive) { action in
@@ -141,7 +140,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     private let detailLabel: UILabel = {
         
         let label = UILabel()
-        label.font = label.font.withSize(16)
+        label.font = .bodyContents
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -169,7 +168,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
 
         let label = UILabel()
-        label.font = label.font.withSize(16)
+        label.font = .bodyTitle
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -180,7 +179,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     private let contributorLabel: UILabel = {
 
         let label = UILabel()
-        label.font = label.font.withSize(14)
+        label.font = .bodyContentsSmall
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
 

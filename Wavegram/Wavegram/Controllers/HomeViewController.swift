@@ -29,15 +29,15 @@ class HomeViewController: UIViewController {
         
         // Logo
         let logoButton = UIButton()
-        logoButton.frame = CGRect(x: 0, y: 0, width: 114, height: 19)
-        logoButton.setTitle("Wavegram", for: .normal)
-        logoButton.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        logoButton.frame = CGRect(x: 0, y: 0, width: 120, height: 28)
+        logoButton.setTitle("MIX TAPE", for: .normal)
+        logoButton.titleLabel?.font = UIFont(name: "RockSalt", size: 18)
         
         // NavBar Left
         let leftBarButtonItem = UIBarButtonItem(customView: logoButton)
-        let leftWidth = leftBarButtonItem.customView?.widthAnchor.constraint(equalToConstant: 114)
+        let leftWidth = leftBarButtonItem.customView?.widthAnchor.constraint(equalToConstant: 120)
             leftWidth?.isActive = true
-        let leftHeight = leftBarButtonItem.customView?.heightAnchor.constraint(equalToConstant: 19)
+        let leftHeight = leftBarButtonItem.customView?.heightAnchor.constraint(equalToConstant: 28)
             leftHeight?.isActive = true
         
         navigationItem.leftBarButtonItem = leftBarButtonItem
