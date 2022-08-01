@@ -1,11 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "milkyProfile.png",
+      "filename" : "stopButton.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "stopButton2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

@@ -1,111 +1,62 @@
 //
-//  NewUploadViewController.swift
+//  ContributionUploadViewController.swift
 //  Wavegram
 //
-//  Created by 김상현, 김제필 on 2022/07/20.
+//  Created by 김상현 on 2022/07/30.
 //
-
 
 import UIKit
 import AVFoundation
-import SwiftUI
 
-// MARK: UIViewController
-class NewUploadViewController: UIViewController {
+class ContributionUploadViewController: UIViewController {
     private var audioPlayer : AVPlayer!
     private var audioRecorder : AVAudioRecorder!
-    var soundWavePlayer: AVAudioPlayer!
-    var soundWaveTimer: Timer!
-
-    private let spectrogram = Spectrogram()
-
+    private let originalSpectrogram = Spectrogram()
+    private let myTrackSpectrogram = Spectrogram()
+    private let imagePicker = UIImagePickerController()
+    private let scrollViewHeight: CGFloat = 900
+    private let maxTitleTextLength: Int = 20
+    private let maxMemoTextLength: Int = 50
     private var isRecording: Bool = false
     private var isPlaying: Bool = false
-
+    private lazy var spectrogramFrame: CGRect = CGRect(x: 0, y: 0, width: self.recordView.frame.width - 20, height: self.recordView.frame.height * 0.2)
+    private let speakerImageBound: CGRect = CGRect(x: 0, y: -3, width: 22.5, height: 18)
+    private let speakerImageString: String = "speaker"
+    private let mutedSpeakerImageString: String = "mutedSpeaker"
+    private let xButtonString: String = "x.circle"
     private let recordStartButton: String = "recordButton"
     private let recordStopButton: String = "stopButton"
     private let playStartButton: String = "playButton"
     private let playStopButton: String = "pauseButton"
-
-    let soundWaveLineWidth: Double = 2.0
-    let soundWaveLineLength: Double = 20.0
-    let soundWaveHorizontalMargin: Double = 5.0
-    let soundWaveSampleRate: Double = 0.1
-
-    private let imagePicker = UIImagePickerController()
-    private let maxTitleTextLength: Int = 20
-    private let maxMemoTextLength: Int = 50
-    private let xButtonString: String = "x.circle"
     private lazy var imagegesture = UITapGestureRecognizer(target: self, action: #selector(onTapRepresentativeImage(_:)))
-
-    private lazy var totalSamples = Int(soundWaveLineLength / soundWaveSampleRate)
-    private lazy var sampleSpace = (soundWaveEndPoint.x - soundWaveStartingPoint.x) / CGFloat(totalSamples)
-
-    // 1차 베지에(Bazier) 곡선으로 렌더링
-    // 1차 베지에 곡선: B(t) = (1-t)P0 + iP1, 이 때 P0, P1은 좌표계
-    // 관련 문서: https://developer.apple.com/documentation/uikit/uibezierpath
-    var soundWaveRecordingBazierPath: UIBezierPath?
-    var soundWavePlayingBazierPath: UIBezierPath?
-
-    // P0: 첫 번째 조절점(control point)
-    lazy var soundWaveStartingPoint = CGPoint(x: spectrogramView.bounds.size.width,
-                                                      y: spectrogramView.bounds.midY)
-    // P1: 마지막 조절점(1차 베지에 곡선은 조절점이 2개니까)
-    lazy var soundWaveEndPoint = CGPoint(x: spectrogramView.bounds.size.width - soundWaveHorizontalMargin,
-                                                 y: spectrogramView.bounds.midY)
-    var recordSoundWaveLayer = CAShapeLayer()
-    var playSoundWaveLayer = CAShapeLayer()
-    var renderingStartingPoint: CGPoint!
-
-    let audioURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("test.mp4")
-    let audioPowersURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("test.data")
-    var audioPowers: [CGFloat] = []
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .black
-        
-        spectrogram.contentsGravity = .resize
-        spectrogramView.layer.addSublayer(spectrogram)
-                
-        self.setNavigationBar()
-        // recordview에 서브뷰 추가
-        [
-            spectrogramView,
-            playTimeLabel,
-            recordToggleButton,
-            playToggleButton
-        ].forEach{ self.recordView.addSubview($0) }
-
-        // vc superview에 서브뷰 추가
-        [
-            representativeImageLabel,
-            representativeImage,
-            titleLabel,
-            titleTextField,
-            memoLabel,
-            memoTextField,
-            memoTextLengthLabel,
-            recordLabel,
-            recordView
-        ].forEach { self.view.addSubview($0) }
-
+        DispatchQueue.main.async {            
+            self.originalSpectrogram.contentsGravity = .resize
+            self.originalSpectrogramView.layer.addSublayer(self.originalSpectrogram)
+            self.myTrackSpectrogram.contentsGravity = .resize
+            self.myTrackSpectrogramView.layer.addSublayer(self.myTrackSpectrogram)
+            
+            self.setNavigationBar()
+            self.view.addSubview(self.scrollView)
+            self.scrollView.addSubview(self.scrollContentView)
+            // recordview에 서브뷰 추가
+            [self.originalSpectrogramView, self.myTrackSpectrogramView, self.originalFeedTitleLabel, self.recordToggleButton, self.playToggleButton, self.originalMusicTitle, self.myTrackMusicTitle, self.originalMusicPlayTimeLabel].forEach{ self.recordView.addSubview($0) }
+            // vc superview에 서브뷰 추가
+            [self.representativeImageLabel, self.representativeImage, self.titleLabel, self.titleTextField, self.memoLabel, self.memoTextField, self.memoTextLengthLabel, self.recordLabel, self.recordView].forEach { self.scrollContentView.addSubview($0) }
+        }
         titleTextField.delegate = self
         memoTextField.delegate = self
         imagePicker.delegate = self
         representativeImage.addGestureRecognizer(imagegesture)
-        recordToggleButton.addTarget(self, action: #selector(onTapRecordButton), for: .touchUpInside)
-        playToggleButton.addTarget(self, action: #selector(onTapPlayButton), for: .touchUpInside)
+        playToggleButton.addTarget(self, action: #selector(onTapRecordButton), for: .touchUpInside)
+        recordToggleButton.addTarget(self, action: #selector(onTapPlayButton), for: .touchUpInside)
       
         guard let recordToggleButtonImage = UIImage(named: recordStartButton) else { return }
         guard let playToggleButtonImage = UIImage(named: playStartButton) else { return }
         recordToggleButton.setImage(recordToggleButtonImage, for: .normal)
         playToggleButton.setImage(playToggleButtonImage, for: .normal)
-    }
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
     }
 
     override func viewDidLayoutSubviews() {
@@ -118,7 +69,8 @@ class NewUploadViewController: UIViewController {
             self.titleTextField.setClearButton(with: xCircleImage, mode: .always)
             self.memoTextField.setClearButton(with: xCircleImage, mode: .always)
             // spectrogram layer 활성화를 위한 frame 주기
-            self.spectrogram.frame = CGRect(x: 0, y: 0, width: self.recordView.bounds.width - 20, height: self.recordView.bounds.height * 0.3)
+            self.originalSpectrogram.frame = CGRect(x: 0, y: 0, width: self.recordView.frame.width - 20, height: self.recordView.frame.height * 0.25)//self.spectrogramFrame
+            self.myTrackSpectrogram.frame = CGRect(x: 0, y: 0, width: self.recordView.frame.width - 20, height: self.recordView.frame.height * 0.25)//self.spectrogramFrame
         }
     }
     
@@ -139,6 +91,22 @@ class NewUploadViewController: UIViewController {
 
         return label
     }()
+    
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.keyboardDismissMode = .onDrag
+
+        return scrollView
+    }()
+    
+    private let scrollContentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+
+        return view
+    }()
 
     private let representativeImageLabel: UILabel = {
         let label = UILabel()
@@ -158,7 +126,7 @@ class NewUploadViewController: UIViewController {
         imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .gray
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 4
+        imageView.layer.cornerRadius = 10
         imageView.isUserInteractionEnabled = true
 
         return imageView
@@ -228,7 +196,43 @@ class NewUploadViewController: UIViewController {
         return view
     }()
     
-    private let playTimeLabel: UILabel = {
+    private let originalFeedTitleLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 15, weight: .medium)
+        label.textColor = .white
+        label.text = "우럭먹다 받은 영감"
+        
+        return label
+    }()
+    
+    private lazy var originalMusicTitle: UILabel = {
+        let label = UILabel()
+        label.semanticContentAttribute = .forceRightToLeft
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.textColor = .white
+        let attributedString = self.retrieveSpeakerImageAttributedString("Original ", self.mutedSpeakerImageString)
+        label.attributedText = attributedString
+        label.autoresizesSubviews = true
+        
+        return label
+    }()
+    
+    private lazy var myTrackMusicTitle: UILabel = {
+        let label = UILabel()
+        label.semanticContentAttribute = .forceRightToLeft
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.textColor = .white
+        let attributedString = self.retrieveSpeakerImageAttributedString("My Track ", self.mutedSpeakerImageString)
+        label.attributedText = attributedString
+        label.autoresizesSubviews = true
+
+        return label
+    }()
+    
+    private let originalMusicPlayTimeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 10, weight: .regular)
@@ -239,7 +243,13 @@ class NewUploadViewController: UIViewController {
     }()
     
     // 스펙트로그램 보여질 뷰
-    let spectrogramView: UIView = {
+    private let originalSpectrogramView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let myTrackSpectrogramView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -269,9 +279,10 @@ class NewUploadViewController: UIViewController {
     private func setNavigationBar() {
         self.navigationItem.title = "게시물 업로드"
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        let leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(onTapLeftBarButtonItem))
+        let leftBarButtonItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(onTapLeftBarButtonItem))
+        leftBarButtonItem.tintColor = .white
         self.navigationItem.leftBarButtonItem = leftBarButtonItem
-        let rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onTapRightBarButtonItem))
+        let rightBarButtonItem = UIBarButtonItem(title: "공유", style: .plain, target: self, action: #selector(onTapRightBarButtonItem))
         self.navigationItem.rightBarButtonItem = rightBarButtonItem
     }
 
@@ -286,31 +297,64 @@ class NewUploadViewController: UIViewController {
                 let currentTime = CMTimeGetSeconds((self.audioPlayer?.currentTime())!)
                 
                 let secs = Int(currentTime)
-                self.playTimeLabel.text = NSString(format: "%02d:%02d", secs/60, secs%60) as String
+                self.originalMusicPlayTimeLabel.text = NSString(format: "%02d:%02d", secs/60, secs%60) as String
             }
         })
     }
 
     // MARK: SetConstraints
     private func setConstraints() {
+        let scrollViewConstraints = [
+            scrollView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+        ]
+        let scrollContentViewConstraints = [
+            scrollContentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            scrollContentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            scrollContentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            scrollContentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            scrollContentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            scrollContentView.heightAnchor.constraint(equalToConstant: scrollViewHeight)
+          ]
         let recordLabelConstraints = [
-            recordLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            recordLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20)
+            recordLabel.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 20),
+            recordLabel.topAnchor.constraint(equalTo: scrollContentView.safeAreaLayoutGuide.topAnchor, constant: 20)
         ]
         let recordViewConstraints = [
-            recordView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            recordView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            recordView.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 20),
+            recordView.trailingAnchor.constraint(equalTo: scrollContentView.trailingAnchor, constant: -20),
             recordView.topAnchor.constraint(equalTo: recordLabel.bottomAnchor, constant: 15),
         ]
-        let playTimeLabelConstraints = [
-            playTimeLabel.centerXAnchor.constraint(equalTo: recordView.centerXAnchor),
-            playTimeLabel.topAnchor.constraint(equalTo: recordView.topAnchor, constant: 10)
+        let playMusicTitleLabelConstraints = [
+            originalFeedTitleLabel.centerXAnchor.constraint(equalTo: recordView.centerXAnchor),
+            originalFeedTitleLabel.topAnchor.constraint(equalTo: recordView.topAnchor, constant: 10)
         ]
-        let spectrogramViewConstraints = [
-            spectrogramView.leadingAnchor.constraint(equalTo: recordView.leadingAnchor, constant: 10),
-            spectrogramView.trailingAnchor.constraint(equalTo: recordView.trailingAnchor, constant: -10),
-            spectrogramView.topAnchor.constraint(equalTo: playTimeLabel.bottomAnchor, constant: 10),
-            spectrogramView.bottomAnchor.constraint(equalTo: recordToggleButton.topAnchor, constant: -10)
+        let originalMusicTitleConstraints = [
+            originalMusicTitle.leadingAnchor.constraint(equalTo: recordView.leadingAnchor, constant: 12),
+            originalMusicTitle.topAnchor.constraint(equalTo: originalFeedTitleLabel.bottomAnchor, constant: 20)
+        ]
+        let myTrackMusicTitleConstraints = [
+            myTrackMusicTitle.leadingAnchor.constraint(equalTo: recordView.leadingAnchor, constant: 12),
+            myTrackMusicTitle.topAnchor.constraint(equalTo: originalSpectrogramView.bottomAnchor, constant: 20)
+        ]
+        let originalSpectrogramViewConstraints = [
+            originalSpectrogramView.leadingAnchor.constraint(equalTo: recordView.leadingAnchor, constant: 10),
+            originalSpectrogramView.trailingAnchor.constraint(equalTo: recordView.trailingAnchor, constant: -10),
+            originalSpectrogramView.topAnchor.constraint(equalTo: originalMusicTitle.bottomAnchor, constant: 10),
+            originalSpectrogramView.heightAnchor.constraint(equalTo: recordView.heightAnchor, multiplier: 0.25)
+        ]
+        let myTrackSpectrogramViewConstraints = [
+            myTrackSpectrogramView.leadingAnchor.constraint(equalTo: recordView.leadingAnchor, constant: 10),
+            myTrackSpectrogramView.trailingAnchor.constraint(equalTo: recordView.trailingAnchor, constant: -10),
+            myTrackSpectrogramView.topAnchor.constraint(equalTo: myTrackMusicTitle.bottomAnchor, constant: 10),
+            myTrackSpectrogramView.heightAnchor.constraint(equalTo: recordView.heightAnchor, multiplier: 0.25)
+        ]
+        let originalMusicPlayTimeLabelConstraints = [
+            originalMusicPlayTimeLabel.topAnchor.constraint(equalTo: originalSpectrogramView.bottomAnchor),
+            originalMusicPlayTimeLabel.bottomAnchor.constraint(equalTo: myTrackMusicTitle.topAnchor),
+            originalMusicPlayTimeLabel.centerXAnchor.constraint(equalTo: recordView.centerXAnchor)
         ]
         let recordToggleButtonConstraints = [
             recordToggleButton.trailingAnchor.constraint(equalTo: recordView.centerXAnchor, constant: -10),
@@ -325,40 +369,42 @@ class NewUploadViewController: UIViewController {
             playToggleButton.heightAnchor.constraint(equalToConstant: 50)
         ]
         let representativeImageLabelConstraints = [
-            representativeImageLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            representativeImageLabel.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 20),
             representativeImageLabel.topAnchor.constraint(equalTo: recordView.bottomAnchor, constant: 35)
         ]
         let representativeImageConstraints = [
             representativeImage.topAnchor.constraint(equalTo: representativeImageLabel.bottomAnchor, constant: 15),
-            representativeImage.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            representativeImage.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.2),
+            representativeImage.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 20),
+            representativeImage.widthAnchor.constraint(equalTo: scrollContentView.widthAnchor, multiplier: 0.2),
             representativeImage.heightAnchor.constraint(equalTo: representativeImage.widthAnchor)
         ]
         let titleLabelConstraints = [
-            titleLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            titleLabel.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 20),
             titleLabel.topAnchor.constraint(equalTo: representativeImage.bottomAnchor, constant: 35)
         ]
         let titleTextFieldConstraints = [
-            titleTextField.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            titleTextField.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            titleTextField.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 20),
+            titleTextField.trailingAnchor.constraint(equalTo: scrollContentView.trailingAnchor, constant: -20),
             titleTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
         ]
         let memoLabelConstraints = [
-            memoLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            memoLabel.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 20),
             memoLabel.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 35)
         ]
         let memoTextFieldConstraints = [
-            memoTextField.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            memoTextField.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            memoTextField.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 20),
+            memoTextField.trailingAnchor.constraint(equalTo: scrollContentView.trailingAnchor, constant: -20),
             memoTextField.topAnchor.constraint(equalTo: memoLabel.bottomAnchor, constant: 15),
         ]
         let memoTextLengthLabelConstraints = [
             memoTextLengthLabel.trailingAnchor.constraint(equalTo: memoTextField.trailingAnchor),
             memoTextLengthLabel.topAnchor.constraint(equalTo: memoTextField.bottomAnchor, constant: 5),
-            memoTextLengthLabel.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+            memoTextLengthLabel.bottomAnchor.constraint(equalTo: scrollContentView.safeAreaLayoutGuide.bottomAnchor, constant: -10)
         ]
         
-        [representativeImageLabelConstraints,
+        [scrollViewConstraints,
+         scrollContentViewConstraints,
+         representativeImageLabelConstraints,
          representativeImageConstraints,
          titleLabelConstraints,
          titleTextFieldConstraints,
@@ -367,10 +413,24 @@ class NewUploadViewController: UIViewController {
          memoTextLengthLabelConstraints,
          recordLabelConstraints,
          recordViewConstraints,
-         playTimeLabelConstraints,
-         spectrogramViewConstraints,
+         playMusicTitleLabelConstraints,
+         originalMusicTitleConstraints,
+         myTrackMusicTitleConstraints,
+         originalMusicPlayTimeLabelConstraints,
+         originalSpectrogramViewConstraints,
+         myTrackSpectrogramViewConstraints,
          recordToggleButtonConstraints,
          playToggleButtonConstraints].forEach{ NSLayoutConstraint.activate($0) }
+    }
+    
+    private func retrieveSpeakerImageAttributedString(_ title: String, _ imageName: String) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: title)
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.bounds = self.speakerImageBound
+        imageAttachment.image = UIImage(named: imageName)
+        attributedString.append(NSAttributedString(attachment: imageAttachment))
+        
+        return attributedString
     }
 
     private func addKeyboardNotifications(){
@@ -407,24 +467,26 @@ class NewUploadViewController: UIViewController {
     }
     
     @objc func keyboardWillShow(_ noti: NSNotification){
-        if let keyboardFrame: NSValue = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keyboardRectangle.height
-            self.view.frame.origin.y -= keyboardHeight
+        DispatchQueue.main.async {
+            if let keyboardFrame: NSValue = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                let keyboardRectangle = keyboardFrame.cgRectValue
+                let keyboardHeight = keyboardRectangle.height
+                let cons = self.scrollContentView.constraints.filter{$0.firstItem as! NSObject == self.scrollContentView && $0.firstAttribute == .bottom}
+                cons.forEach{$0.constant = keyboardHeight}
+            }
         }
     }
 
     @objc func keyboardWillHide(_ noti: NSNotification){
-        if let keyboardFrame: NSValue = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keyboardRectangle.height
-            self.view.frame.origin.y += keyboardHeight
+        DispatchQueue.main.async {
+            let cons = self.scrollContentView.constraints.filter{$0.firstItem as! NSObject == self.scrollContentView && $0.firstAttribute == .bottom}
+            cons.forEach{$0.constant = 0}
         }
     }
 }
 
 // MARK: UITextFieldDelegate
-extension NewUploadViewController: UITextFieldDelegate {
+extension ContributionUploadViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         guard let text = textField.text as? NSString else { return false }
         let newText = text.replacingCharacters(in: range, with: string)
@@ -448,109 +510,65 @@ extension NewUploadViewController: UITextFieldDelegate {
     }
 }
 
-extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegate {
+extension ContributionUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegate {
+    // MARK: Original Play
     @objc func onTapRecordButton() {
         switch isRecording {
         case true:
             DispatchQueue.main.async {
-                guard let playToggleButtonImage = UIImage(named: self.recordStartButton) else { return }
-                self.recordToggleButton.setImage(playToggleButtonImage, for: .normal)
+                guard let playToggleButtonImage = UIImage(named: self.playStartButton) else { return }
+                self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
                 self.isRecording.toggle()
             }
-            self.spectrogram.stopRunning()
+            self.originalSpectrogram.stopRunning()
+            self.originalMusicTitle.attributedText = self.retrieveSpeakerImageAttributedString("Original ", self.mutedSpeakerImageString)
             guard let player = self.audioPlayer else { return }
             player.pause()
             
-//            if let record = self.audioRecorder {
-//                record.stop()
-//                let session = AVAudioSession.sharedInstance()
-//                do{
-//                    try session.setActive(false)
-//                }
-//                catch{
-//                    print("\(error)")
-//                }
-//            }
-
         case false:
             DispatchQueue.main.async {
-                guard let playToggleButtonImage = UIImage(named: self.recordStopButton) else { return }
-                self.recordToggleButton.setImage(playToggleButtonImage, for: .normal)
+                guard let playToggleButtonImage = UIImage(named: self.playStopButton) else { return }
+                self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
                 self.isRecording.toggle()
             }
-            self.spectrogram.startRunning()
-            if let musicURL = Bundle.main.url(forResource: "GuitarAndVocal", withExtension: "mp3") {
+            self.originalSpectrogram.startRunning()
+            self.originalMusicTitle.attributedText = self.retrieveSpeakerImageAttributedString("Original ", self.speakerImageString)
+            if let musicURL = Bundle.main.url(forResource: "GuitarOnly", withExtension: "mp3") {
                 self.audioPlayer = AVPlayer(url: musicURL)
                 self.audioPlayer.volume = 1
                 self.audioPlayer.play()
                 print("오디오 재생")
             }
             self.setPlayTimeLabel()
-//            let session = AVAudioSession.sharedInstance()
-//
-//            do{
-//                try session.setCategory(AVAudioSession.Category.playAndRecord)
-//                try session.setActive(true)
-//                session.requestRecordPermission({ (allowed : Bool) -> Void in
-//                    if allowed {
-//                        self.startRecording()
-//                    }
-//                    else{
-//                        print("녹음 권한 없음")
-//                    }
-//                })
-//            }
-//            catch{
-//                print("\(error)")
-//            }
         }
     }
-
+    // MARK: My Track Play
     @objc func onTapPlayButton() {
         switch isPlaying {
         case true:
-            guard let playToggleButtonImage = UIImage(named: playStartButton) else { return }
-            self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
+            guard let playToggleButtonImage = UIImage(named: recordStartButton) else { return }
+            self.recordToggleButton.setImage(playToggleButtonImage, for: .normal)
                         
             self.isPlaying.toggle()
             guard let player = self.audioPlayer else { return }
             player.pause()
-            self.spectrogram.stopRunning()
-            
+            self.myTrackSpectrogram.stopRunning()
+            self.myTrackMusicTitle.attributedText = self.retrieveSpeakerImageAttributedString("My Track ", self.mutedSpeakerImageString)
         case false:
             DispatchQueue.main.async {
-                guard let playToggleButtonImage = UIImage(named: self.playStopButton) else { return }
-                self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
+                guard let playToggleButtonImage = UIImage(named: self.recordStopButton) else { return }
+                self.recordToggleButton.setImage(playToggleButtonImage, for: .normal)
                 
                 self.isPlaying.toggle()
-                self.spectrogram.startRunning()
-
+                self.myTrackSpectrogram.startRunning()
+                self.myTrackMusicTitle.attributedText = self.retrieveSpeakerImageAttributedString("My Track ", self.speakerImageString)
                 if let musicURL = Bundle.main.url(forResource: "GuitarAndVocal", withExtension: "mp3") {
                     self.audioPlayer = AVPlayer(url: musicURL)
                     self.audioPlayer.volume = 1
                     self.audioPlayer.play()
                     print("오디오 재생")
                 }
-                self.setPlayTimeLabel()
-
-//                guard let playToggleButtonImage = UIImage(named: self.playStartButton) else { return }
-//                self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
-//                self.isPlaying = false
-
-                
-//                if let data = NSData(contentsOfFile: self.audioFilePath()) {
-//                    do {
-//                        self.audioPlayer = try AVAudioPlayer(data: data as Data)
-//                        self.audioPlayer.delegate = self
-//                        self.audioPlayer.volume = 100
-//                        self.audioPlayer.prepareToPlay()
-//                        self.audioPlayer.play()
-//                        print("Audio 재생")
-//                    }
-//                    catch {
-//                        print("\(error)")
-//                    }
-//                }
+//                self.setPlayTimeLabel()
             }
         }
     }
@@ -576,16 +594,8 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
     func audioFilePath() -> String {
         let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
         let filePath = path.stringByAppendingPathComponent(path: "test.m4a") as String
-
+        
         return filePath
-    }
-
-    // 오디오의 세기를 저장하는 코드
-    func audioPowerPath() -> String {
-        let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
-        let powerLevelPath = path.stringByAppendingPathComponent(path: "test.data") as String
-
-        return powerLevelPath
     }
 
     func audioRecorderSettings() -> [String : AnyObject] {
@@ -593,34 +603,10 @@ extension NewUploadViewController: AVAudioPlayerDelegate, AVAudioRecorderDelegat
         
         return settings
     }
-
-//    //MARK: AVAudioPlayerDelegate
-//    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-//        if flag == true {
-//            print("Player 재생완료 성공")
-//            guard let playToggleButtonImage = UIImage(named: playStartButton) else { return }
-//            self.playToggleButton.setImage(playToggleButtonImage, for: .normal)
-//            self.isPlaying = false
-//        }
-//        else{
-//            print("Player 오류")
-//        }
-//    }
-//
-//    //MARK: AVAudioRecorderDelegate
-//    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-//        if flag == true {
-//            print("녹음 완료 성공")
-//            print(recorder.url)
-//        }
-//        else{
-//            print("녹음 실패 종료")
-//        }
-//    }
 }
 
 // MARK: Imagepicker Delegate
-extension NewUploadViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension ContributionUploadViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func openLibrary(){
         imagePicker.sourceType = .photoLibrary
         present(imagePicker, animated: false, completion: nil)
@@ -640,5 +626,12 @@ extension NewUploadViewController: UIImagePickerControllerDelegate, UINavigation
             representativeImage.image = image
         }
         dismiss(animated: true, completion: nil)
+    }
+}
+
+// MARK: UIScrollViewDelegate
+extension ContributionUploadViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        self.view.endEditing(true)
     }
 }

@@ -61,6 +61,20 @@ class UserViewController: UIViewController {
         configureView()
         applyConstraints()
     }
+    
+    // Status Bar
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = false
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = .systemBackground
+        appearance.shadowColor = .clear
+        
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+    }
 }
 
 extension UserViewController {
@@ -141,8 +155,8 @@ extension UserViewController: UICollectionViewDelegate, UICollectionViewDataSour
     // Cell 클릭시
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
-        let vc = UIViewController()
-        vc.view.backgroundColor = .red
+        let currentFeed = feeds[indexPath.row]
+        let vc = UserSingleFeedViewController(feed: currentFeed)
 
         navigationController?.pushViewController(vc, animated: true)
     }

@@ -1,11 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "milkyProfile.png",
+      "filename" : "speaker.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "speaker2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

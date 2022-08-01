@@ -10,11 +10,7 @@ import SwiftUI
 
 class HomeViewController: UIViewController {
 
-    // 임시 Data
-    private var feeds: [Feed] = [
-        Feed(id: 1, owner: User(name: "woody_.", profileImage: "woodyProfile"), contributor: nil, title: "우럭먹다 받은 영감", description: "우럭과 함꼐 블루스", imageName: "woodyFeed", audioName: "happyDay"),
-        Feed(id: 2, owner: User(name: "woody_.", profileImage: "woodyProfile"), contributor: User(name: "alice_in_musicland", profileImage: "aliceProfile"), title: "우럭 마시쏘", description: "우럭우러", imageName: "woodyFeed", audioName: "exampleFile")
-    ]
+    private var feeds = allFeeds
     
     // Collection View
     private let feedCollectionView: UICollectionView = {
@@ -33,15 +29,15 @@ class HomeViewController: UIViewController {
         
         // Logo
         let logoButton = UIButton()
-        logoButton.frame = CGRect(x: 0, y: 0, width: 114, height: 19)
-        logoButton.setTitle("Wavegram", for: .normal)
-        logoButton.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        logoButton.frame = CGRect(x: 0, y: 0, width: 120, height: 28)
+        logoButton.setTitle("MIX TAPE", for: .normal)
+        logoButton.titleLabel?.font = UIFont(name: "RockSalt", size: 18)
         
         // NavBar Left
         let leftBarButtonItem = UIBarButtonItem(customView: logoButton)
-        let leftWidth = leftBarButtonItem.customView?.widthAnchor.constraint(equalToConstant: 114)
+        let leftWidth = leftBarButtonItem.customView?.widthAnchor.constraint(equalToConstant: 120)
             leftWidth?.isActive = true
-        let leftHeight = leftBarButtonItem.customView?.heightAnchor.constraint(equalToConstant: 19)
+        let leftHeight = leftBarButtonItem.customView?.heightAnchor.constraint(equalToConstant: 28)
             leftHeight?.isActive = true
         
         navigationItem.leftBarButtonItem = leftBarButtonItem
@@ -68,7 +64,9 @@ class HomeViewController: UIViewController {
     
     // NavBar Right Button Function
     @objc func uploadNewFeed() {
-        // TODO: Move to Uploading a New Feed
+        let vc = NewUploadViewController()
+//        vc.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(vc, animated: false)
         print("Move To Upload Feed View")
     }
     

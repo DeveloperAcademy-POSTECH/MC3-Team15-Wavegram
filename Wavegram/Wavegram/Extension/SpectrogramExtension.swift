@@ -105,6 +105,7 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
         // AVCaptureSession은 beginConfiguration() 과 commitConfiguration() 사이에 위치함.
 
         // MARK: 하단의 commitConfiguration()과 한 페어를 이룸
+// MARK: ---> Code block starts here --->
         captureSession.beginConfiguration()
 
         if captureSession.canAddOutput(audioOutput) {
@@ -130,13 +131,26 @@ extension Spectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
 
         // MARK: 윗단의 beginConfiguration()과 페어를 이룸
         captureSession.commitConfiguration()
+// MARK: <--- Code block ends here <---
+
     }
 
-    // spectrogram 시작
+
+    // spectrogram 시작 함수
     func startRunning() {
         sessionQueue.async {
             if AVCaptureDevice.authorizationStatus(for: .audio) == .authorized {
                 self.captureSession.startRunning()
+            }
+        }
+    }
+
+
+    // spectrogram 종료 함수
+    func stopRunning() {
+        sessionQueue.async {
+            if AVCaptureDevice.authorizationStatus(for: .audio) == .authorized {
+                self.captureSession.stopRunning()
             }
         }
     }

@@ -31,7 +31,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = label.font.withSize(17)
+        label.font = .bodyContents
         label.textAlignment = .left
         
         return label
@@ -40,7 +40,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     // originLabel
     private let originLabel: UILabel = {
         let label = UILabel()
-        label.font = label.font.withSize(12)
+        label.font = .bodyContentsSmall
         label.textColor = .systemGray
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -53,10 +53,9 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         
         let button = UIButton()
         
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        button.titleLabel?.font = .bodyContentsSmall
         button.setTitleColor(.systemBlue, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(moveToOriginFeed), for: .touchUpInside)
         
         return button
     }()
@@ -79,7 +78,8 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     
     // Contribute Button
     @objc func uploadContributeFeed() {
-        // TODO: Move to UploadContributeFeed
+        let vc = ContributionUploadViewController()
+        self.viewController?.navigationController?.pushViewController(vc, animated: false)
         print("Move to uploadContributeFeed View")
     }
     
@@ -90,11 +90,12 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         let modify = UIAlertAction(title: "수정하기", style: .default) { action in
-            // let vc = ModifyPost()
-            // self.present(vc)
+            let vc = ModifyPostViewController()
+            self.viewController?.navigationController?.pushViewController(vc, animated: true)
             print("수정하기")
         }
         let delete = UIAlertAction(title: "삭제하기", style: .destructive) { action in
+            // TODO: 게시물 삭제하기
             print("삭제하기")
         }
         let cancel = UIAlertAction(title: "취소하기", style: .cancel) { action in
@@ -139,7 +140,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     private let detailLabel: UILabel = {
         
         let label = UILabel()
-        label.font = label.font.withSize(16)
+        label.font = .bodyContents
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -167,7 +168,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
 
         let label = UILabel()
-        label.font = label.font.withSize(16)
+        label.font = .bodyTitle
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -178,7 +179,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     private let contributorLabel: UILabel = {
 
         let label = UILabel()
-        label.font = label.font.withSize(14)
+        label.font = .bodyContentsSmall
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
 
@@ -194,10 +195,10 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         
         // TODO: Change playButton Font Size
         let button = UIButton()
-        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        button.addTarget(self, action: #selector(pressButton(_sender:)), for: .touchUpInside)
+//        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        button.setImage(UIImage(systemName: "play.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .light)), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        
+        button.tintColor = .white
         return button
     }()
     
@@ -207,20 +208,17 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         if isPlaying {
             player.play()
             print("PLAY")
-            _sender.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            _sender.setImage(UIImage(systemName: "pause.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .light)), for: .normal)
         } else {
             player.pause()
             print("PAUSE")
-            _sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            _sender.setImage(UIImage(systemName: "play.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .light)), for: .normal)
         }
     }
     
     let timeSlider: UISlider = {
         
         let slider = UISlider()
-        slider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidBegin)
-        slider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidEnd)
-        slider.addTarget(self, action: #selector(seekAudio(_sender:)), for: .valueChanged)
         slider.translatesAutoresizingMaskIntoConstraints = false
         
         return slider
@@ -264,12 +262,18 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
             playButton, timeSlider
         ].forEach { addSubview($0) }
         
-        
     }
-    
+
     // Basic Setting
     required init?(coder: NSCoder) {
         fatalError()
+    }
+    
+    // Cell Reuse
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        originButton.setTitle("", for: .normal)
+        originLabel.text = ""
     }
     
     // Configure
@@ -295,7 +299,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         }
         
         // Additional Button
-        let isMine = model.contributor?.name == "woody_." || model.contributor == nil
+        let isMine = (model.owner.name == DataManager.loggedInUser.name) && (model.contributor == nil)
         let buttonSymbolName = isMine ? "ellipsis" : "rectangle.stack.badge.plus"
         additionalButton.setImage(UIImage(systemName: buttonSymbolName, withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)), for: .normal)
         
@@ -318,11 +322,23 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
             contributorLabel.text = model.owner.name + ", " + model.contributor!.name
         }
         
+        buttonTargets()
+        
         applyConstraints(model)
         
-        configurePlayer(model.audioName)
+        configurePlayer(model.audioName ?? "")
         
         configureObserver()
+        
+    }
+    
+    private func buttonTargets() {
+        originButton.addTarget(self, action: #selector(moveToOriginFeed), for: .touchUpInside)
+        playButton.addTarget(self, action: #selector(pressButton(_sender:)), for: .touchUpInside)
+        timeSlider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidBegin)
+        timeSlider.addTarget(self, action: #selector(toggleIsSeeking), for: .editingDidEnd)
+        timeSlider.addTarget(self, action: #selector(seekAudio(_sender:)), for: .valueChanged)
+
     }
     
     // Constraints
