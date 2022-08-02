@@ -9,6 +9,7 @@ import UIKit
 import AVFoundation
 
 class ContributionUploadViewController: UIViewController {
+    var feed: Feed? = nil
     private var audioPlayer : AVPlayer!
     private var audioRecorder : AVAudioRecorder!
     private let originalSpectrogram = Spectrogram()
@@ -29,7 +30,7 @@ class ContributionUploadViewController: UIViewController {
     private let playStartButton: String = "playButton"
     private let playStopButton: String = "pauseButton"
     private lazy var imagegesture = UITapGestureRecognizer(target: self, action: #selector(onTapRepresentativeImage(_:)))
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         DispatchQueue.main.async {            
@@ -45,6 +46,8 @@ class ContributionUploadViewController: UIViewController {
             [self.originalSpectrogramView, self.myTrackSpectrogramView, self.originalFeedTitleLabel, self.recordToggleButton, self.playToggleButton, self.originalMusicTitle, self.myTrackMusicTitle, self.originalMusicPlayTimeLabel].forEach{ self.recordView.addSubview($0) }
             // vc superview에 서브뷰 추가
             [self.representativeImageLabel, self.representativeImage, self.titleLabel, self.titleTextField, self.memoLabel, self.memoTextField, self.memoTextLengthLabel, self.recordLabel, self.recordView].forEach { self.scrollContentView.addSubview($0) }
+            
+            self.representativeImage.image = UIImage(named: (self.feed?.imageName)!)
         }
         titleTextField.delegate = self
         memoTextField.delegate = self
@@ -64,7 +67,7 @@ class ContributionUploadViewController: UIViewController {
         DispatchQueue.main.async {
             self.setConstraints()
             self.setTitleTextFieldBorder()
-
+            self.originalFeedTitleLabel.text = self.feed?.title
             guard let xCircleImage = UIImage(systemName: self.xButtonString) else { return }
             self.titleTextField.setClearButton(with: xCircleImage, mode: .always)
             self.memoTextField.setClearButton(with: xCircleImage, mode: .always)
@@ -148,7 +151,7 @@ class ContributionUploadViewController: UIViewController {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.borderStyle = .none
-        textField.text = "우럭먹다 받은 영감"
+        textField.text = ""
         textField.textColor = .white
         textField.clearButtonMode = .whileEditing
 
@@ -169,7 +172,7 @@ class ContributionUploadViewController: UIViewController {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.borderStyle = .none
-        textField.text = "우럭과 블루스"
+        textField.text = ""
         textField.textColor = .white
 
         return textField
@@ -201,7 +204,6 @@ class ContributionUploadViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15, weight: .medium)
         label.textColor = .white
-        label.text = "우럭먹다 받은 영감"
         
         return label
     }()
@@ -458,12 +460,20 @@ class ContributionUploadViewController: UIViewController {
     }
 
     @objc func onTapLeftBarButtonItem() {
-        self.navigationController?.popViewController(animated: true)
+        self.navigationController?.popViewController(animated: false)
         print("onTapLeftBarButtonItem")
     }
 
     @objc func onTapRightBarButtonItem() {
-        self.navigationController?.popViewController(animated: true)
+        let id = allFeeds.count + 1
+        guard let user = self.feed?.owner else {return}
+        let contributor = DataManager.loggedInUser
+        guard let title = self.titleTextField.text else { return }
+        guard let description = self.memoTextField.text else { return }
+
+        let feed = Feed(id: id, owner: user, contributor: contributor, title: title, description: description, imageName: "bulgogi", audioName: "GuitarAndVocal")
+        allFeeds.insert(feed, at: 0)
+        self.navigationController?.popViewController(animated: false)
         print("onTapRightBarButtonItem")
     }
     
