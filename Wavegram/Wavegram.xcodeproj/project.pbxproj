@@ -379,10 +379,8 @@
 				0A08F1242893CF0700971224 /* GuitarAndVocal.mp3 in Resources */,
 				B6A859C3289275D400912725 /* exampleFile.mp3 in Resources */,
 				0ABD56B5288534A3001DF711 /* Assets.xcassets in Resources */,
-
 				0A08F1232893CF0700971224 /* GuitarOnly.mp3 in Resources */,
 				C6A7F2D82897B51E0028B145 /* UserContributedFeeds.json in Resources */,
-
 				B6A859C1289275CE00912725 /* happyDay.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -588,9 +586,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZNH7978JJQ;
+				DEVELOPMENT_TEAM = 76AJ433CP5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Wavegram/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Mix Tape";
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 사용 허용?";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "마이크 허용해줘잉";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "갤러리 사용 허용?";
@@ -619,9 +618,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZNH7978JJQ;
+				DEVELOPMENT_TEAM = 76AJ433CP5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Wavegram/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Mix Tape";
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 사용 허용?";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "마이크 허용해줘잉";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "갤러리 사용 허용?";
