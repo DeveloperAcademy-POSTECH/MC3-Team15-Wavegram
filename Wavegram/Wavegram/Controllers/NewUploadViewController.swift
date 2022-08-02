@@ -409,7 +409,7 @@ class NewUploadViewController: UIViewController {
         guard let title = self.titleTextField.text else { return }
         guard let description = self.memoTextField.text else { return }
 
-        let feed = Feed(id: id, owner: user, contributor: nil, title: title, description: description, imageName: nil, audioName: "GuitarOnly")
+        let feed = Feed(id: id, owner: user, contributor: nil, title: title, description: description, imageName: "someImage", audioName: "GuitarOnly")
         allFeeds.insert(feed, at: 0)
         print("onTapRightBarButtonItem")
     }

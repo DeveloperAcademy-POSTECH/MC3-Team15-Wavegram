@@ -470,8 +470,11 @@ class ContributionUploadViewController: UIViewController {
         let contributor = DataManager.loggedInUser
         guard let title = self.titleTextField.text else { return }
         guard let description = self.memoTextField.text else { return }
-
-        let feed = Feed(id: id, owner: user, contributor: contributor, title: title, description: description, imageName: "bulgogi", audioName: "GuitarAndVocal")
+        var imageName: String? = "bulgogi"
+        if let name = self.feed?.imageName {
+            imageName = name
+        }
+        let feed = Feed(id: id, owner: user, contributor: contributor, title: title, description: description, imageName: imageName, audioName: "GuitarAndVocal")
         allFeeds.insert(feed, at: 0)
         self.navigationController?.popViewController(animated: false)
         print("onTapRightBarButtonItem")
