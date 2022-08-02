@@ -4,7 +4,6 @@
 //
 //  Created by Kim Insub on 2022/07/12.
 //
-
 import UIKit
 
 class UserViewController: UIViewController {
@@ -15,6 +14,7 @@ class UserViewController: UIViewController {
     private var currentPage: Int = 0
     private var hasNextPage: Bool = true
     private var isLoading: Bool = false
+
 
     // Feed Collection View
     private let feedCollectionView: UICollectionView = {
@@ -166,6 +166,7 @@ extension UserViewController: UICollectionViewDelegate, UICollectionViewDataSour
 
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: UserFeedCollectionReusableView.identifier, for: indexPath) as? UserFeedCollectionReusableView else { return UICollectionReusableView() }
 
+        header.delegate = self
         header.configure(with: user)
 
         return header
@@ -204,6 +205,15 @@ extension UserViewController: UIScrollViewDelegate {
             }
 
             isLoading = false
+        }
+    }
+}
+
+extension UserViewController: UserFeedCollectionReusableViewDelegate {
+    func segmentedControlDidTapSection(feeds: [Feed]) {
+        DispatchQueue.main.async { [weak self] in
+            self?.feeds = feeds
+            self?.feedCollectionView.reloadData()
         }
     }
 }
