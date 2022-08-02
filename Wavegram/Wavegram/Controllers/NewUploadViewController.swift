@@ -180,7 +180,7 @@ class NewUploadViewController: UIViewController {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.borderStyle = .none
-        textField.text = "우럭먹다 받은 영감"
+        textField.text = ""
         textField.textColor = .white
         textField.clearButtonMode = .whileEditing
 
@@ -201,7 +201,7 @@ class NewUploadViewController: UIViewController {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.borderStyle = .none
-        textField.text = "우럭과 블루스"
+        textField.text = ""
         textField.textColor = .white
 
         return textField
@@ -398,11 +398,19 @@ class NewUploadViewController: UIViewController {
     }
 
     @objc func onTapLeftBarButtonItem() {
-//        self.dismiss(animated: false)
+        self.navigationController?.popViewController(animated: false)
         print("onTapLeftBarButtonItem")
     }
 
     @objc func onTapRightBarButtonItem() {
+        self.navigationController?.popViewController(animated: false)
+        let id = allFeeds.count + 1
+        let user = DataManager.loggedInUser
+        guard let title = self.titleTextField.text else { return }
+        guard let description = self.memoTextField.text else { return }
+
+        let feed = Feed(id: id, owner: user, contributor: nil, title: title, description: description, imageName: "someImage", audioName: "GuitarOnly")
+        allFeeds.insert(feed, at: 0)
         print("onTapRightBarButtonItem")
     }
     

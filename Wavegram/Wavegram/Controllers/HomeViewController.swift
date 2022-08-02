@@ -69,6 +69,12 @@ class HomeViewController: UIViewController {
         self.navigationController?.pushViewController(vc, animated: false)
         print("Move To Upload Feed View")
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.feeds = allFeeds
+        self.feedCollectionView.reloadData()
+    }
     
     // viewLoad
     override func viewDidLoad() {

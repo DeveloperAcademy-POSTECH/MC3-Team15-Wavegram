@@ -79,6 +79,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
     // Contribute Button
     @objc func uploadContributeFeed() {
         let vc = ContributionUploadViewController()
+        vc.feed = self.feeds
         self.viewController?.navigationController?.pushViewController(vc, animated: false)
         print("Move to uploadContributeFeed View")
     }
@@ -91,7 +92,8 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         
         let modify = UIAlertAction(title: "수정하기", style: .default) { action in
             let vc = ModifyPostViewController()
-            self.viewController?.navigationController?.pushViewController(vc, animated: true)
+            vc.feed = self.feeds
+            self.viewController?.navigationController?.pushViewController(vc, animated: false)
             print("수정하기")
         }
         let delete = UIAlertAction(title: "삭제하기", style: .destructive) { action in
@@ -274,6 +276,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         super.prepareForReuse()
         originButton.setTitle("", for: .normal)
         originLabel.text = ""
+        additionalButton.removeTarget(self, action: nil, for: .touchUpInside)
     }
     
     // Configure
@@ -299,7 +302,7 @@ class HomeFeedCollectionViewCell: UICollectionViewCell {
         }
         
         // Additional Button
-        let isMine = (model.owner.name == DataManager.loggedInUser.name) && (model.contributor == nil)
+        let isMine = (model.owner.name == DataManager.loggedInUser.name) && (model.isOriginal)
         let buttonSymbolName = isMine ? "ellipsis" : "rectangle.stack.badge.plus"
         additionalButton.setImage(UIImage(systemName: buttonSymbolName, withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)), for: .normal)
         

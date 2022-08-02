@@ -10,6 +10,7 @@ import SwiftUI
 
 // MARK: UIViewController
 class ModifyPostViewController: UIViewController {
+    var feed: Feed? = nil
     private let maxTitleTextLength: Int = 20
     private let maxMemoTextLength: Int = 50
     private let xButtonString: String = "x.circle"
@@ -20,6 +21,8 @@ class ModifyPostViewController: UIViewController {
         [representativeImageLabel, representativeImage, titleLabel, titleTextField, memoLabel, memoTextField, memoTextLengthLabel].forEach { self.view.addSubview($0) }
         titleTextField.delegate = self
         memoTextField.delegate = self
+        self.titleTextField.text = self.feed?.title
+        self.memoTextField.text = self.feed?.description
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -32,7 +35,8 @@ class ModifyPostViewController: UIViewController {
             self.view.backgroundColor = .black
             self.setConstraints()
             self.setTitleTextFieldBorder()
-            
+            representativeImage.image = UIImage(named: (self.feed?.imageName)!)
+
             guard let xCircleImage = UIImage(systemName: self.xButtonString) else { return }
             titleTextField.setClearButton(with: xCircleImage, mode: .always)
             memoTextField.setClearButton(with: xCircleImage, mode: .always)
@@ -63,7 +67,6 @@ class ModifyPostViewController: UIViewController {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "testImage1")
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 4
         
@@ -86,7 +89,7 @@ class ModifyPostViewController: UIViewController {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.borderStyle = .none
-        textField.text = "우럭먹다 받은 영감"
+        textField.text = ""
         textField.textColor = .white
         textField.clearButtonMode = .whileEditing
         
@@ -107,7 +110,7 @@ class ModifyPostViewController: UIViewController {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.borderStyle = .none
-        textField.text = "우럭과 블루스"
+        textField.text = ""
         textField.textColor = .white
 
         return textField
@@ -169,11 +172,24 @@ class ModifyPostViewController: UIViewController {
     
     // MARK: OnTapGesture
     @objc func onTapLeftBarButtonItem() {
-//        self.dismiss(animated: false)
+        self.navigationController?.popViewController(animated: false)
         print("onTapLeftBarButtonItem")
     }
     
     @objc func onTapRightBarButtonItem() {
+        self.navigationController?.popViewController(animated: false)
+        guard let id = self.feed?.id else {return}
+        guard let owner = self.feed?.owner else {return}
+        let contributor = self.feed?.contributor
+        guard let title = self.titleTextField.text else {return}
+        let description = self.memoTextField.text
+        let imageName = self.feed?.imageName
+        let audioName = self.feed?.audioName
+        
+        let feed = Feed(id: id, owner: owner, contributor: contributor, title: title, description: description, imageName: imageName, audioName: audioName)
+        guard let unModifiedFeedIndex = allFeeds.firstIndex(of: self.feed!) else {return}
+        allFeeds[unModifiedFeedIndex] = feed
+        
         print("onTapRightBarButtonItem")
     }
 }
