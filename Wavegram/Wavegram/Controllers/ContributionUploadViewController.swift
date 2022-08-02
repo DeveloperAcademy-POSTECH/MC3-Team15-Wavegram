@@ -458,11 +458,12 @@ class ContributionUploadViewController: UIViewController {
     }
 
     @objc func onTapLeftBarButtonItem() {
-//        self.dismiss(animated: false)
+        self.navigationController?.popViewController(animated: true)
         print("onTapLeftBarButtonItem")
     }
 
     @objc func onTapRightBarButtonItem() {
+        self.navigationController?.popViewController(animated: true)
         print("onTapRightBarButtonItem")
     }
     

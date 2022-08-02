@@ -398,11 +398,19 @@ class NewUploadViewController: UIViewController {
     }
 
     @objc func onTapLeftBarButtonItem() {
-//        self.dismiss(animated: false)
+        self.navigationController?.popViewController(animated: true)
         print("onTapLeftBarButtonItem")
     }
 
     @objc func onTapRightBarButtonItem() {
+        self.navigationController?.popViewController(animated: true)
+        let id = allFeeds.count + 1
+        let user = DataManager.loggedInUser
+        guard let title = self.titleTextField.text else { return }
+        guard let description = self.memoTextField.text else { return }
+
+        let feed = Feed(id: id, owner: user, contributor: nil, title: title, description: description, imageName: nil, audioName: "GuitarOnly")
+        allFeeds.insert(feed, at: 0)
         print("onTapRightBarButtonItem")
     }
     

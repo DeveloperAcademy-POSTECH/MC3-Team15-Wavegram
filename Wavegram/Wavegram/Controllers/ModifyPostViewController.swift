@@ -169,11 +169,12 @@ class ModifyPostViewController: UIViewController {
     
     // MARK: OnTapGesture
     @objc func onTapLeftBarButtonItem() {
-//        self.dismiss(animated: false)
+        self.navigationController?.popViewController(animated: true)
         print("onTapLeftBarButtonItem")
     }
     
     @objc func onTapRightBarButtonItem() {
+        self.navigationController?.popViewController(animated: true)
         print("onTapRightBarButtonItem")
     }
 }
