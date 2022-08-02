@@ -14,10 +14,10 @@ struct DataManager {
     static let loggedInUser = User.loggedInUser
 
     private let jsonManager = JsonManager()
+    
+    lazy var userOwnedFeeds: [Feed] = jsonManager.load("UserOwnedFeeds.json")
 
-    private lazy var userOwnedFeeds: [Feed] = jsonManager.load("UserOwnedFeeds.json")
-
-    private lazy var userContributedFeeds: [Feed] = jsonManager.load("UserContributedFeeds.json")
+    lazy var userContributedFeeds: [Feed] = jsonManager.load("UserContributedFeeds.json")
 
     mutating func requestUserOwnedFeeds(currentPage: Int, completion: @escaping (Result<([Feed], Bool), Error>) -> Void) {
 

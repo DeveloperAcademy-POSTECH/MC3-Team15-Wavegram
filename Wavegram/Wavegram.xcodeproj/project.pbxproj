@@ -43,6 +43,7 @@
 		C688BE4228925D4300E876B8 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C688BE4128925D4300E876B8 /* DataManager.swift */; };
 		C688BE4428925F5700E876B8 /* UserFeedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C688BE4328925F5700E876B8 /* UserFeedCollectionViewCell.swift */; };
 		C688BE4928939B9000E876B8 /* UserOwnedFeeds.json in Resources */ = {isa = PBXBuildFile; fileRef = C688BE4828939B9000E876B8 /* UserOwnedFeeds.json */; };
+		C6A7F2D82897B51E0028B145 /* UserContributedFeeds.json in Resources */ = {isa = PBXBuildFile; fileRef = C6A7F2D72897B51E0028B145 /* UserContributedFeeds.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,7 +104,7 @@
 		C688BE4128925D4300E876B8 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		C688BE4328925F5700E876B8 /* UserFeedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeedCollectionViewCell.swift; sourceTree = "<group>"; };
 		C688BE4828939B9000E876B8 /* UserOwnedFeeds.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = UserOwnedFeeds.json; sourceTree = "<group>"; };
-		C688BE4A28939BA700E876B8 /* UserContributedFeeds.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = UserContributedFeeds.json; sourceTree = "<group>"; };
+		C6A7F2D72897B51E0028B145 /* UserContributedFeeds.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = UserContributedFeeds.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -261,7 +262,7 @@
 			isa = PBXGroup;
 			children = (
 				C688BE4828939B9000E876B8 /* UserOwnedFeeds.json */,
-				C688BE4A28939BA700E876B8 /* UserContributedFeeds.json */,
+				C6A7F2D72897B51E0028B145 /* UserContributedFeeds.json */,
 			);
 			path = Jsons;
 			sourceTree = "<group>";
@@ -378,7 +379,10 @@
 				0A08F1242893CF0700971224 /* GuitarAndVocal.mp3 in Resources */,
 				B6A859C3289275D400912725 /* exampleFile.mp3 in Resources */,
 				0ABD56B5288534A3001DF711 /* Assets.xcassets in Resources */,
+
 				0A08F1232893CF0700971224 /* GuitarOnly.mp3 in Resources */,
+				C6A7F2D82897B51E0028B145 /* UserContributedFeeds.json in Resources */,
+
 				B6A859C1289275CE00912725 /* happyDay.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
